@@ -7,13 +7,16 @@
 ehthumbs.db
 Thumbs.db
 
-# Root level files (except README.md and LICENSE)
+# Root level files (except specific allowed files)
 /*
 !/.simone
 !/.claude
 !/.gitignore
 !/README.md
 !/LICENSE
+!/SYNC_GUIDE.md
+!/sync-simone.sh
+!/CHANGELOG.md
 
 # Editor directories and files
 .cursor/
@@ -43,3 +46,6 @@ yarn-error.log*
 
 # Logs
 *.log
+
+# Folders
+mixed_notes
