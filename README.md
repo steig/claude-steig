@@ -6,6 +6,20 @@ Simone is a directory-based project management system I built to work better wit
 
 **⚠️ Early Stage Warning**: This is very much a work in progress. I've been using it for my own projects and found it incredibly helpful, so I'm sharing it. But it's currently tuned to how I work, and your mileage may vary.
 
+## 🆕 What's New (Latest Updates)
+
+- **Smart Commit Filtering**: Use `commit T01_S02` to commit only files related to that task
+- **YOLO Mode**: Use `commit YOLO` to skip confirmations for faster iteration
+- **Autonomous Execution**: New `yolo` command for unattended task processing ⚠️ **Use with extreme caution**
+- **Enhanced Task Generation**: Much better context and codebase references in generated tasks
+- **ADR Documentation**: New template for tracking architectural decisions
+- **Better Review Tracking**: Code reviews now log directly to your task files
+- **Cleaner Templates**: Simplified date formats and better structure throughout
+
+### ⚠️ YOLO Mode Safety Warning
+
+The `yolo` command can run tasks autonomously without user interaction. **Only use in isolated environments like dev containers.** It can potentially modify or delete files outside your project. Never run on production systems or systems with important data.
+
 ## What it actually does
 
 ### 1. Start with your requirements
@@ -99,9 +113,9 @@ Contains sprint plans and task definitions organized by milestone and sprint seq
 
 Stores task definitions for work not tied to a specific sprint. Completed tasks use a `TX` prefix (e.g., `TX001_Completed_Task.md`), making it easy for Claude to identify what's been done.
 
-### 05_ARCHITECTURE_DECISIONS/
+### 05_ARCHITECTURAL_DECISIONS/
 
-Captures significant architectural decisions as Architecture Decision Records (ADRs), documenting the context, options considered, and rationale. This provides critical context for Claude when making technical decisions.
+Captures significant architectural decisions as Architecture Decision Records (ADRs), documenting the context, options considered, and rationale. This provides critical context for Claude when making technical decisions. Uses a structured ADR template for consistency.
 
 ### 10_STATE_OF_PROJECT/
 
@@ -109,7 +123,12 @@ Contains timestamped project review snapshots created by the `project_review` co
 
 ### 99_TEMPLATES/
 
-Contains standardized templates for different document types to ensure consistency for both humans and Claude.
+Contains standardized templates for different document types to ensure consistency for both humans and Claude:
+
+- Task templates with structured objectives and acceptance criteria
+- Sprint and milestone metadata templates
+- ADR template for documenting architectural decisions
+- All templates use simplified date formats (YYYY-MM-DD HH:MM)
 
 ## Directory Structure
 
@@ -183,15 +202,28 @@ Every task completion triggers a code review that:
 - Compares implementation against requirements
 - Checks for spec deviations (zero tolerance!)
 - Creates actionable fix items on failure
+- Logs results directly to task files for tracking
 - Only marks tasks complete after passing review
+
+### Enhanced Task Generation
+
+Task creation commands now provide:
+
+- Deep codebase analysis and integration point discovery
+- Specific file references and implementation patterns
+- Existing test patterns and error handling approaches
+- Technical guidance based on actual project architecture
+- Much higher quality, actionable task descriptions
 
 ### Smart Git Commits
 
 The `commit` command:
 
-- Groups related changes logically
+- Groups related changes logically by task or feature
+- Supports task ID filtering (e.g., `T01_S02`, `TX003`)
+- Includes YOLO mode for automated commits without approval
 - Proposes conventional commit messages
-- Gets your approval before each commit
+- Gets your approval before each commit (unless YOLO mode)
 - No AI attribution in messages
 
 ### Project Health Tracking
