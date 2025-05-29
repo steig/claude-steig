@@ -2,7 +2,10 @@
 
 Perform a comprehensive project-level review focusing on architecture, progress, and technical decisions.
 
-**IMPORTANT:** This is a high-level review of overall project state, not recent changes.
+**IMPORTANT:**
+
+- This is a high-level review of overall project state, not recent changes.
+- Unless clearly mentioned in project documents, there is no timeline and schedule is irrelevant
 
 ## Create a TODO with EXACTLY these 8 Items
 
@@ -23,7 +26,7 @@ Follow step by step and adhere closely to the following instructions for each st
 
 Check: <$ARGUMENTS>
 
-If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to identify specific focus areas (milestone, sprint, architecture component, etc.).
+If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to identify specific focus areas (milestone, sprint, architecture component, etc.). Unless stated in Argument do not compare to previews project reviews in `.simone/10_STATE_OF_PROJECT`.
 
 **IMPORTANT:** This review looks at overall project state, not just recent changes.
 

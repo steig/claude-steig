@@ -7,7 +7,7 @@ Follow these instructions from top to bottom.
 1. Parse arguments and analyze git status
 2. Review changes and group by logical commits
 3. Propose commit structure and messages
-4. Get user confirmation for each commit
+4. Check if user approval is necessary
 5. Execute approved commits
 6. Report commit results
 
@@ -17,14 +17,49 @@ Follow these instructions from top to bottom.
 
 - Run these commands in parallel for maximum efficiency: `git status`, `git diff --staged`, `git diff`
 - List all changed files with their folder structure to understand the scope
-- If arguments are provided in <$ARGUMENTS>, **think carefully** about what the user means:
-  - Look at the changed files list and think about which ones match the argument
-  - Consider the semantic meaning - what would this argument mean for this project?
-  - Be SPECIFIC about which files you believe the argument refers to
-- If arguments specify a focus, confirm: "I interpreted '$ARGUMENTS' as referring to these files: [list files]. Is this correct?"
-- If no clear matches found, ask: "I couldn't find specific files matching '$ARGUMENTS'. Could you clarify which files you want to commit?"
-- If arguments specify a focus, ONLY analyze changes related to that focus
-- If no arguments provided, analyze all changes
+### CRITICAL: Argument Interpretation Rules
+
+**Context Provided** (when <$ARGUMENTS> contains text):
+
+- If YOLO is part of the Argument it is meant to skip user Approval (see Step 4 on your Todo)
+- The other text in <$ARGUMENTS> represents a **task ID**, **sprint ID**, or other **contextual identifier** provided by the user
+- This is NOT a file path - it's a semantic context for filtering changes
+- **PRIMARY FOCUS**: Only commit files directly related to this context
+- **SECONDARY CONSIDERATION**: After handling the primary context, ask if user wants to commit other unrelated changes
+
+**Task ID Pattern** (e.g., T01_S02, TX03_S01, T003):
+
+- Sprint Tasks: `T<NN>_S<NN>` format (e.g., T01_S02, T03_S02)
+- Completed Sprint Tasks: `TX<NN>_S<NN>` format (e.g., TX01_S02, TX03_S01)
+- General Tasks: `T<NNN>` format (e.g., T001, T002)
+- Completed General Tasks: `TX<NNN>` format (e.g., TX001, TX002)
+- Search for this task ID in:
+  - `.simone/03_SPRINTS/` directory (for sprint tasks)
+  - `.simone/04_GENERAL_TASKS/` directory (for general tasks)
+  - Task metadata in files (look for `task_id: T01_S02` in frontmatter)
+  - Git diff content (to see if code comments or commits reference the task)
+- Identify ALL files that were modified as part of this task's implementation
+- This includes: source code, tests, configuration, and the task documentation file itself
+
+**Sprint ID Pattern** (e.g., S01, S02):
+
+- When only sprint ID is provided, commit all changes related to ANY task within that sprint
+- Search pattern: `T*_S<NN>` in the sprint directory
+- Example: "S02" would include changes for T01_S02, T02_S02, T03_S02, etc.
+
+**No Context Provided** (when <$ARGUMENTS> is empty):
+
+- Analyze all changes and group them logically
+- Propose separate commits for different logical units of work
+
+### Implementation Steps
+
+1. First, determine if <$ARGUMENTS> contains any text
+2. If yes, explicitly state: "Context provided: '$ARGUMENTS' - I will focus on changes related to this context"
+3. If it's a task ID pattern, find the task file and understand what was implemented
+4. Filter the changed files to only those related to the identified context
+5. If no files match the context, inform the user: "No changes found related to '$ARGUMENTS'"
+6. If unrelated changes exist, mention them but DO NOT include in initial commit proposal
 
 ## 2 · Review changes and group by logical commits
 
@@ -47,10 +82,13 @@ For the next commit to create:
   - **CRITICAL:** Must not contain any attribution to Claude, Anthropic, or AI assistance
 - **Reasoning**: Brief explanation of why these changes belong together
 
-## 4 · Get user confirmation for FIRST commit only
+## 4 · Check if user approval is necessary
 
-For the first/next proposed commit:
+**YOLO Mode** (if "YOLO" was in arguments):
+- Skip user confirmation and proceed directly to commit execution
+- Still show what will be committed but don't wait for approval
 
+**Normal Mode** (default):
 - Show the complete commit plan including files and message
 - Wait for explicit user confirmation before proceeding
 - If user says no, ask what should be changed

@@ -26,7 +26,7 @@ If no open task matches, pause and ask the user how to proceed.
 
 Read the task description. If anything is unclear, ask clarifying questions before continuing.
 
-**CRITICAL CONTEXT VALIDATION:** Before executing any task:
+**CRITICAL CONTEXT VALIDATION:** Before executing any task spin up Parallel Subagents for these tasks:
 1. **Sprint Context:** Confirm task belongs to current sprint scope
 2. **Dependencies:** Check if any dependent tasks need to be completed first
 3. **Requirements:** Read relevant requirements docs in `.simone/02_REQUIREMENTS/`
@@ -36,8 +36,9 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 
 ## 4 · Set status to in_progress
 
-- Update front-matter to **status: in_progress**.
-- Record the current local timestamp (YYYY-MM-DD HH:MM).
+- Find out the current local timestamp (YYYY-MM-DD HH:MM).
+- Update front-matter to **status: in_progress** and set Updated time
+- Update ./simone/00_PROJECT_MANIFEST.md to set task in progress, updated time and current Sprint Status.
 
 ## 5 · Execute task work
 
@@ -47,7 +48,7 @@ Read the task description. If anything is unclear, ask clarifying questions befo
   1. Pick the next incomplete subtask.
   2. Implement the required changes, consulting docs as needed.
   3. Mark the subtask done.
-  4. Append a log entry to **## Claude Output Log** using the format `[YYYY-MM-DD HH:MM]: <message>`.
+  4. Append a log entry to **## Output Log** using the format `[YYYY-MM-DD HH:MM]: <message>`.
   5. Repeat until all subtasks are complete.
 
 ## 6 · Placeholder
@@ -58,8 +59,8 @@ Placeholder - just move on to the next step
 
 Follow these steps for a Code Review (in order)
 
-- include @.claude/commands/simone/code_review and use the Task ID as Scope.
-- Follow the instructions in the file to run a code review in parallel subtasks
+- include @.claude/commands/simone/code_review.md and use the Task ID as Scope.
+- Follow the instructions in the file to run a code review in **PARALLEL SUBAGENTS**
 - When done continue acting on the results accordingly
 - Understand and think about the results
 - on **FAIL**

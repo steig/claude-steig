@@ -73,11 +73,16 @@ With the identified Scope use `git diff` (on default: `git diff HEAD~1`) to find
 
 #### IMPORTANT: Output Format
 
-- Output the results of your review to the Tasks Output Log with a Timestamp.
+- Output the results of your review to the task's **## Output Log** section in the task file
+- Find the task file in `.simone/03_SPRINTS/` or `.simone/04_GENERAL_TASKS/` based on the scope
+- Append the review results to the existing Output Log with timestamp
 - Output Format:
-  - Result: **FAIL/PASS** Your final decision on if it's a PASS or a FAIL.
-  - **Scope:** Inform the user about the review scope.
-  - **Findings** Detailed list with all Issues found and Severity Score.
-  - **Summary** Short summary on what is wrong or not.
-  - **Recommendation** Your personal recommendation on further steps.
-- Finally output result to the console
+  ```
+  [YYYY-MM-DD HH:MM]: Code Review - PASS/FAIL
+  Result: **FAIL/PASS** Your final decision on if it's a PASS or a FAIL.
+  **Scope:** Inform the user about the review scope.
+  **Findings:** Detailed list with all Issues found and Severity Score.
+  **Summary:** Short summary on what is wrong or not.
+  **Recommendation:** Your personal recommendation on further steps.
+  ```
+- Also output a brief result summary to the console for immediate feedback
