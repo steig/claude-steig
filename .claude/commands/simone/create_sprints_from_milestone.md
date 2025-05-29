@@ -1,6 +1,6 @@
-# Plan entire milestone sprint structure based on current state and milestone requirements
+# Plan Sprints from a given Milestone. Execute from Top to Bottom
 
-Follow these instructions from top to bottom.
+Follow these instructions to sprint the scope of a Milestone into Sprints
 
 ## Create a TODO with EXACTLY these 8 items
 
@@ -18,6 +18,8 @@ Follow these instructions from top to bottom.
 ## 1 · Analyze current milestone state
 
 **CRITICAL:** You are given additional Arguments: <$ARGUMENTS>
+
+**USE PARALLEL SUBAGENTS** to do these tasks:
 
 - Parse arguments for milestone ID (defaults to current milestone from PROJECT_MANIFEST)
 - Read `.simone/00_PROJECT_MANIFEST.md` to understand current progress
