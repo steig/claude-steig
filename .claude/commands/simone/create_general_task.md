@@ -145,35 +145,3 @@ Populate the task file with:
 🧪 **Test Approach**: [Testing pattern to follow]
 ⏭️ **Next Step**: Review task details and run `/do_task T###` to begin
 ```
-
-## IMPORTANT REMINDERS
-
-- **Documentation drives implementation** - Never create tasks that aren't grounded in project docs
-- **Architecture is law** - Tasks must work within established patterns
-- **No orphan tasks** - Every task must connect to project goals
-- **Template compliance is mandatory** - Use provided templates exactly
-- **When in doubt, reference documentation** - Don't make assumptions
-- **Codebase research is critical** - Tasks must reference actual implementation patterns
-
-## Task Template Reference
-
-The task template includes these required sections:
-
-- Task metadata (ID, Created, Status, Complexity)
-- Context and Background
-- Requirements and Goals
-- Acceptance Criteria
-- Technical Approach
-- Dependencies
-- Implementation Notes
-- Testing Strategy
-- Documentation Updates
-
-**ENHANCED SECTIONS** to add based on codebase research:
-
-- Technical Guidance (interfaces, patterns, integration points)
-- Implementation Notes (specific files, functions, approaches)
-- Testing patterns from existing tests
-- Error handling approaches used in similar code
-
-**FOLLOW** the template structure exactly as defined in `.simone/99_TEMPLATES/task_template.md` and ADD the enhanced sections

@@ -31,10 +31,11 @@ You need to stick to this process and **PRECISELY** follow it
 
 Before you start:
 
-- Run tests to ensure clean baseline: `poetry run python run_dev.py test`
-- Check git status to ensure clean working directory
+- Run tests to ensure clean baseline using test.md command (@.claude/commands/simone/test.md)
+- **If** FAIL rate is above 10% asses if a fix is possible. If so, fix and move on. If not, move on anyways.
 
-If any of these fail, exit right away report to the user.
+- Check git status to ensure clean working directory
+- **If** git status is not clean just remember and report to the user at the end, but move on.
 
 Also consider <$ARGUMENTS> - if anything between <> can be considered additional instructions, prioritize them in the process.
 
@@ -86,7 +87,7 @@ Execute based on mode:
 - if you find a task that you cannot fix because the work was done already, close the task and note in Output Log of task.
 - **BEFORE STARTING**: Create a git branch for the task: `git checkout -b task/<task-id>`
 - **USE A SUBAGENT** and have it include @.claude/commands/simone/do_task.md with the Task ID as Argument to execute the Task.
-- **AFTER TASK COMPLETION**: Run tests to verify nothing broke: `poetry run python run_dev.py test`
+- **AFTER TASK COMPLETION**: Run tests to verify nothing broke using test.md command (@.claude/commands/simone/test.md)
 - on any failure in the task execution assess the severity of the error:
   - CRITICAL errors (breaking tests, security issues, data loss risk): **FIX PROBLEMS**
   - NON-CRITICAL errors (linting, formatting, minor issues): note in OUTPUT LOG and continue

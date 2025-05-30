@@ -27,6 +27,7 @@ If no open task matches, pause and ask the user how to proceed.
 Read the task description. If anything is unclear, ask clarifying questions before continuing.
 
 **CRITICAL CONTEXT VALIDATION:** Before executing any task spin up Parallel Subagents for these tasks:
+
 1. **Sprint Context:** Confirm task belongs to current sprint scope
 2. **Dependencies:** Check if any dependent tasks need to be completed first
 3. **Requirements:** Read relevant requirements docs in `.simone/02_REQUIREMENTS/`
@@ -68,16 +69,24 @@ Follow these steps for a Code Review (in order)
   - extend the Current Task with the Subtasks identified by the review
   - go back to "5 · Execute task work"
 - on **PASS**
-  - report the result to the user
-    - **Result**: DONE | BLOCKED | NO TASK
-    - **Scope**: Identified task or reason none was processed
-    - **Summary**: One-paragraph recap of what was done or why blocked
-    - **Next steps**: Recommended follow-up actions
-  - Ask for user confirmation
+  - move on to next step
 
 ## 8 · Finalize task status
 
-**ONLY WHEN USER CONFIRMATION IS GIVEN**
-
 - set the Task status to **completed**
+- Rename the Task file accordingly to enable proper Completed recognition from the filename (TX[TASK_ID]...)
 - Update .simone/00_PROJECT_MANIFEST.md to reflect the new status
+- **Report** the result to the user
+
+  ✅ **Result**: Quick statement of success
+
+  🔎 **Scope**: Identified task or reason none was processed
+
+  💬 **Summary**: One-paragraph recap of what was done or why blocked
+
+  ⏭️ **Next steps**: Recommended follow-up actions
+
+- **Suggestions** for the User:
+
+  - 🛠️ Use /project:simone:commit `TASK_ID` to commit the changes to git
+  - 🧹 Use /clear to clear the context before starting the next Task

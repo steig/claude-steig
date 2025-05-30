@@ -7,16 +7,17 @@ Perform a comprehensive project-level review focusing on architecture, progress,
 - This is a high-level review of overall project state, not recent changes.
 - Unless clearly mentioned in project documents, there is no timeline and schedule is irrelevant
 
-## Create a TODO with EXACTLY these 8 Items
+## Create a TODO with EXACTLY these 9 Items
 
 1. Analyze review scope and timing
-2. Assess project documentation alignment
-3. Review milestone and sprint progress
-4. Analyze codebase architecture and structure
-5. Audit file organization and workflow compliance
-6. Evaluate technical decisions and complexity
-7. Critique implementation quality (John Carmack perspective)
-8. Provide comprehensive assessment with recommendations
+2. Execute and assess test infrastructure health
+3. Assess project documentation alignment
+4. Review milestone and sprint progress
+5. Analyze codebase architecture and structure
+6. Audit file organization and workflow compliance
+7. Evaluate technical decisions and complexity
+8. Critique implementation quality (John Carmack perspective)
+9. Provide comprehensive assessment with recommendations
 
 Follow step by step and adhere closely to the following instructions for each step.
 
@@ -28,7 +29,7 @@ Check: <$ARGUMENTS>
 
 If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to identify specific focus areas (milestone, sprint, architecture component, etc.). Unless stated in Argument do not compare to previews project reviews in `.simone/10_STATE_OF_PROJECT`.
 
-**IMPORTANT:** This review looks at overall project state, not just recent changes.
+**IMPORTANT:** This review looks at overall project state in context of recent changes.
 
 **CRITICAL:** Read `.simone/00_PROJECT_MANIFEST.md` FIRST to understand:
 
@@ -45,17 +46,47 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 
 **REVIEW PRINCIPLE:** Evaluate against CURRENT SPRINT deliverables, not full milestone scope.
 
-### 2. Assess project documentation alignment
+### 2. Execute and assess test infrastructure health
+
+**CRITICAL:** Test infrastructure health is a BLOCKING criteria for sprint/milestone progression.
+
+- USE test.md command to execute full test suite (@.claude/commands/simone/test.md)
+- ANALYZE test results: passed/failed/skipped counts and failure categories
+- CALCULATE test health score (0-10 scale):
+  - 10: 100% pass rate, no infrastructure issues
+  - 8-9: >95% pass rate, minor issues only
+  - 6-7: 80-95% pass rate, some non-critical failures
+  - 4-5: 60-80% pass rate, significant issues
+  - 0-3: <60% pass rate, critical infrastructure problems
+- CATEGORIZE failures:
+  - Infrastructure: Import errors, missing modules
+  - Configuration: Environment variables, database connections
+  - Logic: Assertion failures, actual bugs
+  - Flaky: Intermittent failures
+- DETERMINE blocking status:
+  - Score < 6: BLOCKS sprint progression
+  - Score < 8: BLOCKS milestone completion
+  - Score < 4: TRIGGERS emergency escalation
+- IDENTIFY root causes of any infrastructure failures
+- TRACK trend vs previous review (improvement/degradation)
+- ASSESS test strategy validity for scope of the project. Tests should be pragmatic and help assuring functionality but not get in the way of development progress too much.
+
+### 3. Assess project documentation alignment
+
+**USE PARALLEL AGENTS** to follow these steps:
 
 - READ all core documents in `.simone/01_PROJECT_DOCS/` especially ARCHITECTURE.md
 - READ current milestone requirements in `.simone/02_REQUIREMENTS/`
+- READ architecture decisions in `.simone/05_ARCHITECTURE_DECISIONS` as they might extend/contradict other documents
 - IDENTIFY any gaps between documentation and current implementation
 - CHECK if the project is still following the documented architecture vision
 - VERIFY that current code structure matches documented patterns
 
 **IMPORTANT:** Documentation is our source of truth. Any deviation needs justification.
 
-### 3. Review milestone and sprint progress
+### 4. Review milestone and sprint progress
+
+**USE PARALLEL AGENTS** to follow these steps:
 
 - READ `.simone/00_PROJECT_MANIFEST.md` for current status
 - ANALYZE completed sprints in `.simone/03_SPRINTS/`
@@ -63,17 +94,9 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 - DISTINGUISH between sprint-level tasks vs milestone-level features
 - ASSESS if current sprint focus aligns with milestone goals
 
-**CRITICAL SPRINT-BASED EVALUATION:**
-
-- Compare against CURRENT SPRINT deliverables ONLY
-- Identify what's intentionally deferred to future sprints
-- DO NOT criticize missing functionality planned for later sprints
-- Distinguish "sprint incomplete" from "milestone incomplete"
-- Focus on sprint deliverable quality, not missing future features
-
-**INFRASTRUCTURE-FIRST CONTEXT:** Missing AI features during S01 infrastructure phase is expected and appropriate.
-
-### 4. Analyze codebase architecture and structure
+### 5. Analyze codebase architecture and structure
+#
+**USE PARALLEL AGENTS** to follow these steps:
 
 - EXAMINE overall project structure and organization
 - ANALYZE import patterns and dependency relationships
@@ -89,7 +112,7 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 - **APIs** — RESTful design, proper HTTP methods, consistent patterns
 - **Configuration** — environment management, secrets handling
 
-### 5. Audit file organization and workflow compliance
+### 6. Audit file organization and workflow compliance
 
 **IMPORTANT:** Check for workflow discipline and architectural boundary violations.
 
@@ -117,7 +140,7 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 
 **CRITICAL:** File proliferation indicates workflow breakdown. Flag for immediate cleanup task creation.
 
-### 6. Evaluate technical decisions and complexity
+### 7. Evaluate technical decisions and complexity
 
 - ASSESS complexity vs. business value ratio
 - REVIEW choice of frameworks, libraries, and tools
@@ -127,9 +150,9 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 
 **IMPORTANT:** Think like an experienced developer. Are we solving the right problems the right way?
 
-### 7. Critique implementation quality (John Carmack perspective)
+### 8. Critique implementation quality (John Carmack perspective)
 
-Think as John Carmack would: focus on simplicity, performance, and maintainability.
+Think as John Carmack would: focus on simplicity, performance, and maintainability, but keep the projects goal in mind. Especially long term vision as well. Don't over simplify.
 
 - **Simplicity:** Are we solving problems in the most straightforward way?
 - **Performance:** Are there obvious performance issues or bottlenecks?
@@ -137,22 +160,21 @@ Think as John Carmack would: focus on simplicity, performance, and maintainabili
 - **Robustness:** How does the system handle edge cases and failures?
 - **Technical debt:** What shortcuts are we taking that will hurt us later?
 
-**IMPORTANT:** Be brutally honest. Carmack-level critique means no sugar-coating.
+Be **brutally honest**. Carmack-level critique means no sugar-coating but still staying true to the project's reality.
+Be thorough and **go above and beyond** in your analysis - leave no stone unturned.
 
-**IMPORTANT:** Be thorough and go above and beyond in your analysis - leave no stone unturned.
-
-### 8. Provide comprehensive assessment with recommendations
+### 9. Provide comprehensive assessment with recommendations
 
 **IMPORTANT:** Get current timestamp and create output file
 
 - Get current timestamp using system date command
-- Create filename: `YYYY-MM-DD-<judgment-slug>.md` in `.simone/10_STATE_OF_PROJECT/`
+- Create filename: `YYYY-MM-DD-HH-MM-<judgment-slug>.md` in `.simone/10_STATE_OF_PROJECT/`
 - Judgment slug should be 2-3 words describing overall project health (e.g., "solid-progress", "needs-focus", "critical-issues", "doing-great", "on-track")
 
 **IMPORTANT:** Write full report to the timestamped file with this format:
 
 ```markdown
-# Project Review - [Current Date]
+# Project Review - [YYYY-MM-DD HH:MM]
 
 ## 🎭 Review Sentiment
 
@@ -164,6 +186,29 @@ Think as John Carmack would: focus on simplicity, performance, and maintainabili
 - **Scope:** What areas were reviewed
 - **Overall Judgment:** [2-3 word assessment used in filename]
 
+## Test Infrastructure Assessment
+
+- **Test Suite Status**: [PASSING/FAILING/BLOCKED] (X/Y tests)
+- **Test Pass Rate**: X% (Y passed, Z failed)
+- **Test Health Score**: X/10
+- **Infrastructure Health**: [HEALTHY/DEGRADED/BROKEN]
+  - Import errors: [count]
+  - Configuration errors: [count]
+  - Fixture issues: [count]
+- **Test Categories**:
+  - Unit Tests: X/Y passing
+  - Integration Tests: X/Y passing
+  - API Tests: X/Y passing
+- **Critical Issues**:
+  - [List of blocking test infrastructure problems]
+  - [Module import mismatches]
+  - [Environment configuration failures]
+- **Sprint Coverage**: [% of sprint deliverables with passing tests]
+- **Blocking Status**: [CLEAR/BLOCKED - reason]
+- **Recommendations**:
+  - [Immediate fixes required]
+  - [Test infrastructure improvements needed]
+
 ## Development Context
 
 - **Current Milestone:** [ID and status from manifest]
@@ -172,7 +217,7 @@ Think as John Carmack would: focus on simplicity, performance, and maintainabili
 
 ## Progress Assessment
 
-- **Milestone Progress:** [percentage complete, timeline status]
+- **Milestone Progress:** [percentage complete]
 - **Sprint Status:** [current sprint assessment]
 - **Deliverable Tracking:** [what's done vs planned]
 
@@ -203,9 +248,12 @@ Think as John Carmack would: focus on simplicity, performance, and maintainabili
 
 ## Recommendations
 
-- **Next Sprint Focus:** [what should be prioritized]
-- **Timeline Impact:** [will current issues affect milestone delivery?]
-- **Action Items:** [specific next steps]
+Based on your findings recommend Action items - chose whatever fits your findings
+
+- **Important fixes:** What needs to be fixed immediately?
+- **Optional fixes/changes:** What would still be recommended though optional?
+- **Next Sprint Focus:** Can the user move to the next sprint?
+
 ```
 
 **IMPORTANT:** Be specific with file paths and line numbers. This review should be actionable and permanently archived.

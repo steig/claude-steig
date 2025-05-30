@@ -8,6 +8,8 @@ Simone is a directory-based project management system I built to work better wit
 
 ## 🆕 What's New (Latest Updates)
 
+- **Quick Start**: Use `npx hello-simone` to initialize Simone in any project
+- **Interactive Setup**: Improved `initialize` command with adaptive, conversational setup
 - **Smart Commit Filtering**: Use `commit T01_S02` to commit only files related to that task
 - **YOLO Mode**: Use `commit YOLO` to skip confirmations for faster iteration
 - **Autonomous Execution**: New `yolo` command for unattended task processing ⚠️ **Use with extreme caution**
@@ -73,21 +75,27 @@ The result is a task-based workflow where Claude always has the right context fo
 
 ## Getting Started
 
-1. Copy the `.simone` directory structure to your project
-2. Create your architecture documentation in `.simone/01_PROJECT_DOCS/ARCHITECTURE.md`:
-   - Describe your system architecture and technical approach
-   - Reference any additional documentation files you create
-   - Use the provided example as a guide
-3. Add your first milestone in `.simone/02_REQUIREMENTS/`:
-   - Create a folder like `M01_Your_Milestone_Name/`
-   - Add milestone metadata and requirements documents
-   - Follow the example structure provided
-4. Run `/project:simone:initialize` - it will:
-   - Understand your project structure
-   - Generate your project manifest automatically
-   - Guide you through any missing pieces
+### Quick Start (Recommended)
 
-**⚠️ Note**: The initialization process is still being refined and has limited testing. I'm especially looking for feedback on how well it works for different project setups. Please share your experience!
+```bash
+npx hello-simone
+```
+
+This will:
+- Install the Simone framework in your project
+- Guide you through interactive setup
+- Create initial documentation based on your project
+
+### Manual Installation
+
+1. Copy the `.simone` directory structure to your project
+2. Run `/project:simone:initialize` in Claude Code - it will:
+   - Detect your project type automatically
+   - Guide you through creating architecture docs
+   - Help set up your first milestone
+   - Generate your project manifest
+
+The new initialize command is conversational and adapts to your project's needs!
 
 That's it. The system guides you (and Claude) through the rest.
 

@@ -17,11 +17,12 @@ Follow these instructions from top to bottom.
 
 - Run these commands in parallel for maximum efficiency: `git status`, `git diff --staged`, `git diff`
 - List all changed files with their folder structure to understand the scope
+
 ### CRITICAL: Argument Interpretation Rules
 
 **Context Provided** (when <$ARGUMENTS> contains text):
 
-- If YOLO is part of the Argument it is meant to skip user Approval (see Step 4 on your Todo)
+- If YOLO is part of the <$ARGUMENTS> it is meant to skip user Approval (see Step 4 on your Todo)
 - The other text in <$ARGUMENTS> represents a **task ID**, **sprint ID**, or other **contextual identifier** provided by the user
 - This is NOT a file path - it's a semantic context for filtering changes
 - **PRIMARY FOCUS**: Only commit files directly related to this context
@@ -63,6 +64,18 @@ Follow these instructions from top to bottom.
 
 ## 2 · Review changes and group by logical commits
 
+### PRIORITY: Context Filtering
+
+**If context provided in arguments**:
+
+1. **FILTER FIRST**: Separate changes into two groups:
+   - **Related to context**: Files that are part of the task/context implementation
+   - **Unrelated to context**: Everything else
+2. **FOCUS**: Only analyze the "related to context" group for the first commit
+3. **DEFER**: Keep the "unrelated" group for potential later commits (only if user requests)
+
+**Standard grouping logic** (for no-context or within-context grouping):
+
 - **Think about** which changes belong together logically:
   - Task completion (group by task ID when applicable)
   - Feature additions (group by feature scope)
@@ -75,20 +88,33 @@ Follow these instructions from top to bottom.
 
 ## 3 · Propose commit
 
+### Context-Aware Commit Proposal
+
+**When context was provided** (e.g., task ID):
+
+- **FIRST COMMIT**: Must contain ONLY files related to the provided context
+- State clearly: "This commit includes changes for $ARGUMENTS"
+- After this commit is done, then ask: "There are also unrelated changes in [list files]. Would you like me to create additional commits for these?"
+
+**When no context provided**:
+
+- Propose commits based on logical grouping of all changes
+
 For the next commit to create:
 
+- **Context**: If applicable, which task/context this commit addresses
 - **Files**: List the specific files to be included
 - **Commit message**: Use conventional commit format, be clear and concise
   - **CRITICAL:** Must not contain any attribution to Claude, Anthropic, or AI assistance
+  - If task-related, include task ID in message (e.g., "feat(agents): implement T01_S02 coordinator agent" or "fix(api): resolve T003 authentication issue")
 - **Reasoning**: Brief explanation of why these changes belong together
 
 ## 4 · Check if user approval is necessary
 
-**YOLO Mode** (if "YOLO" was in arguments):
-- Skip user confirmation and proceed directly to commit execution
-- Still show what will be committed but don't wait for approval
+If YOLO **IS** part of the <$ARGUMENTS> skip this and jump to next step.
 
-**Normal Mode** (default):
+Otherwise ask the User for approval.
+
 - Show the complete commit plan including files and message
 - Wait for explicit user confirmation before proceeding
 - If user says no, ask what should be changed
@@ -99,7 +125,8 @@ For the next commit to create:
 For the approved commit:
 
 - Stage the specified files with `git add`
-- Create the commit with the approved message
+- **IMPORTANT:** We are using pre-commit hooks that will likely report shortcomings. You need to fix them. Don't skip validation unless there are open tasks adressing especially these problems.
+- **Create the commit** with the approved message
 - Verify commit was created successfully
 - **IMPORTANT:** If there are more commits remaining, return to step 3 for the next commit
 - Only proceed to step 6 when all commits are completed

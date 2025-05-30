@@ -1,5 +1,28 @@
 # Changelog
 
+## 2025-05-30
+
+### Added
+
+- `npx hello-simone` quick start command for easy Simone installation
+- Interactive, adaptive initialize command that:
+  - Auto-detects project type and framework
+  - Guides users through conversational setup
+  - Creates documentation through Q&A process
+  - Adapts to existing vs new projects
+
+### Changed
+
+- initialize command completely rewritten for better user experience
+- Removed complex branching logic in favor of adaptive process
+- Focus on conversational interaction rather than rigid steps
+
+### Improved
+
+- Better handling of existing documentation during setup
+- Smart project detection (Node.js, Python, PHP, etc.)
+- Milestone creation now interactive and context-aware
+
 ## 2025-05-29
 
 ### Added

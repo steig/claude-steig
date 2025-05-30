@@ -1,94 +1,123 @@
 # Initialize Simone Framework
 
-Initialize and set up the Simone project management framework for this project.
+Initialize the Simone project management framework through an adaptive, interactive process.
 
-## Create a TODO with EXACTLY these 6 items
+## Create a TODO with EXACTLY these items
 
-1. Verify Simone installation and understand framework
-2. Identify project state (new or existing)
-3. Check for real documentation and milestones
-4. Generate or update project manifest
-5. Provide framework guidance
-6. List available commands and next steps
-
-Follow each step in order and complete all tasks.
+1. Scan and analyze the project
+2. Interactive confirmation with user
+3. Check for existing Simone documents
+4. Guide document creation process
+5. Create first milestone for Simone
+6. Generate project manifest
+7. Provide next steps
 
 ## DETAILS on every TODO item
 
-### 1. Verify Simone installation and understand framework
+### 1. Scan and analyze the project
 
-- Verify `.simone/` directory exists with all required subdirectories
-- Verify `.claude/commands/simone/` directory exists
-- Read `.simone/CLAUDE.MD` to understand the framework structure
-- Read `.simone/README.md` to understand Simone's purpose and workflow
-- Check templates exist in `.simone/99_TEMPLATES/`
-- Report any missing components
+**Detect project characteristics:**
+- Check for package.json, requirements.txt, composer.json, etc.
+- Identify project type (Node.js, Python, PHP, etc.)
+- Scan overall project structure
+- Check if this is a new or existing project
+- Look for existing documentation (README, docs/, etc.)
 
-### 2. Identify project state (new or existing)
+**Keep findings brief** - Just identify the essentials
 
-Check if this is a fresh setup or existing project by examining:
+### 2. Interactive confirmation with user
 
-- `00_PROJECT_MANIFEST.md` - look for "Your Project Name" or other placeholders
-- `01_PROJECT_DOCS/ARCHITECTURE.md` - check if it's the example file
-- `02_REQUIREMENTS/M01_Backend_Setup/` - check if it's example content
+**Present findings conversationally:**
+```
+I found this to be a [project type] project named [detected name].
+Is this correct? Should I proceed with Simone setup?
+```
 
-**Determine**: Is this a new project using example files, or an existing project with real content?
+**Get user confirmation before continuing**
 
-### 3. Check for real documentation and milestones
+### 3. Check for existing Simone documents
 
-**For new projects**, check if user has already created:
+**Scan .simone/ directory for:**
+- Any documents in 01_PROJECT_DOCS/
+- Any milestones in 02_REQUIREMENTS/
+- Any existing sprints or tasks
+- Current manifest status
 
-- Real ARCHITECTURE.md in `01_PROJECT_DOCS/` (not the example)
-- At least one real milestone folder in `02_REQUIREMENTS/` (not M01_Backend_Setup)
-- Any sprint folders in `03_SPRINTS/`
+**Interactive decision:**
+- If documents found: "I found existing documents: [list]. Should we work with these or extend them?"
+- If no documents: "No Simone documents found yet. Do you have any existing project documentation you'd like to copy in before we continue?"
 
-**For existing projects**:
+**Allow user to:**
+- Use existing documents
+- Add new documents
+- Start fresh
+- Cancel to add documents manually first
 
-- Skip to step 4 if manifest is already customized
-- Otherwise check for real content as above
+### 4. Guide document creation process
 
-### 4. Generate or update project manifest
+**Based on user's choice:**
 
-**If real documentation AND milestones exist:**
+**If starting fresh or extending:**
+- Perform deep analysis of the codebase
+- Identify key components and architecture patterns
+- Create draft ARCHITECTURE.md based on analysis
+- Use Q&A style to refine and complete:
+  - "What's the main purpose of this project?"
+  - "What are the key technical decisions?"
+  - "Any important constraints or requirements?"
 
-- Read template from `.simone/99_TEMPLATES/project_manifest_template.md`
-- Extract information:
-  - Project name from current directory or prompt user
-  - Vision/overview from ARCHITECTURE.md introduction
-  - Current milestone from newest folder in `02_REQUIREMENTS/`
-  - Sprint info from `03_SPRINTS/` if any exist
-- Generate new manifest using template
-- Replace example manifest with generated version
-- Use current timestamp (get system date first)
+**If using existing docs:**
+- Import and adapt existing documentation
+- Fill in any Simone-specific sections
+- Ensure compatibility with framework structure
 
-**If still using only examples:**
+**Keep it conversational and adaptive**
 
-- Keep example manifest as-is
-- Inform user that manifest will auto-generate after creating real content
+### 5. Create first milestone for Simone
 
-### 5. Provide framework guidance
+**Determine appropriate first milestone:**
+- If new project: Start with setup/foundation milestone
+- If existing project: Identify current phase and create appropriate milestone
 
-**For new users (using examples):**
+**Interactive milestone creation:**
+- "Based on the project state, I suggest creating milestone: [name]"
+- "What would you like to focus on in this milestone?"
+- Create milestone structure with initial requirements
+- Keep scope realistic and focused
 
-- Explain Simone's context management approach
-- Guide them through next steps:
-  1. Create ARCHITECTURE.md with their project's technical approach
-  2. Create first milestone folder with requirements
-  3. Re-run initialize to generate manifest
-- Offer to help create ARCHITECTURE.md if requested
+### 6. Generate project manifest
 
-**For existing users:**
+**Automatically generate manifest using:**
+- Information gathered during setup
+- Created/imported documentation
+- Current milestone details
+- Project metadata
 
-- Summarize current project state from manifest
-- Identify current milestone and sprint
-- Check for any in-progress tasks
-- Suggest next actions based on project state
+**No user interaction needed** - Just inform when complete
 
-### 6. List available commands and next steps
+### 7. Provide next steps
 
-- List all commands found in `.claude/commands/simone/`
-- Explain command pattern: `/project:simone:<command>`
-- Recommend next commands based on project state:
-  - New projects: `plan_milestone` after creating requirements
-  - Existing projects: `do_task` or `project_review`
-- Remind that Simone guides the workflow from here
+**Customized guidance based on setup:**
+```
+✅ Simone initialized for [project name]!
+
+Current setup:
+- Project type: [type]
+- Current milestone: [milestone]
+- Documents: [created/imported]
+
+Next steps:
+- Review your architecture: 01_PROJECT_DOCS/ARCHITECTURE.md
+- Check milestone requirements: 02_REQUIREMENTS/[milestone]/
+- Start first task: /project:simone:create_general_task
+
+Ready to begin development!
+```
+
+## ADAPTIVE PROCESS NOTES
+
+- **Stay conversational** - Ask questions naturally, not like a form
+- **Be smart** - Use AI to understand context and make intelligent suggestions
+- **Allow flexibility** - User can skip, cancel, or modify at any point
+- **Focus on value** - Only create what's useful for the specific project
+- **Keep it simple** - Don't overwhelm with options or details
