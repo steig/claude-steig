@@ -96,7 +96,7 @@ Execute based on mode:
 ### COMMIT WORK
 
 - **ONLY IF** tests are passing and no critical issues exist
-- **USE A SUBAGENT** and have it include @.claude/commands/commit.md with the Task ID as Argument and YOLO as additional argument
+- **USE A SUBAGENT** and have it include @.claude/commands/simone/commit.md with the Task ID as Argument and YOLO as additional argument
 - on any failure when committing, note the problem in the OUTPUT LOG of the task and continue
 - after successful commit, merge to main: `git checkout main && git merge task/<task-id>`
 - on success move on
@@ -120,11 +120,11 @@ Execute based on mode:
 
 ## EXECUTE PROJECT REVIEW
 
-- **USE A SUBAGENT** and have it include @.claude/commands/project_review.md
+- **USE A SUBAGENT** and have it include @.claude/commands/simone/project_review.md
 - Depending on the results of the review:
   - On FAIL: Think about possible fixes.
   - If fixes are quickly done, fix right away and repeat `## EXECUTE PROJECT REVIEW``
-  - If fixes are more complex **USE A SUBAGENT** and have it include @.claude/commands/create_general_task.md to create new general tasks as needed.
+  - If fixes are more complex **USE A SUBAGENT** and have it include @.claude/commands/simone/create_general_task.md to create new general tasks as needed.
   - Go back to `### FIND OPEN WORK` to work on these fixes
   - On PASS: move on
 

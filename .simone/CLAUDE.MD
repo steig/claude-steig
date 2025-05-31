@@ -1,44 +1,65 @@
-# Simone Framework Instructions
+# CLAUDE.md - Simone Framework Structure Guide
 
-## IMPORTANT: Date & Time
+## Overview
+This is the root directory of the Simone framework structure. It contains all project documentation, requirements, sprints, and organizational files.
 
-- Before adding Date/Time to any file make sure you are aware of the current system time (system `date` command) and use 24h time format.
-- When Using Timestamps use YYYY-MM-DD HH:MM format, for Date only use YYYY-MM-DD
+## Critical Files
 
-## Simone Overview
-
-This project uses the Simone framework for project management. Key operational files are:
-
-- Project status: `.simone/00_PROJECT_MANIFEST.md`
-
-## Directory Structure
-
-```plaintext
-.simone/
-├── 00_PROJECT_MANIFEST.md       # Project status and pointers
-├── 01_PROJECT_DOCS/             # General Documentation to understand the Project
-├── 02_REQUIREMENTS/             # Milestone-based requirements in subfolders
-├── 03_SPRINTS/                  # Sprint plans and tasks
-├── 04_GENERAL_TASKS/            # Non-sprint tasks
-├── 05_ARCHITECTURE_DECISIONS/   # ADRs
-├── 10_STATE_OF_PROJECT/         # Project review snapshots and state tracking
-└── 99_TEMPLATES/                # Templates
+### Project Manifest
+**IMPORTANT**: The project manifest file MUST be named:
+```
+00_PROJECT_MANIFEST.md
 ```
 
-## File Naming Conventions
+**NOT**:
+- ❌ `MANIFEST.md`
+- ❌ `PROJECT_MANIFEST.md`
+- ❌ `project_manifest.md`
 
-- Milestones: `M<NN>_<Description>`
-- Sprints: `S<NN>_M<NN>_<Focus_Area>`
-- Sprint Tasks: `T<NN>_S<NN>_<Description>.md`
-- Completed Sprint Tasks: `TX<NN>_S<NN>_<Description>.md`
-- General Tasks: `T<NNN>_<Description>.md`
-- Completed Tasks: `TX<NNN>_<Description>.md`
-- ADRs: `ADR<NNN>_<Title>.md`
-- PRD Amendments: `PRD_AMEND_<NN>_<Description>.md`
+The manifest is the central reference file that tracks:
+- Project name and status
+- Current milestone and sprint
+- Project metadata
+- Last updated timestamp
 
-## General Guidelines
+## Directory Structure
+```
+.simone/
+├── 00_PROJECT_MANIFEST.md          # Central project reference (CORRECT NAME)
+├── 01_PROJECT_DOCS/                # General project documentation
+├── 02_REQUIREMENTS/                # Milestone-based requirements
+├── 03_SPRINTS/                     # Sprint execution folders
+├── 04_GENERAL_TASKS/               # Non-sprint tasks
+├── 05_ARCHITECTURAL_DECISIONS/     # ADR documentation
+├── 10_STATE_OF_PROJECT/            # Project review snapshots
+└── 99_TEMPLATES/                   # Document templates
+```
 
-- Always use templates from `.simone/99_TEMPLATES/` as structural guides
-- Flag unclear requirements or overly complex tasks for human review and actively ask the user.
-- Be concise in logs and communications and be aware of current date and time
-- Update project manifest when significant changes occur (especially on Tasks, Sprints or Milestones completed)
+## Naming Conventions Summary
+
+### Files
+- **Project Manifest**: `00_PROJECT_MANIFEST.md`
+- **Milestone Meta**: `M##_milestone_meta.md`
+- **Sprint Meta**: `S##_M##_sprint_meta.md`
+- **Task Files**: `TASK_##_*.md`
+- **ADR Files**: `ADR_###_*.md`
+
+### Folders
+- **Milestones**: `M##_Milestone_Name/`
+- **Sprints**: `S##_M##_Sprint_Name/`
+- **State Snapshots**: `YYYY-MM-DD_HH-MM_snapshot/`
+
+## Important Notes for Claude Code
+
+1. **Always create `00_PROJECT_MANIFEST.md`** when initializing a project
+2. **Use the templates** from `99_TEMPLATES/` for consistency
+3. **Follow the naming conventions exactly** - they enable proper sorting and navigation
+4. **Update the manifest** when creating milestones or sprints
+5. **Use underscores** for spaces in folder and file names
+
+## Common Initialization Mistakes
+- Creating `MANIFEST.md` instead of `00_PROJECT_MANIFEST.md`
+- Missing the leading zeros in numbered prefixes
+- Using hyphens instead of underscores
+- Creating files without using templates
+- Not updating the manifest after structural changes

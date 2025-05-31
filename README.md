@@ -82,6 +82,7 @@ npx hello-simone
 ```
 
 This will:
+
 - Install the Simone framework in your project
 - Guide you through interactive setup
 - Create initial documentation based on your project
@@ -103,7 +104,7 @@ That's it. The system guides you (and Claude) through the rest.
 
 ### 00_PROJECT_MANIFEST.md
 
-The central document containing the project's vision, goals, and high-level overview. It serves as the starting point for Claude to understand the project.
+The central document containing the project's vision, goals, and high-level overview. It serves as the starting point for Claude to understand the project. **Important**: The manifest file must be named exactly `00_PROJECT_MANIFEST.md`, not `MANIFEST.md`.
 
 ### 01_PROJECT_DOCS/
 
@@ -111,7 +112,7 @@ Contains general project documentation including technical specifications, user 
 
 ### 02_REQUIREMENTS/
 
-Organized by milestones, this directory stores product requirements documents (PRDs) and their amendments, providing a clear view of what needs to be built. This helps Claude understand the project requirements.
+Organized by milestones, this directory stores product requirements documents (PRDs) and their amendments, providing a clear view of what needs to be built. This helps Claude understand the project requirements. Milestone folders must follow the naming convention `M##_Milestone_Name/` (e.g., `M01_Backend_Setup/`).
 
 ### 03_SPRINTS/
 
