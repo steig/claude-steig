@@ -1,54 +1,91 @@
-# Simone - A Project Management System for Claude Code
+# Simone for Claude Code
 
 ## What is this?
 
 Simone is a directory-based project management system I built to work better with Claude Code. It's basically a set of folders, markdown files, and custom commands that help break down software projects into manageable chunks that AI can handle effectively.
 
-**⚠️ Early Stage Warning**: This is very much a work in progress. I've been using it for my own projects and found it incredibly helpful, so I'm sharing it. But it's currently tuned to how I work, and your mileage may vary.
+**⚠️ Complexity Warning**: Simone is a sophisticated system that requires time to understand properly. It's not a simple plug-and-play solution, but rather a framework that works best when you take the time to learn how it operates and adapt it to your workflow.
 
-## 🆕 What's New (Latest Updates)
+**📋 Latest Updates**: See [CHANGELOG.md](CHANGELOG.md) for recent changes and improvements.
 
-- **Quick Start**: Use `npx hello-simone` to initialize Simone in any project
-- **Interactive Setup**: Improved `initialize` command with adaptive, conversational setup
-- **Smart Commit Filtering**: Use `commit T01_S02` to commit only files related to that task
-- **YOLO Mode**: Use `commit YOLO` to skip confirmations for faster iteration
-- **Autonomous Execution**: New `yolo` command for unattended task processing ⚠️ **Use with extreme caution**
-- **Enhanced Task Generation**: Much better context and codebase references in generated tasks
-- **ADR Documentation**: New template for tracking architectural decisions
-- **Better Review Tracking**: Code reviews now log directly to your task files
-- **Cleaner Templates**: Simplified date formats and better structure throughout
+## How to Get Started
 
-### ⚠️ YOLO Mode Safety Warning
+### 1. Install Simone
 
-The `yolo` command can run tasks autonomously without user interaction. **Only use in isolated environments like dev containers.** It can potentially modify or delete files outside your project. Never run on production systems or systems with important data.
+```bash
+npx hello-simone
+```
 
-## What it actually does
+This sets up the folder structure and installs/updates the command files in your project. Can also be used to update an existing installation - command files get backed up automatically.
 
-### 1. Start with your requirements
+### 2. Initialize Your Project
 
-- Bring well-thought-out documents (PRDs, architecture specs, database schemas)
-- Organize them into milestones in the structured folders
-- Define your project vision and technical approach
+Open your project in Claude Code and run:
 
-### 2. Break down the work
+```
+/project:simone:initialize
+```
 
-- Use commands to split milestones into manageable sprints
-- Create focused tasks within each sprint
-- Each task is scoped to be completed in one Claude session
+This guides you through the basic setup process. Works with new or existing codebases, and can help you create project documentation (PRDs, architecture docs) or work with documents you already have.
 
-### 3. Execute with confidence
+### 3. Set Up Your First Milestone
 
-- Claude works through tasks one by one with full context
-- Automatic code review after each task (zero tolerance for spec deviations!)
-- Smart commits group related changes logically
+Create a milestone folder in `.simone/02_REQUIREMENTS/` named `M01_Your_Milestone_Name` (e.g., `M01_Basic_Application`). Include at least:
 
-### 4. Stay on track
+- `M01_PRD.md` - Product requirements document
+- Other specs as needed: `M01_Database_Schema.md`, `M01_API_Specs.md`, etc.
 
-- Run periodic project reviews for health checks
-- Get timestamped snapshots of progress and technical debt
-- Brutally honest assessments keep your standards high
+*Note: There's no command for this yet. Use the existing chat from step 2 to guide Claude through milestone creation, ensuring proper naming with the `M##_` prefix and underscores.*
 
-The whole system runs purely with Claude Code - no external tools, no complex setup. Just markdown files, folders, and commands that create a repeatable workflow for AI-assisted development.
+### 4. Break Down into Sprints
+
+```
+/project:simone:create_sprints_from_milestone
+```
+
+This analyzes your milestone and breaks it down into logical sprints. It looks at the entire scope and creates meaningful sprint boundaries without detailed tasks yet.
+
+### 5. Create Your First Tasks
+
+```
+/project:simone:create_sprint_tasks
+```
+
+This analyzes your sprints, reviews documentation, researches necessary information, and identifies knowledge gaps to gain comprehensive understanding of your project. Creates detailed, actionable tasks for the current sprint.
+
+*Important: Only create tasks for your next sprint, not all sprints upfront. After completing Sprint 1, then create tasks for Sprint 2. This ensures the system can reference your existing codebase and incorporate completed work into future task creation.*
+
+### 6. Start Working
+
+```
+/project:simone:do_task
+```
+
+This will automatically pick a task from your general tasks or sprints. For faster execution, specify a task ID:
+
+```
+/project:simone:do_task T01_S01
+```
+
+Claude will then work through the specified task with full project context.
+
+That's the basic workflow to get started! You can also:
+
+- Create general tasks with `/project:simone:create_general_task`
+- Use YOLO mode to run a full sprint autonomously
+- Explore other commands in `.claude/commands/simone/`
+
+**Important**: Simone is a complex system, not a simple set-and-forget tool. It works best when you understand how it operates. Take time to read through the commands and consider adapting them to your workflow.
+
+## How it Works
+
+Simone organizes your project into:
+
+- **Milestones**: Major features or project phases
+- **Sprints**: Groups of related tasks within a milestone
+- **Tasks**: Individual work items scoped for one Claude session
+
+Each task gets full project context so Claude knows exactly what to build and how it fits into your architecture.
 
 ## Why I built this
 
@@ -64,41 +101,6 @@ My solution: Start fresh for each task, but provide rich surrounding context. By
 - The surrounding context guides development, not just the task description
 
 The result is a task-based workflow where Claude always has the right context for the job at hand.
-
-## How I use it
-
-1. **Start with requirements**: I write down what I want to build in PRD documents
-2. **Break into tasks**: Each task should be doable in one Claude session (this is crucial!)
-3. **Let Claude work**: Use `do_task` and Claude follows the task structure
-4. **Review regularly**: After each task, review what was done
-5. **Track progress**: Completed tasks are renamed with `TX` prefix, project reviews go in `10_STATE_OF_PROJECT/`
-
-## Getting Started
-
-### Quick Start (Recommended)
-
-```bash
-npx hello-simone
-```
-
-This will:
-
-- Install the Simone framework in your project
-- Guide you through interactive setup
-- Create initial documentation based on your project
-
-### Manual Installation
-
-1. Copy the `.simone` directory structure to your project
-2. Run `/project:simone:initialize` in Claude Code - it will:
-   - Detect your project type automatically
-   - Guide you through creating architecture docs
-   - Help set up your first milestone
-   - Generate your project manifest
-
-The new initialize command is conversational and adapts to your project's needs!
-
-That's it. The system guides you (and Claude) through the rest.
 
 ## Key Components
 
@@ -139,6 +141,17 @@ Contains standardized templates for different document types to ensure consisten
 - ADR template for documenting architectural decisions
 - All templates use simplified date formats (YYYY-MM-DD HH:MM)
 
+### .claude/commands/simone/
+
+Custom Claude Code commands that power the Simone workflow:
+
+- `initialize` - Set up project structure and documentation
+- `create_sprints_from_milestone` - Break milestones into logical sprints
+- `create_sprint_tasks` - Generate detailed tasks from sprint plans
+- `do_task` - Execute individual tasks with full context
+- `yolo` - Autonomous sprint execution (use with caution)
+- And many more for testing, reviewing, and project management
+
 ## Directory Structure
 
 ```plaintext
@@ -167,82 +180,28 @@ Contains standardized templates for different document types to ensure consisten
     └── milestone_meta_template.md
 ```
 
-## Task Structure
+## Configuration Tips
 
-Tasks are the atomic units of work in Simone. Each task file includes:
+### Enabling Parallel Task Execution
 
-```markdown
----
-task_id: T001
-status: in_progress # open | in_progress | pending_review | done | blocked
-complexity: Medium # Low | Medium | High
-last_updated: 2025-05-23 10:30
----
+While Simone commands like `create_sprint_tasks` support the `useParallelSubagents` instruction, Claude Code needs to be configured to actually execute tasks in parallel. By default, it only runs one task at a time.
 
-# Task: Task Title
+To enable parallel execution:
 
-## Description
-Detailed explanation of the task...
+```bash
+# Set the number of parallel tasks (example: 3)
+claude config set --global "parallelTasksCount" 3
 
-## Goal / Objectives
-- Objective 1
-- Objective 2
-
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Subtasks
-- [ ] Subtask 1
-- [ ] Subtask 2
-
-## Output Log
-[2025-05-23 10:30] Started task
-[2025-05-23 10:45] Completed subtask 1: Updated database schema
-[2025-05-23 11:00] Modified files: models/user.js, migrations/001_add_user_table.js
+# Check your current configuration
+claude config list -g
 ```
 
-## Key Workflow Features
+**Important considerations:**
 
-### Automatic Code Review
-
-Every task completion triggers a code review that:
-
-- Compares implementation against requirements
-- Checks for spec deviations (zero tolerance!)
-- Creates actionable fix items on failure
-- Logs results directly to task files for tracking
-- Only marks tasks complete after passing review
-
-### Enhanced Task Generation
-
-Task creation commands now provide:
-
-- Deep codebase analysis and integration point discovery
-- Specific file references and implementation patterns
-- Existing test patterns and error handling approaches
-- Technical guidance based on actual project architecture
-- Much higher quality, actionable task descriptions
-
-### Smart Git Commits
-
-The `commit` command:
-
-- Groups related changes logically by task or feature
-- Supports task ID filtering (e.g., `T01_S02`, `TX003`)
-- Includes YOLO mode for automated commits without approval
-- Proposes conventional commit messages
-- Gets your approval before each commit (unless YOLO mode)
-- No AI attribution in messages
-
-### Project Health Tracking
-
-Regular `project_review` creates timestamped reports showing:
-
-- Architecture quality scores
-- Technical debt assessment
-- Progress against milestones
-- John Carmack-style critique (brutally honest!)
+- Choose the number based on your system's capabilities and rate limits
+- Parallel execution increases API usage significantly
+- Some tasks may have conflicts when run in parallel
+- Start with a small number (2-3) and adjust based on your experience
 
 ## Contributing & Feedback
 
