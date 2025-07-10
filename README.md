@@ -98,12 +98,25 @@ This guides you through the basic setup process. Works with new or existing code
 
 ### 3. Set Up Your First Milestone
 
-Create a milestone folder in `.simone/02_REQUIREMENTS/` named `M01_Your_Milestone_Name` (e.g., `M01_Basic_Application`). Include at least:
+**NEW**: Use AI-powered milestone generation for faster, comprehensive planning:
+
+```
+/project:simone:create_milestone "Build user authentication system with JWT tokens, social login, and MFA support"
+```
+
+This command will:
+- 🤖 **Analyze your prompt** and extract features, requirements, and constraints
+- 📝 **Generate comprehensive milestone** with business objectives, success criteria, and risk assessment
+- 🎯 **Create sprint breakdown** with timeline estimation and dependency mapping
+- 📊 **Populate all metadata** automatically (30+ YAML fields)
+- 🔗 **Integrate with project** by updating manifest and creating proper directory structure
+
+**Alternative (Manual Setup)**: Create a milestone folder in `.simone/02_REQUIREMENTS/` named `M01_Your_Milestone_Name` (e.g., `M01_Basic_Application`). Include at least:
 
 - `M01_PRD.md` - Product requirements document
 - Other specs as needed: `M01_Database_Schema.md`, `M01_API_Specs.md`, etc.
 
-*Note: There's no command for this yet. Use the existing chat from step 2 to guide Claude through milestone creation, ensuring proper naming with the `M##_` prefix and underscores.*
+*Use the existing chat from step 2 to guide Claude through manual milestone creation, ensuring proper naming with the `M##_` prefix and underscores.*
 
 ### 4. Break Down into Sprints
 
