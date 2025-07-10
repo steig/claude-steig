@@ -1,8 +1,8 @@
 # Create Bug Report - Execute top to bottom
 
-Creates a new bug report in `.simone/06_BUGS/` following comprehensive bug tracking standards with automatic task generation.
+Creates a new bug report in `.simone/06_BUGS/` following comprehensive bug tracking standards with automatic task generation and GitHub integration.
 
-## Create a TODO with EXACTLY these 10 Items
+## Create a TODO with EXACTLY these 11 Items
 
 1. Parse bug arguments and determine bug ID
 2. Load project context and bug tracking requirements
@@ -12,8 +12,9 @@ Creates a new bug report in `.simone/06_BUGS/` following comprehensive bug track
 6. Fill in bug details with comprehensive information
 7. Add technical analysis and reproduction guidance
 8. Generate bug fix tasks automatically
-9. Update project manifest with new bug
-10. Perform final quality check and report
+9. Create GitHub issue with proper linking
+10. Update project manifest with new bug
+11. Perform final quality check and report
 
 ## DETAILS on every TODO item
 
@@ -107,6 +108,8 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 - **related_bugs**: Array of related bug IDs or ["none"]
 - **estimated_effort**: "TBD" initially
 - **actual_effort**: "0" initially
+- **github_issue**: "N/A" initially (will be populated after GitHub issue creation)
+- **github_url**: "N/A" initially (will be populated after GitHub issue creation)
 
 **Content Sections (populate thoroughly based on research):**
 - **Bug Summary**: Clear description with expected vs actual behavior
@@ -162,12 +165,47 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 - **Implementation Notes**: Technical guidance from bug analysis
 - **Dependencies**: Any prerequisite tasks or investigations
 
-### 9. Update project manifest with new bug
+### 9. Create GitHub issue with proper linking
+
+**GitHub Issue Creation:**
+- Use `gh issue create` command with bug report template
+- Include bug ID reference and reproduction steps
+- Add appropriate labels based on severity/component
+- Link to local bug report file in issue description
+- Set milestone if applicable
+
+**GitHub CLI Commands:**
+```bash
+# Create issue using template
+gh issue create --template bug_report.yml \
+  --title "[BUG] {bug_title}" \
+  --body "Related Bug Report: [BUG###](.simone/06_BUGS/BUG###_Title.md)
+
+Reproduction Steps:
+{reproduction_steps}
+
+Environment: {environment}
+Severity: {severity}
+Component: {component}
+
+For detailed analysis, see local bug report: .simone/06_BUGS/BUG###_Title.md"
+
+# Add labels based on severity and component
+gh issue edit {issue_number} --add-label "{severity},component/{component}"
+```
+
+**Cross-Reference Updates:**
+- Add `github_issue: "{issue_number}"` to bug report YAML
+- Add `github_url: "{issue_url}"` to bug report YAML
+- Update bug report with GitHub issue URL in description
+- Link GitHub issue in project manifest
+
+### 10. Update project manifest with new bug
 
 **UPDATE** `.simone/00_PROJECT_MANIFEST.md`:
 
 - Add new section "## Open Bugs" if not present
-- Add bug to bugs section: `- [ ] BUG###: [Bug Title] - Status: Open (Priority: [priority])`
+- Add bug to bugs section: `- [ ] BUG###: [Bug Title] - Status: Open (Priority: [priority]) - [GitHub #{issue_number}]({github_url})`
 - Maintain numerical ordering
 - Link to bug file: `[BUG###](06_BUGS/BUG###_Title.md)`
 - Update "Last Updated" timestamp
@@ -178,7 +216,7 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 - Update open bug count
 - Update severity distribution
 
-### 10. Perform final quality check and report
+### 11. Perform final quality check and report
 
 **QUALITY CHECK**:
 
@@ -188,15 +226,17 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 - Bug ID is sequential and unique
 - Manifest updated correctly
 - Associated fix task created and properly linked
+- GitHub issue created and properly cross-referenced
 - No duplicate bug exists
 - Severity and priority assessments are appropriate
 
 **VERIFICATION**:
 - Bug report file created in correct location
 - Template structure maintained
-- Cross-references between bug and task are correct
+- Cross-references between bug, task, and GitHub issue are correct
 - Manifest links work properly
 - All required fields populated
+- GitHub issue accessible and properly labeled
 
 **OUTPUT FORMAT**:
 
@@ -206,9 +246,10 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 🚨 **Severity**: [severity] | **Priority**: [priority]
 📍 **Component**: [component] | **Environment**: [environment]
 🔗 **Fix Task**: [task_id] - [task_location]
+📝 **GitHub Issue**: #{issue_number} - {github_url}
 📚 **Analysis**: [key_findings_summary]
 🧪 **Reproduction**: [reproduction_complexity]
-⏭️ **Next Step**: Review bug details and run `/do_task [task_id]` to begin fix
+⏭️ **Next Step**: Review bug details and run `/project:simone:fix_bug [BUG###]` to begin fix
 ```
 
 ## Bug Workflow Integration
@@ -225,8 +266,16 @@ Based on the bug description, use PARALLEL SUBAGENTS to:
 - Task completion triggers bug status change to "testing"
 - Bug verification completion triggers status change to "closed"
 
+**GitHub Integration:**
+
+- Automatic issue creation with comprehensive template
+- Cross-referencing between local bug reports and GitHub issues
+- Label management based on severity and component
+- Milestone assignment when applicable
+
 **Reporting Integration:**
 
 - Bugs automatically included in project health reports
 - Bug metrics tracked in project manifest
 - Severity trends monitored in state of project snapshots
+- GitHub integration provides external visibility and collaboration
