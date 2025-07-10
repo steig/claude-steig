@@ -2,18 +2,19 @@
 
 Executes bug fix tasks with specialized bug tracking integration and comprehensive resolution workflow.
 
-## Create a TODO with EXACTLY these 10 Items
+## Create a TODO with EXACTLY these 11 Items
 
 1. Parse bug arguments and locate bug report
 2. Analyze bug details and current status
 3. Create or locate associated fix task
-4. Set bug status to in_progress
-5. Execute bug fix implementation
-6. Perform bug-specific testing
-7. Update bug status to testing
-8. Execute comprehensive bug verification
-9. Update bug status to closed
-10. Generate bug resolution report
+4. Create and switch to bug fix branch
+5. Set bug status to in_progress
+6. Execute bug fix implementation
+7. Perform bug-specific testing
+8. Update bug status to testing
+9. Execute comprehensive bug verification
+10. Update bug status to closed
+11. Generate bug resolution report
 
 ## DETAILS on every TODO item
 
@@ -82,7 +83,51 @@ related_bug: "{BUG_ID}"
 - **Success Criteria**: Bug verification requirements
 - **Testing Requirements**: Reproduction test + regression tests
 
-### 4. Set bug status to in_progress
+### 4. Create and switch to bug fix branch
+
+**Git Branch Management for Bug Fixes:**
+
+**Branch Creation Process:**
+1. **Check Current Git Status:**
+   - Run `git status` to check for uncommitted changes
+   - If uncommitted changes exist, pause and ask user how to proceed
+   - Options: commit changes, stash changes, or abort bug fix start
+
+2. **Ensure Clean Working Directory:**
+   - If on feature branch, check if it should be merged first
+   - Switch to main/master branch as starting point
+   - Pull latest changes: `git pull origin main`
+
+3. **Generate Bug Fix Branch Name:**
+   - **For Regular Bugs**: `bug/BUG###_<bug_title_snake_case>`
+   - **For Critical/Hotfixes**: `hotfix/BUG###_<bug_title_snake_case>`
+   - **Examples**:
+     - `bug/BUG001_login_validation_error`
+     - `hotfix/BUG002_critical_security_fix`
+   - Extract bug title from bug report and convert to snake_case
+   - Limit branch name to 50 characters total
+
+4. **Create and Switch Branch:**
+   - For critical/high severity: `git checkout -b hotfix/BUG###_<title>`
+   - For medium/low severity: `git checkout -b bug/BUG###_<title>`
+   - Verify branch creation: `git branch --show-current`
+   - **CRITICAL**: If branch already exists, append timestamp: `_YYYYMMDD_HHMM`
+
+5. **Update Bug and Task Metadata:**
+   - Add `git_branch: "<branch_name>"` to bug YAML frontmatter
+   - Add same to associated task YAML frontmatter if exists
+   - Log branch creation in bug's Status Log: `| [timestamp] | in_progress | Created branch <branch_name> | 0 |`
+
+**Branch Type Selection:**
+- **hotfix/**: Critical and high severity bugs that need immediate attention
+- **bug/**: Medium and low severity bugs following normal workflow
+
+**Error Handling:**
+- If git commands fail, provide clear error messages and continue without branch
+- If repository is not clean, guide user through resolution options
+- If branch creation fails, warn user but continue with bug fix process
+
+### 5. Set bug status to in_progress
 
 **Bug Status Update:**
 - Update bug YAML frontmatter: `status: "in_progress"`
@@ -99,7 +144,7 @@ related_bug: "{BUG_ID}"
 - Update project manifest bug tracking section
 - Log status change in task's Output Log
 
-### 5. Execute bug fix implementation
+### 6. Execute bug fix implementation
 
 **MCP INTEGRATION:** Leverage MCP servers during bug fixing:
 - **Sequential Thinking**: Structure fix implementation step-by-step
@@ -132,7 +177,7 @@ related_bug: "{BUG_ID}"
 - Update or add relevant documentation
 - Ensure fix aligns with architecture decisions
 
-### 6. Perform bug-specific testing
+### 7. Perform bug-specific testing
 
 **Testing Strategy (based on bug report requirements):**
 
@@ -160,7 +205,7 @@ related_bug: "{BUG_ID}"
 - Performance impact acceptable
 - Security review passed (if applicable)
 
-### 7. Update bug status to testing
+### 8. Update bug status to testing
 
 **Status Transition:**
 - Update bug status: `status: "testing"`
@@ -178,7 +223,7 @@ related_bug: "{BUG_ID}"
 - Prepare summary of fix for user communication
 - Document any deployment considerations
 
-### 8. Execute comprehensive bug verification
+### 9. Execute comprehensive bug verification
 
 **Verification Process:**
 
@@ -206,7 +251,7 @@ related_bug: "{BUG_ID}"
 - Verify database migrations if needed
 - Check configuration changes required
 
-### 9. Update bug status to closed
+### 10. Update bug status to closed
 
 **Final Status Update:**
 - Update bug status: `status: "closed"`
@@ -232,7 +277,7 @@ related_bug: "{BUG_ID}"
 - Rename task file with TX prefix if in general tasks
 - Update task's final metadata and completion notes
 
-### 10. Generate bug resolution report
+### 11. Generate bug resolution report
 
 **Comprehensive Report Generation:**
 
@@ -277,6 +322,11 @@ related_bug: "{BUG_ID}"
 - Identify patterns for process improvement
 - Recommend additional testing or monitoring
 - Note knowledge sharing opportunities
+
+**Next Steps Suggestions:**
+- 🛠️ Use /project:simone:commit `BUG_ID` to commit the bug fix changes
+- 🔀 Use /project:simone:create_pr `BUG_ID` to create a pull request for review (coming soon)
+- 🚀 Consider /project:simone:deploy if this is a critical hotfix requiring immediate deployment
 
 ## Bug-Specific Workflow Integration
 

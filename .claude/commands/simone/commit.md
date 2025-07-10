@@ -20,8 +20,13 @@ Follow these instructions from top to bottom.
 - **Sequential Thinking**: Structure logical commit grouping systematically
 - **Serena**: Enhance code change analysis and commit message quality
 
-- Run these commands in parallel for maximum efficiency: `git status`, `git diff --staged`, `git diff`
+- Run these commands in parallel for maximum efficiency: `git status`, `git diff --staged`, `git diff`, `git branch --show-current`
 - List all changed files with their folder structure to understand the scope
+- **Branch Context Analysis**: Check current branch name for automatic context detection:
+  - If on `task/T##_S##_*` branch, automatically detect task context from branch name
+  - If on `bug/BUG###_*` or `hotfix/BUG###_*` branch, automatically detect bug context
+  - If context argument provided, verify it matches current branch context
+  - If mismatch detected, warn user and ask how to proceed
 
 ### CRITICAL: Argument Interpretation Rules
 
@@ -46,6 +51,17 @@ Follow these instructions from top to bottom.
   - Git diff content (to see if code comments or commits reference the task)
 - Identify ALL files that were modified as part of this task's implementation
 - This includes: source code, tests, configuration, and the task documentation file itself
+
+**Bug ID Pattern** (e.g., BUG001, BUG002):
+
+- Bug Reports: `BUG<NNN>` format (e.g., BUG001, BUG002)
+- Search for this bug ID in:
+  - `.simone/06_BUGS/` directory (for bug reports)
+  - Bug metadata in files (look for `bug_id: BUG001` in frontmatter)
+  - Associated task files that reference the bug
+  - Git diff content (to see if code comments or commits reference the bug)
+- Identify ALL files that were modified as part of this bug fix
+- This includes: source code, tests, bug report updates, and associated task files
 
 **Sprint ID Pattern** (e.g., S01, S02):
 
@@ -111,7 +127,15 @@ For the next commit to create:
 - **Files**: List the specific files to be included
 - **Commit message**: Use conventional commit format, be clear and concise
   - **CRITICAL:** Must not contain any attribution to Claude, Anthropic, or AI assistance
-  - If task-related, include task ID in message (e.g., "feat(agents): implement T01_S02 coordinator agent" or "fix(api): resolve T003 authentication issue")
+  - **Task-related commits**: Include task ID in message (e.g., "feat(auth): implement T01_S02 user authentication" or "refactor(api): optimize T003 response handling")
+  - **Bug fix commits**: Include bug ID in message (e.g., "fix(login): resolve BUG001 validation error" or "hotfix(security): patch BUG002 authentication bypass")
+  - **Branch Context**: Use conventional commit types that match the work being done:
+    - `feat:` for new features (task branches)
+    - `fix:` for bug fixes (bug branches)
+    - `hotfix:` for critical fixes (hotfix branches)
+    - `refactor:` for code improvements
+    - `docs:` for documentation updates
+    - `test:` for test additions/updates
 - **Reasoning**: Brief explanation of why these changes belong together
 
 ## 4 · Check if user approval is necessary
@@ -144,3 +168,9 @@ Provide summary:
 - **Files Committed**: Total count of files committed
 - **Remaining Changes**: Any uncommitted changes still pending
 - **Repository Status**: Current git status after commits
+
+**Next Steps Suggestions:**
+- If on feature/task branch: Consider `/project:simone:create_pr [TASK_ID/BUG_ID]` to create pull request (coming soon)
+- If task/bug work is complete: Consider updating task/bug status to "completed" 
+- If working on multiple commits: Continue with additional commits for remaining changes
+- If ready for review: Push branch to remote for code review

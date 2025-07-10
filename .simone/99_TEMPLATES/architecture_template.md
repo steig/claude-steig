@@ -32,10 +32,53 @@
 ### High-Level Overview
 {SYSTEM_OVERVIEW}
 
+### System Architecture Diagram
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        UI[User Interface]
+        API[API Gateway]
+    end
+    
+    subgraph "Application Layer"
+        APP[Application Services]
+        BL[Business Logic]
+    end
+    
+    subgraph "Data Layer"
+        DB[(Database)]
+        CACHE[(Cache)]
+    end
+    
+    UI --> API
+    API --> APP
+    APP --> BL
+    BL --> DB
+    BL --> CACHE
+```
+
 ### Core Components
 {CORE_COMPONENTS}
 
 ### Data Flow
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API
+    participant Service
+    participant Database
+    
+    User->>Frontend: Request
+    Frontend->>API: HTTP Request
+    API->>Service: Process
+    Service->>Database: Query
+    Database-->>Service: Data
+    Service-->>API: Response
+    API-->>Frontend: JSON
+    Frontend-->>User: Display
+```
+
 {DATA_FLOW}
 
 ### Integration Points

@@ -81,6 +81,22 @@ technical_value: "{TECHNICAL_VALUE}" # low, medium, high, critical
 ### Technical Design
 {TECHNICAL_DESIGN}
 
+### Implementation Flow
+```mermaid
+flowchart TD
+    A[Start Implementation] --> B{Requirements Clear?}
+    B -->|No| C[Clarify Requirements]
+    B -->|Yes| D[Design Solution]
+    C --> B
+    D --> E[Implement Changes]
+    E --> F[Write Tests]
+    F --> G[Code Review]
+    G --> H{Review Passed?}
+    H -->|No| I[Address Feedback]
+    H -->|Yes| J[Deploy & Complete]
+    I --> E
+```
+
 ### Code Changes Required
 1. **{CODE_CHANGE_1}**
    - **File**: {FILE_PATH_1}
@@ -285,6 +301,21 @@ technical_value: "{TECHNICAL_VALUE}" # low, medium, high, critical
 - **Last Updated**: {UPDATED_DATE}
 - **Progress**: {PROGRESS_PERCENTAGE}%
 - **Time Spent**: {ACTUAL_EFFORT}h / {ESTIMATED_EFFORT}h
+
+### Task Status Workflow
+```mermaid
+stateDiagram-v2
+    [*] --> pending
+    pending --> in_progress: Start Work
+    in_progress --> review: Submit for Review
+    in_progress --> blocked: Hit Blocker
+    blocked --> in_progress: Blocker Resolved
+    review --> testing: Review Approved
+    review --> in_progress: Changes Requested
+    testing --> completed: Tests Pass
+    testing --> in_progress: Tests Fail
+    completed --> [*]
+```
 
 ### Quality Metrics
 - **Complexity Score**: {COMPLEXITY_SCORE}

@@ -48,6 +48,24 @@ blockers: ["{BLOCKER_1}", "{BLOCKER_2}"]
 2. {BUSINESS_OBJECTIVE_2}
 3. {BUSINESS_OBJECTIVE_3}
 
+### Sprint Timeline
+```mermaid
+gantt
+    title Sprint Timeline
+    dateFormat  YYYY-MM-DD
+    section Planning
+    Sprint Planning     :done, planning, {START_DATE_MINUS_2}, 1d
+    Task Assignment     :done, assign, after planning, 1d
+    section Development
+    Implementation      :active, dev, {START_DATE}, {DEVELOPMENT_DAYS}d
+    Code Reviews        :active, review, after dev, {REVIEW_DAYS}d
+    section Testing
+    QA Testing          :test, after review, {TESTING_DAYS}d
+    Bug Fixes           :fixes, after test, {BUGFIX_DAYS}d
+    section Completion
+    Sprint Review       :retro, after fixes, 1d
+```
+
 ### Technical Objectives
 1. {TECHNICAL_OBJECTIVE_1}
 2. {TECHNICAL_OBJECTIVE_2}

@@ -2,16 +2,17 @@
 
 **IMPORTANT:** Follow from Top to Bottom - don't skip anything!
 
-**CREATE A TODO LIST** with exactly these 8 items
+**CREATE A TODO LIST** with exactly these 9 items
 
 1. Analyse scope from argument
 2. Identify task file
 3. Analyse the task
-4. Set status to in_progress
-5. Execute task work
-6. Placeholder
-7. Execute Code review
-8. Finalize Task status
+4. Create and switch to task branch
+5. Set status to in_progress
+6. Execute task work
+7. Placeholder
+8. Execute Code review
+9. Finalize Task status
 
 ## 1 · Analyse scope from argument
 
@@ -41,7 +42,45 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 
 **IMPORTANT:** If task references functionality from future sprints or has unmet dependencies, pause and ask for clarification.
 
-## 4 · Set status to in_progress
+## 4 · Create and switch to task branch
+
+**Git Branch Management:**
+
+**Branch Creation Process:**
+1. **Check Current Git Status:**
+   - Run `git status` to check for uncommitted changes
+   - If uncommitted changes exist, pause and ask user how to proceed
+   - Options: commit changes, stash changes, or abort task start
+
+2. **Ensure Clean Working Directory:**
+   - If on feature branch, check if it should be merged first
+   - Switch to main/master branch as starting point
+   - Pull latest changes: `git pull origin main`
+
+3. **Generate Branch Name:**
+   - **For Sprint Tasks**: `task/T##_S##_<task_title_snake_case>`
+   - **For General Tasks**: `task/T###_<task_title_snake_case>`
+   - **Examples**: 
+     - `task/T01_S02_user_authentication`
+     - `task/T003_refactor_logging_system`
+   - Extract task title from task file and convert to snake_case
+   - Limit branch name to 50 characters total
+
+4. **Create and Switch Branch:**
+   - Create branch: `git checkout -b <branch_name>`
+   - Verify branch creation: `git branch --show-current`
+   - **CRITICAL**: If branch already exists, append timestamp: `_YYYYMMDD_HHMM`
+
+5. **Update Task Metadata:**
+   - Add `git_branch: "<branch_name>"` to task YAML frontmatter
+   - Log branch creation in Output Log: `[YYYY-MM-DD HH:MM] Created and switched to branch: <branch_name>`
+
+**Error Handling:**
+- If git commands fail, provide clear error messages
+- If repository is not clean, guide user through resolution
+- If branch creation fails, fall back to working on current branch but warn user
+
+## 5 · Set status to in_progress
 
 **Metadata Update:**
 - Find out the current local timestamp (YYYY-MM-DD HH:MM)
@@ -54,7 +93,7 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 - Update ./simone/00_PROJECT_MANIFEST.md to set task in progress, updated time and current Sprint Status
 - Log status change in Output Log: `[YYYY-MM-DD HH:MM] Task started - status changed to in_progress`
 
-## 5 · Execute task work
+## 6 · Execute task work
 
 **MCP INTEGRATION:** Leverage MCP servers during task execution:
 - **Sequential Thinking**: Structure implementation approach step-by-step
@@ -76,11 +115,11 @@ Read the task description. If anything is unclear, ask clarifying questions befo
   9. **Update progress percentage** based on completed subtasks vs total.
   10. Repeat until all subtasks are complete.
 
-## 6 · Placeholder
+## 7 · Placeholder
 
 Placeholder - just move on to the next step
 
-## 7 · Execute Code Review
+## 8 · Execute Code Review
 
 Follow these steps for a Code Review (in order)
 
@@ -91,11 +130,11 @@ Follow these steps for a Code Review (in order)
 - on **FAIL**
   - thoroughly understand the problem
   - extend the Current Task with the Subtasks identified by the review
-  - go back to "5 · Execute task work"
+  - go back to "6 · Execute task work"
 - on **PASS**
   - move on to next step
 
-## 8 · Finalize task status
+## 9 · Finalize task status
 
 **MCP INTEGRATION:** Complete task tracking:
 - **Work History**: Log final task completion and outcomes
@@ -143,4 +182,5 @@ Follow these steps for a Code Review (in order)
 - **Suggestions** for the User:
 
   - 🛠️ Use /project:simone:commit `TASK_ID` to commit the changes to git
+  - 🔀 Use /project:simone:create_pr `TASK_ID` to create a pull request (coming soon)
   - 🧹 Use /clear to clear the context before starting the next Task

@@ -41,6 +41,20 @@ superseded_by: "{SUPERSEDING_ADR}"
 - **Decision Date**: {DECISION_DATE}
 - **Implementation Target**: {IMPLEMENTATION_TARGET_DATE}
 
+### Decision Process Flow
+```mermaid
+flowchart LR
+    A[Problem Identified] --> B[Research Options]
+    B --> C[Stakeholder Input]
+    C --> D[Evaluate Trade-offs]
+    D --> E{Decision Ready?}
+    E -->|No| F[More Research]
+    F --> B
+    E -->|Yes| G[Document Decision]
+    G --> H[Implementation Plan]
+    H --> I[Monitor Outcomes]
+```
+
 ## 1. Context & Problem Statement
 
 ### Background
