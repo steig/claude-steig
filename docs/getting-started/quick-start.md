@@ -63,9 +63,38 @@ Choose option: 1
 Let's create your Product Requirements Document...
 ```
 
-## Step 3: Create Your First Sprint (2 minutes)
+## Step 3: Create Additional Milestones (Optional - 2 minutes)
 
-After initialization, break down your milestone into sprints:
+**NEW**: Use AI-powered milestone generation for faster planning:
+
+```
+/project:simone:create_milestone "Build user authentication system with JWT tokens, social login, and MFA support"
+```
+
+This AI command will:
+- 🤖 **Analyze your prompt** and extract features, requirements, and constraints
+- 📝 **Generate comprehensive milestone** with business objectives, success criteria, and risk assessment
+- 🎯 **Create sprint breakdown** with timeline estimation and dependency mapping
+- 📊 **Populate all metadata** automatically (30+ YAML fields)
+- 🔗 **Integrate with project** by updating manifest and creating proper directory structure
+
+**Example AI generation:**
+```
+🤖 Analyzing prompt: "Build user authentication system..."
+
+✅ Generated M02_User_Authentication:
+   📊 Business Value: High (enables user acquisition)
+   ⏱️  Estimated Effort: 6-8 weeks (3 sprints)
+   🎯 Key Features: JWT auth, social login, MFA, audit logging
+   ⚠️  Risks: Security compliance, third-party integration
+   📋 Sprints: Foundation → Social Integration → Advanced Security
+
+Milestone created at: .simone/02_REQUIREMENTS/M02_User_Authentication/
+```
+
+## Step 4: Create Your First Sprint (2 minutes)
+
+After initialization (or milestone creation), break down your milestone into sprints:
 
 ```
 /project:simone:create_sprints_from_milestone
@@ -85,7 +114,7 @@ Created 3 sprints for M01_Basic_Application:
 ✅ S03_M01_Integration_Testing (Week 5)
 ```
 
-## Step 4: Generate Detailed Tasks (3 minutes)
+## Step 5: Generate Detailed Tasks (3 minutes)
 
 Create implementation-ready tasks for your current sprint:
 
@@ -109,7 +138,7 @@ This advanced command will:
 ✅ task-05-s01: Add comprehensive error handling and logging
 ```
 
-## Step 5: Execute Your First Task (5 minutes)
+## Step 6: Execute Your First Task (5 minutes)
 
 Let Simone execute a task with full context:
 
@@ -186,6 +215,7 @@ In 15 minutes, you've:
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
 | `/project:simone:initialize` | Project setup | Once per project |
+| `/project:simone:create_milestone "<description>"` | AI milestone generation | When planning new features |
 | `/project:simone:create_sprints_from_milestone` | Sprint planning | After milestone creation |
 | `/project:simone:create_sprint_tasks` | Task generation | Start of each sprint |
 | `/project:simone:do_task [ID]` | Task execution | Daily development work |

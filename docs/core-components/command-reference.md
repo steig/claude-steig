@@ -24,6 +24,7 @@ The Simone Framework provides 23 specialized commands for project management, de
 - [`fix_bug`](#fix_bug) - Implement bug fixes
 
 ### 🎯 Sprint & Milestone Management
+- [`create_milestone`](#create_milestone) - AI-powered milestone generation from natural language
 - [`create_sprints_from_milestone`](#create_sprints_from_milestone) - Generate sprints from milestones
 - [`sync`](#sync) - Synchronize project state and dependencies
 
@@ -232,6 +233,77 @@ The Simone Framework provides 23 specialized commands for project management, de
 - Synchronizes project manifest
 - Maintains audit trail
 - Updates sprint and milestone progress
+
+---
+
+### create_milestone
+
+**Purpose**: AI-powered milestone generation from natural language descriptions using intelligent template population and scope analysis.
+
+**Usage**:
+```
+/project:simone:create_milestone "<milestone description>"
+```
+
+**Arguments**:
+- `milestone description` - Natural language description of the milestone to create
+
+**Examples**:
+```bash
+# Basic authentication milestone
+/project:simone:create_milestone "Implement user authentication system with JWT tokens, MFA support, and social login integration"
+
+# E-commerce feature milestone  
+/project:simone:create_milestone "Build comprehensive product catalog with advanced search, real-time inventory tracking, recommendation engine, and admin management tools"
+
+# API development milestone
+/project:simone:create_milestone "Create RESTful API v2 with GraphQL support, rate limiting, comprehensive documentation, and developer portal"
+```
+
+**AI Features**:
+- **Natural Language Processing**: Converts human descriptions into structured milestone metadata
+- **Domain Intelligence**: Built-in knowledge for authentication, e-commerce, APIs, and data processing
+- **Automated Planning**: AI-generated sprint breakdown with dependency analysis
+- **Risk Assessment**: Comprehensive risk identification with mitigation strategies
+
+**Generated Content**:
+- Comprehensive YAML frontmatter with 30+ metadata fields
+- Executive summary and milestone vision
+- Business objectives with measurable KPIs
+- Feature breakdown with MoSCoW prioritization
+- Sprint planning with timeline estimation
+- Risk analysis with mitigation strategies
+- Technical architecture considerations
+
+**Process**:
+1. Parse and validate milestone prompt
+2. Analyze project context and existing milestones
+3. Generate milestone metadata using AI analysis
+4. Create intelligent scope and feature breakdown
+5. Generate sprint planning and timeline
+6. Assess risks and dependencies automatically
+7. Create milestone directory structure
+8. Populate milestone meta file with generated content
+9. Update project manifest with new milestone
+10. Validate and review generated milestone
+
+**Integration**:
+- Automatic project manifest updates
+- Standard Simone directory structure creation
+- Full template system integration
+- Seamless workflow with existing commands
+
+**Follow-up Commands**:
+```bash
+# Generate sprint structure
+/project:simone:create_sprints_from_milestone M##_Milestone_Name
+
+# Create initial tasks
+/project:simone:create_sprint_tasks S01_M##
+
+# Review milestone
+/project:simone:project_review --milestone M##
+```
 
 ---
 
