@@ -134,7 +134,7 @@ teardown() {
     [ -f .simone/.version ]
     
     version=$(cat .simone/.version)
-    [ "$version" = "2.0.2" ]
+    [ "$version" = "2.0.3" ]
 }
 
 @test "create_initial_manifest detects project name from package.json" {

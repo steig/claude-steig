@@ -37,7 +37,7 @@ success "Backup directory created: ${backup_dirs[0]}"
 
 # Check version was updated
 version=$(cat .simone/.version)
-[[ "$version" == "2.0.2" ]] || error "Version not updated correctly: $version"
+[[ "$version" == "2.0.3" ]] || error "Version not updated correctly: $version"
 success "Version updated to: $version"
 
 # Check that user data was preserved

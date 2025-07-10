@@ -50,7 +50,7 @@ curl -s https://api.github.com/repos/steig/claude-steig/releases/latest | grep t
 - **v2.0.5**: Latest stable release with safety features
 - **v2.0.4**: Bug fixes and installation improvements
 - **v2.0.3**: Remote installation support
-- **v2.0.2**: Comprehensive documentation expansion
+- **v2.0.3**: Comprehensive documentation expansion
 
 ## Configuration Management
 

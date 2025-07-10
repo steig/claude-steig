@@ -15,11 +15,11 @@ This guide provides comprehensive procedures for migrating between versions of t
 #### Direct Upgrades
 - **2.0.4 → 2.0.5**: Direct upgrade supported
 - **2.0.3 → 2.0.5**: Direct upgrade supported
-- **2.0.2 → 2.0.5**: Direct upgrade supported
+- **2.0.3 → 2.0.5**: Direct upgrade supported
 
 #### Multi-Step Upgrades
 - **2.0.1 → 2.0.5**: Upgrade to 2.0.3 first, then 2.0.5
-- **2.0.0 → 2.0.5**: Upgrade to 2.0.2 first, then 2.0.5
+- **2.0.0 → 2.0.5**: Upgrade to 2.0.3 first, then 2.0.5
 
 #### Breaking Changes
 - **2.0.5**: Safety features added, new security commands

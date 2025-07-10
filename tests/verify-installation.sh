@@ -42,7 +42,7 @@ done
 # Check version file
 [[ -f .simone/.version ]] || error "Version file not found"
 version=$(cat .simone/.version)
-[[ "$version" == "2.0.2" ]] || error "Incorrect version: $version (expected 2.0.2)"
+[[ "$version" == "2.0.3" ]] || error "Incorrect version: $version (expected 2.0.3)"
 success "Version file correct: $version"
 
 # Check templates exist

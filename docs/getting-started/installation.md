@@ -300,6 +300,6 @@ After installation:
 
 ## Version Information
 
-- **Current Version**: 2.0.2
+- **Current Version**: 2.0.3
 - **Minimum Claude Code Version**: Latest stable release
 - **Repository**: https://github.com/steig/claude-steig
