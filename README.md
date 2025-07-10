@@ -43,24 +43,19 @@ This fork includes specialized improvements for comprehensive project management
 
 ### 1. Install Simone
 
-#### Quick Install
+#### Clone and Install
 ```bash
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
-```
+# Clone the Simone framework
+git clone https://github.com/steig/claude-steig.git
+cd claude-steig
 
-#### Manual Install
-```bash
-# Download installer
-wget https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh
-chmod +x install-simone.sh
-
-# Run installer
+# Run installer from the local repository
 ./install-simone.sh
 ```
 
 #### Install to Specific Directory
 ```bash
-# Install to a specific directory
+# Install to a specific directory from the cloned repo
 ./install-simone.sh /path/to/my-project
 
 # Install to a relative directory  
@@ -68,6 +63,13 @@ chmod +x install-simone.sh
 
 # Force reinstall in a specific directory
 ./install-simone.sh --force /path/to/existing-project
+```
+
+#### Alternative: Copy Install Script
+```bash
+# Copy the installer to your project
+cp /path/to/claude-steig/install-simone.sh ./
+./install-simone.sh
 ```
 
 **Smart Installation Features:**
