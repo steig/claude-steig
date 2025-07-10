@@ -36,13 +36,18 @@ This project follows a milestone-based development approach.
 📋 [Second planned deliverable]
 📋 [Third planned deliverable]
 
-## 4. Key Documentation
+## 4. Open Bugs
+
+- [ ] BUG001: [Test Bug Report System](06_BUGS/BUG001_Test_Bug_Report_System.md) - Status: Open (Priority: medium)
+
+## 5. Key Documentation
 
 - [Architecture Documentation](./01_PROJECT_DOCS/ARCHITECTURE.md)
 - [Current Milestone Requirements](./02_REQUIREMENTS/M01_[Milestone_Name]/)
 - [General Tasks](./04_GENERAL_TASKS/)
+- [Bug Reports](./06_BUGS/)
 
-## 5. Quick Links
+## 6. Quick Links
 
 - **Current Sprint:** [S01 Sprint Folder](./03_SPRINTS/S01_M01_[Sprint_Name]/)
 - **Active Tasks:** Check sprint folder for T##_S01_*.md files
