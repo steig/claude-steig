@@ -13,6 +13,7 @@ Simone is a sophisticated, directory-based project management framework specific
 ### 📖 **Getting Started**
 - [Quick Start Guide](./getting-started/quick-start.md) - 15-minute setup and first task
 - [Installation Guide](./getting-started/installation.md) - Comprehensive setup instructions
+- [Remote Installation](./installation/remote-installation.md) - Install directly from GitHub
 - [Framework Overview](./getting-started/framework-overview.md) - Core concepts and philosophy
 - [Enterprise Onboarding](./getting-started/enterprise-onboarding.md) - Team setup and governance
 
