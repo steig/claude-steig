@@ -748,6 +748,91 @@ development_quality:
     - Review turnaround time
 ```
 
+#### Pre-commit Hooks Integration
+
+Pre-commit hooks are essential for maintaining code quality at the development stage. The Simone Framework includes a comprehensive pre-commit configuration:
+
+```yaml
+pre_commit_setup:
+  installation:
+    - "pip install pre-commit"
+    - "pre-commit install"
+    - "pre-commit run --all-files"
+    
+  hooks_included:
+    shell_quality:
+      - "ShellCheck: Script linting"
+      - "shfmt: Script formatting"
+      - "Executable validation"
+      
+    markdown_quality:
+      - "markdownlint: Documentation linting"
+      - "Auto-fix formatting issues"
+      
+    general_quality:
+      - "Trailing whitespace removal"
+      - "File ending normalization"
+      - "YAML syntax validation"
+      - "Large file detection"
+      
+    security:
+      - "detect-secrets: Prevent credential commits"
+      - "Baseline comparison"
+      
+  benefits:
+    - "Catches issues before commit"
+    - "Enforces consistent formatting"
+    - "Prevents security vulnerabilities"
+    - "Reduces review time"
+    - "Maintains documentation quality"
+    
+  workflow_integration:
+    - "Runs automatically on git commit"
+    - "Blocks commits with quality issues"
+    - "Provides immediate feedback"
+    - "Supports bypass for emergencies"
+```
+
+**Pre-commit Configuration Example**:
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.10.0
+    hooks:
+      - id: shellcheck
+        args: [--severity=warning]
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: [--fix]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+
+  - repo: https://github.com/mvdan/sh
+    rev: v3.7.0
+    hooks:
+      - id: shfmt
+        args: [-i, '2', -w]
+```
+
 ### Release Phase
 
 ```yaml

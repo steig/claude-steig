@@ -404,7 +404,31 @@ claude config list -g
 This version is maintained at [steig/claude-steig](https://github.com/steig/claude-steig).
 
 - **GitHub Issues**: [Report bugs and feature requests](https://github.com/steig/claude-steig/issues)
-- **Pull Requests**: Contributions welcome! Let's make this better together
+- **Pull Requests**: Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details
+- **Quality Standards**: We use pre-commit hooks to ensure code quality - see contributing guide for setup
+
+### Development Setup
+
+To contribute to the Simone Framework:
+
+```bash
+# Clone and set up development environment
+git clone https://github.com/steig/claude-steig.git
+cd claude-steig
+
+# Install pre-commit hooks for quality assurance
+pip install pre-commit
+pre-commit install
+
+# Test the setup
+pre-commit run --all-files
+```
+
+Our pre-commit hooks ensure:
+- ✅ Shell script quality (ShellCheck + shfmt)
+- ✅ Markdown formatting (markdownlint)
+- ✅ Security scanning (detect-secrets)
+- ✅ General formatting and validation
 
 ### Original Framework
 The original Simone framework was created by [Helmi](https://github.com/helmi). 
