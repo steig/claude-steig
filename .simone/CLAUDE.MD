@@ -1,5 +1,11 @@
 # CLAUDE.md - Simone Framework Structure Guide
 
+## 🚨 CRITICAL: File Operation Rules
+**MANDATORY READING**: All file operations MUST follow the rules in `.claude/CLAUDE_FILE_RULES.md`
+- NEVER modify file paths or names from what the user specifies
+- ALWAYS use exact paths as provided
+- NO assumptions about "better" locations or names
+
 ## Overview
 This is the root directory of the Simone framework structure. It contains all project documentation, requirements, sprints, and organizational files.
 
