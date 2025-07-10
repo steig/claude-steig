@@ -300,7 +300,13 @@ upgrade_installation() {
             if [[ -d "$dir" ]]; then
                 local target_dir="$SIMONE_DIR/$(basename "$dir")"
                 # Copy user files, skip CLAUDE.md files (use new versions)
-                find "$dir" -type f ! -name "CLAUDE.md" ! -name "CLAUDE.MD" -exec cp {} "$target_dir/" \; 2>/dev/null || true
+                # Use rsync to preserve directory structure, or fallback to cp -r with exclusions
+                if command -v rsync >/dev/null 2>&1; then
+                    rsync -av --exclude="CLAUDE.md" --exclude="CLAUDE.MD" "$dir/" "$target_dir/" 2>/dev/null || true
+                else
+                    # Fallback: use cp with find to preserve structure
+                    (cd "$dir" && find . -type f ! -name "CLAUDE.md" ! -name "CLAUDE.MD" -exec cp --parents {} "$target_dir/" \; 2>/dev/null) || true
+                fi
             fi
         done
     }
