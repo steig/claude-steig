@@ -1,5 +1,23 @@
 # Changelog
 
+## 2025-07-10 - v2.0.3
+
+### 🚀 Installation & Repository Strategy
+
+#### Remote Installation Support
+- **Dual installation modes** - Support for both remote (curl/wget) and local installation
+- **Auto-detection** of installation context (remote vs local)
+- **Remote repository support** - Install directly from GitHub with one command
+- **Improved installation script** with `--remote` flag for forcing remote installation
+- **Updated documentation** to reflect both installation methods
+- **Comprehensive installation guide** with troubleshooting and proxy support
+
+#### Installation Improvements
+- **Quick install command**: `curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash`
+- **Temporary directory cleanup** after remote installations
+- **Better error handling** for network issues and missing dependencies
+- **Enhanced help documentation** with examples for all installation methods
+
 ## 2025-07-10
 
 ### 🚀 Enhancements
