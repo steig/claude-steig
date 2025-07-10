@@ -1,5 +1,28 @@
 # Create Pull Request - Automated PR Creation and Management
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise for intelligent PR creation and review preparation.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect`: Architecture-focused PR descriptions and system impact analysis
+- `--persona-security`: Security-aware PR validation and compliance checklist
+- `--persona-frontend`: Frontend-specific PR descriptions and UX impact assessment
+- `--persona-backend`: Backend system PR analysis and API impact documentation
+- `--persona-analyzer`: Code quality metrics and change impact analysis for PR
+- `--persona-mentor`: Educational PR descriptions and best practices guidance
+- `--persona-refactorer`: Refactoring-focused PR organization and improvement documentation
+- `--persona-performance`: Performance impact analysis and optimization documentation
+- `--persona-qa`: Testing-focused PR validation and quality assurance checklist
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent reasoning for PR structure and description decisions
+- `--consensus`: Multi-model consensus for complex PR validation
+- `--think-deep`: Extended analysis for complex changes and their implications
+
+**USAGE EXAMPLES:**
+- `/project:simone:create_pr T001 --persona-security` (Security-focused PR with compliance checklist)
+- `/project:simone:create_pr T001 --persona-architect --introspect` (Architecture changes with transparency)
+- `/project:simone:create_pr BUG123 --persona-analyzer --persona-qa` (Bug fix with quality focus)
+
 Creates pull requests with auto-generated descriptions, checklists, and proper linking to tasks/bugs.
 
 ## Create a TODO with EXACTLY these 8 Items

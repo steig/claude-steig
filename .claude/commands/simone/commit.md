@@ -1,5 +1,28 @@
 # Analyze changes and create logical git commits with user confirmation
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise for intelligent commit analysis and organization.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect`: Architecture-focused commit grouping and technical design changes
+- `--persona-security`: Security-aware commit analysis and sensitive change detection
+- `--persona-frontend`: Frontend-specific commit organization and UI/UX change grouping
+- `--persona-backend`: Backend system commit structure and API change analysis
+- `--persona-analyzer`: Code quality metrics and change impact analysis
+- `--persona-mentor`: Educational commit messages and best practices enforcement
+- `--persona-refactorer`: Refactoring-focused commit organization and cleanup grouping
+- `--persona-performance`: Performance-impact commit analysis and optimization tracking
+- `--persona-qa`: Testing-focused commit organization and quality assurance validation
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent reasoning for commit organization decisions
+- `--consensus`: Multi-model consensus for complex commit organization
+- `--think-deep`: Extended analysis for complex change sets
+
+**USAGE EXAMPLES:**
+- `/project:simone:commit T001 --persona-security` (Security-aware commit organization)
+- `/project:simone:commit T001 --persona-architect --introspect` (Architecture changes with transparency)
+- `/project:simone:commit BUG123 --persona-analyzer --persona-qa` (Bug fix with quality focus)
+
 Follow these instructions from top to bottom.
 
 ## Create a TODO with EXACTLY these 6 items
@@ -27,6 +50,19 @@ Follow these instructions from top to bottom.
   - If on `bug/BUG###-*` or `hotfix/BUG###-*` branch, automatically detect bug context
   - If context argument provided, verify it matches current branch context
   - If mismatch detected, warn user and ask how to proceed
+
+**PERSONA ACTIVATION:** Analyze changes for automatic persona activation:
+
+1. **Scan modified files and changes** for domain-specific patterns:
+   - **Security**: Authentication, authorization, validation, encryption, access control
+   - **Frontend**: UI components, styles, templates, user interfaces, accessibility
+   - **Backend**: APIs, databases, services, middleware, server configuration
+   - **Architecture**: Core system changes, design patterns, structural modifications
+   - **Performance**: Optimization, caching, database queries, resource usage
+
+2. **Apply relevant personas automatically** or honor explicit persona flags from user
+3. **If `--introspect` flag present**: Show 🤔 Thinking process for persona selection and commit organization reasoning
+4. **If multiple personas activated**: Plan multi-domain commit organization approach
 
 ### CRITICAL: Argument Interpretation Rules
 
@@ -97,6 +133,27 @@ Follow these instructions from top to bottom.
 
 **Standard grouping logic** (for no-context or within-context grouping):
 
+**PERSONA-DRIVEN COMMIT ORGANIZATION:**
+
+**For each activated persona, apply specialized grouping criteria:**
+
+- **🏗️ Architecture Persona**: Group by system components, architectural layers, and design pattern implementations
+- **🔒 Security Persona**: Separate security-critical changes, group authentication/authorization changes together
+- **🎨 Frontend Persona**: Group UI components, styles, and user experience changes by feature or component
+- **⚙️ Backend Persona**: Group API changes, database modifications, and service updates by domain
+- **📊 Analyzer Persona**: Group refactoring, code quality improvements, and metric enhancements
+- **🎓 Mentor Persona**: Ensure commit messages are educational and group changes for learning clarity
+- **🔧 Refactorer Persona**: Group cleanup, optimization, and maintenance changes separately from features
+- **⚡ Performance Persona**: Group performance optimizations and separate from functional changes
+- **✅ QA Persona**: Group test additions/changes with related functionality, validate test coverage
+
+**INTROSPECTION MODE** (if `--introspect` flag present):
+- Show 🤔 Thinking process for commit organization decisions
+- Display 🎯 Decision rationale for each grouping choice
+- Provide 🔍 Analysis of dependencies and logical separation
+- Conclude with ✅ Final commit structure reasoning
+
+**Standard logic** (always applied):
 - **Think about** which changes belong together logically:
   - Task completion (group by task ID when applicable)
   - Feature additions (group by feature scope)
