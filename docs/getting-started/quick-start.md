@@ -203,6 +203,72 @@ In 15 minutes, you've:
 ✅ **Executed high-quality development** with automated code review  
 ✅ **Established complete traceability** from requirements to implementation  
 
+## Step 7: Experience Domain Expertise with Cognitive Personas (3 minutes)
+
+Simone includes **9 specialized AI personas** that provide domain-specific expertise to enhance your development workflow. These personas automatically analyze your work and provide specialized guidance:
+
+### Basic Persona Usage
+
+Try executing a task with security expertise:
+
+```
+/project:simone:do_task task-03-s01 --persona-security
+```
+
+**What happens**:
+- 🔒 **Security analysis** automatically applied during implementation
+- 🛡️ **OWASP compliance** validation built into code generation
+- 🔍 **Vulnerability assessment** performed on authentication logic
+- ✅ **Security best practices** enforced throughout development
+
+### Multi-Domain Analysis
+
+For comprehensive analysis, combine multiple personas:
+
+```
+/project:simone:do_task task-03-s01 --persona-security --persona-backend --introspect
+```
+
+**Enhanced capabilities**:
+- 🔒 **Security Persona**: OWASP compliance, vulnerability analysis
+- ⚙️ **Backend Persona**: API design optimization, database security
+- 🤔 **Introspection Mode**: Shows AI reasoning and decision-making process
+
+### Available Personas
+
+| Persona | Domain | Best For |
+|---------|--------|----------|
+| 🏗️ `--persona-architect` | System design | Architecture decisions, scalability |
+| 🔒 `--persona-security` | Security analysis | Auth, API security, data protection |
+| 🎨 `--persona-frontend` | UI/UX optimization | React components, accessibility |
+| ⚙️ `--persona-backend` | API & database | Express APIs, database design |
+| 📊 `--persona-analyzer` | Code quality | Code metrics, technical debt |
+| 🎓 `--persona-mentor` | Best practices | Learning, team guidance |
+| ⚡ `--persona-performance` | Optimization | Performance bottlenecks |
+| ✅ `--persona-qa` | Testing strategy | Test coverage, quality gates |
+
+### Smart Auto-Activation
+
+Personas automatically activate based on task content:
+
+```
+# Creating authentication → Security persona auto-activates
+/project:simone:do_task task-03-s01
+
+# Database optimization → Backend + Performance personas activate
+/project:simone:do_task task-db-optimization
+
+# UI components → Frontend persona activates
+/project:simone:do_task task-dashboard-ui
+```
+
+**Advanced Features** (explore after completing your first sprint):
+- `--consensus`: Multi-model analysis for critical decisions
+- `--think-deep`: Extended reasoning for complex problems
+- `--uc`: Token optimization for large projects
+
+> 📖 **Learn More**: [Complete Cognitive Personas Guide](../advanced/cognitive-personas.md)
+
 ## Next Steps
 
 ### Immediate Actions (Next 30 minutes)

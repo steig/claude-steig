@@ -145,6 +145,124 @@ ls .simone/03_SPRINTS/S01_M01_*/task-*.md
 - ❌ **No critical changes** - Avoids database migrations, auth changes
 - ❌ **Safety boundaries** - Stops on first quality gate failure
 
+#### Cognitive Personas for Enhanced Task Execution
+
+Leverage specialized AI personas to enhance task execution quality and decision-making:
+
+##### Domain-Specific Task Execution
+
+**🔒 Security-Critical Tasks:**
+```bash
+# Authentication, authorization, data protection tasks
+/project:simone:do_task task-auth-implementation --persona-security --persona-backend --introspect
+
+# Benefits:
+# - OWASP compliance validation throughout development
+# - Security vulnerability prevention in code generation
+# - Transparent security reasoning for team learning
+```
+
+**🏗️ Architecture Tasks:**
+```bash
+# System design, integration, scalability tasks
+/project:simone:do_task task-api-design --persona-architect --persona-performance --think-deep
+
+# Benefits:
+# - System design pattern validation
+# - Performance implications considered upfront
+# - Extended analysis for complex architectural decisions
+```
+
+**🎨 Frontend Development:**
+```bash
+# UI components, user experience, accessibility tasks
+/project:simone:do_task task-dashboard-ui --persona-frontend --persona-qa --persona-mentor
+
+# Benefits:
+# - UX optimization and accessibility compliance
+# - Testing strategy integration for UI components
+# - Educational feedback for frontend best practices
+```
+
+##### Multi-Persona Collaboration Patterns
+
+**Comprehensive Analysis (Critical Tasks):**
+```bash
+# For high-risk or complex tasks requiring multiple perspectives
+/project:simone:do_task task-payment-integration --persona-security --persona-backend --persona-analyzer --consensus
+
+# Workflow:
+# 1. Security persona validates payment security requirements
+# 2. Backend persona optimizes API design and data flow
+# 3. Analyzer persona assesses complexity and risks
+# 4. Consensus mode validates decisions across all perspectives
+```
+
+**Progressive Enhancement (Learning Mode):**
+```bash
+# For team learning and capability building
+/project:simone:do_task task-user-registration --persona-mentor --persona-security --introspect
+
+# Benefits:
+# - Educational guidance throughout implementation
+# - Security best practices with transparent reasoning
+# - Team learning through mentor persona feedback
+```
+
+##### Persona Selection by Task Type
+
+| Task Category | Recommended Personas | Key Benefits |
+|---------------|---------------------|--------------|
+| **Authentication/Security** | Security + Backend + Mentor | OWASP compliance, secure patterns, learning |
+| **API Development** | Backend + Security + QA | RESTful design, security, testing |
+| **UI/UX Components** | Frontend + Performance + QA | User experience, optimization, testing |
+| **Database Changes** | Backend + Security + Analyzer | Performance, security, complexity assessment |
+| **System Integration** | Architect + Security + Performance | Design patterns, security, scalability |
+| **Performance Optimization** | Performance + Backend + Analyzer | Bottleneck identification, metrics |
+| **Complex Features** | Multiple + Consensus | Comprehensive analysis, validation |
+
+##### Smart Persona Activation
+
+Simone automatically suggests personas based on task content:
+
+```bash
+# Task with "authentication" → Security persona auto-suggested
+/project:simone:do_task task-jwt-implementation
+# → Simone suggests: --persona-security --persona-backend
+
+# Task with "performance" → Performance persona auto-suggested  
+/project:simone:do_task task-optimize-queries
+# → Simone suggests: --persona-performance --persona-backend
+
+# Task with "frontend" → Frontend persona auto-suggested
+/project:simone:do_task task-responsive-layout
+# → Simone suggests: --persona-frontend --persona-performance
+```
+
+##### Advanced Persona Features
+
+**Cost Optimization for Large Tasks:**
+```bash
+# Use UltraCompressed mode for large codebases
+/project:simone:do_task task-large-refactor --persona-refactorer --persona-analyzer --uc
+
+# Benefits:
+# - 70% token reduction for cost efficiency
+# - Maintains analysis quality with compression
+# - Ideal for large-scale refactoring tasks
+```
+
+**Critical Decision Making:**
+```bash
+# Use consensus mode for architecture decisions
+/project:simone:do_task task-database-migration --persona-backend --persona-security --consensus --think-deep
+
+# Benefits:
+# - Multi-model validation for critical decisions
+# - Extended reasoning with assumption challenging
+# - Comprehensive risk analysis for major changes
+```
+
 ### Task Execution Deep Dive
 
 #### Context Loading Process

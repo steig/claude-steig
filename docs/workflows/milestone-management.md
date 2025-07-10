@@ -78,6 +78,82 @@ Create requirement documents in the milestone directory:
    - `M##_Performance_Targets.md`
    - `M##_Migration_Plan.md`
 
+### Step 3.5: AI-Enhanced Requirements Analysis with Cognitive Personas
+
+Leverage specialized AI personas to validate and enhance your milestone requirements:
+
+#### Strategic Persona Application
+
+**🏗️ Architecture Analysis:**
+```bash
+/project:simone:create_milestone "User Authentication System" --persona-architect --introspect
+```
+**Benefits:**
+- Technical feasibility validation and system design recommendations
+- Scalability considerations and integration pattern analysis
+- Architecture decision record (ADR) suggestions
+- Technology stack compatibility assessment
+
+**🔒 Security Requirements:**
+```bash
+/project:simone:create_milestone "User Authentication System" --persona-security --persona-architect
+```
+**Benefits:**
+- OWASP compliance requirements identification
+- Security threat modeling and risk assessment
+- Authentication flow security validation
+- Data protection and privacy requirement analysis
+
+**📊 Complexity Assessment:**
+```bash
+/project:simone:create_milestone "User Authentication System" --persona-analyzer --think-deep
+```
+**Benefits:**
+- Effort estimation refinement based on technical complexity
+- Risk factor identification and mitigation planning
+- Dependency analysis and critical path assessment
+- Quality metrics and success criteria definition
+
+#### Multi-Persona Validation Workflow
+
+**Comprehensive Analysis (for critical milestones):**
+```bash
+# Sequential analysis for thorough validation
+/project:simone:create_milestone "Payment Gateway Integration" --persona-security --persona-backend --consensus --think-deep
+```
+
+**Benefits of Multi-Persona Approach:**
+- **Conflict Resolution**: Identifies competing requirements and trade-offs
+- **Comprehensive Coverage**: Ensures no critical aspects are overlooked
+- **Quality Enhancement**: Multiple expert perspectives validate decisions
+- **Risk Mitigation**: Early identification of potential issues
+
+#### When to Use Persona Enhancement
+
+| Milestone Type | Recommended Personas | Key Benefits |
+|----------------|---------------------|--------------|
+| **Authentication/Security** | Security + Architecture | OWASP compliance, secure design patterns |
+| **Performance Critical** | Performance + Backend + Architecture | Optimization strategies, scalability planning |
+| **User Interface** | Frontend + Performance + QA | UX optimization, accessibility compliance |
+| **Data Migration** | Backend + Security + Analyzer | Data integrity, security, complexity assessment |
+| **API Development** | Backend + Security + QA | RESTful design, security, testing strategies |
+| **Complex Integration** | Architecture + Analyzer + Consensus | System design, risk assessment, validation |
+
+#### Persona-Enhanced Documentation
+
+The personas will automatically populate milestone metadata with domain-specific insights:
+
+```yaml
+# Enhanced milestone metadata (auto-populated by personas)
+architecture_guidance: "Microservices architecture recommended for scalability"
+security_assessment: "OAuth 2.0 with PKCE required for security compliance"
+performance_considerations: "Response time target: <200ms for auth endpoints"
+quality_insights: "90% test coverage required for authentication flows"
+complexity_analysis: "High complexity due to third-party integrations"
+```
+
+> 💡 **Pro Tip**: Use `--introspect` flag to see the AI reasoning process and learn from expert analysis patterns.
+
 ### Step 4: Capacity Planning
 
 Calculate team capacity and resource allocation:

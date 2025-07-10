@@ -229,6 +229,45 @@ Every task includes comprehensive tracking:
 - **Process optimization** - Continuous process improvement based on data
 - **Knowledge management** - Lessons learned capture and application
 
+### 6. Cognitive Personas - Domain Expertise Integration
+
+Simone includes **9 specialized AI personas** that provide domain-specific expertise throughout the development lifecycle, automatically enhancing decision-making with specialized knowledge:
+
+#### Domain-Specific Analysis
+- **🏗️ Architecture Persona** - System design patterns, scalability analysis, integration planning
+- **🔒 Security Persona** - OWASP compliance, vulnerability assessment, secure coding practices
+- **🎨 Frontend Persona** - UX optimization, accessibility compliance, performance optimization
+- **⚙️ Backend Persona** - API design, database optimization, server-side performance
+- **📊 Analyzer Persona** - Code quality metrics, technical debt assessment, complexity analysis
+
+#### Advanced AI Capabilities
+- **🎓 Mentor Persona** - Best practices guidance, team learning, knowledge transfer
+- **🔧 Refactorer Persona** - Code optimization, maintainability improvements, pattern application
+- **⚡ Performance Persona** - Bottleneck identification, optimization strategies, resource efficiency
+- **✅ QA Persona** - Testing strategies, quality gate definition, bug prevention
+
+#### Intelligent Enhancement Features
+- **Smart Activation** - Personas automatically activate based on task content and keywords
+- **Multi-Domain Analysis** - Combine personas for comprehensive evaluation from multiple perspectives
+- **Transparent Reasoning** - Introspection mode shows AI decision-making process for team learning
+- **Token Optimization** - UltraCompressed mode reduces costs by 70% while maintaining quality
+- **Consensus Mode** - Multi-model analysis for critical decisions requiring validation
+
+#### Integration Points
+- **Task Execution** - Domain expertise applied throughout implementation
+- **Code Review** - Multi-perspective analysis with specialized criteria
+- **Milestone Planning** - Expert guidance for requirements, risks, and complexity assessment
+- **Quality Gates** - Domain-specific validation and improvement recommendations
+
+```bash
+# Examples of persona usage
+/project:simone:do_task T001 --persona-security --persona-backend
+/project:simone:code_review --persona-architect --persona-performance --introspect
+/project:simone:create_milestone "Auth System" --persona-security --consensus
+```
+
+> 📖 **Learn More**: [Complete Cognitive Personas Guide](../advanced/cognitive-personas.md)
+
 ## Benefits by Role
 
 ### For Developers
@@ -237,6 +276,9 @@ Every task includes comprehensive tracking:
 - ⚡ **Efficient execution** - AI-optimized development workflow
 - 🔍 **Quality guidance** - Built-in quality standards and checklists
 - 📚 **Knowledge transfer** - Comprehensive documentation that stays current
+- 🧠 **Domain expertise** - 9 specialized personas provide expert guidance automatically
+- 🔒 **Security by default** - Security persona ensures OWASP compliance in all code
+- 🎓 **Continuous learning** - Mentor persona provides educational feedback and best practices
 
 ### For Project Managers
 - 📊 **Complete visibility** - Real-time progress tracking and health metrics
@@ -251,6 +293,9 @@ Every task includes comprehensive tracking:
 - 📊 **Quality oversight** - Comprehensive quality metrics and standards
 - 🎓 **Team development** - Consistent practices and knowledge sharing
 - 🔄 **Continuous improvement** - Data-driven process optimization
+- 🧠 **Expert consultation** - Architecture and performance personas provide specialized analysis
+- 🔍 **Quality automation** - Analyzer and QA personas ensure consistent quality standards
+- 💡 **Strategic guidance** - Multi-persona consensus for critical technical decisions
 
 ### For Organizations
 - 📈 **Improved predictability** - Consistent delivery and quality outcomes
@@ -258,6 +303,9 @@ Every task includes comprehensive tracking:
 - 🏢 **Scalable processes** - Standards that work from startup to enterprise
 - 📋 **Compliance support** - Built-in audit trails and governance processes
 - 🎯 **Strategic alignment** - Clear connection from business objectives to implementation
+- 💰 **Cost optimization** - UltraCompressed mode reduces AI costs by 70% for large projects
+- 🔒 **Security compliance** - Security persona ensures regulatory compliance across all development
+- ⚡ **Performance excellence** - Performance persona prevents bottlenecks and optimization issues
 
 ## Comparison with Traditional Approaches
 

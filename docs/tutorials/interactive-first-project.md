@@ -399,7 +399,191 @@ Research and choose the best static site generator for the personal blog project
 
 ---
 
-## 🎯 Step 7: Track Your Progress
+## 🧠 Step 7: Experience Cognitive Personas
+
+Now that you have concrete tasks, let's learn how to execute them with specialized AI expertise! Simone includes 9 cognitive personas that provide domain-specific guidance.
+
+### Understanding Personas
+
+Think of personas as specialized consultants that enhance your development process:
+
+**🔒 Security Expert**: "Always consider OWASP guidelines and threat models"  
+**🏗️ Architect**: "Focus on scalable design patterns and system integration"  
+**🎨 Frontend Specialist**: "Prioritize user experience and accessibility"  
+**⚙️ Backend Engineer**: "Optimize APIs and database performance"  
+
+### Hands-On Persona Experience
+
+**Your Turn**: Let's enhance our blog project tasks with persona expertise!
+
+#### 1. Create a Security-Enhanced Task
+
+Create a new authentication task with security expertise:
+
+```bash
+# In your terminal, create a security-focused task
+cat > .simone/03_SPRINTS/S01_M01_Blog_Foundation/task_002_user_authentication.md << 'EOF'
+---
+task_id: "TASK_002"
+title: "Implement User Authentication"
+sprint_id: "S01_M01"
+milestone_id: "M01"
+type: "feature"
+priority: "high"
+complexity: "medium"
+estimated_hours: 8
+status: "todo"
+assigned_to: "Developer"
+
+# Cognitive Personas Applied
+personas_applied: ["security", "backend"]
+security_requirements: "OWASP compliance, JWT tokens, secure password hashing"
+backend_considerations: "RESTful API design, session management, database security"
+---
+
+# TASK_002: Implement User Authentication
+
+**Enhanced with Security + Backend Personas**
+
+## Security-First Approach
+
+### Security Requirements (Security Persona)
+- [ ] Implement bcrypt password hashing (min cost factor 12)
+- [ ] Add rate limiting for login attempts (5 attempts per 15 minutes)
+- [ ] Implement JWT tokens with secure claims
+- [ ] Add HTTPS enforcement and secure cookie settings
+- [ ] Include password strength validation
+
+### Backend Implementation (Backend Persona)  
+- [ ] Design RESTful authentication endpoints
+- [ ] Implement proper HTTP status codes
+- [ ] Add comprehensive error handling
+- [ ] Create middleware for protected routes
+- [ ] Optimize database queries for user lookup
+
+### Quality Gates
+- [ ] Security review passed
+- [ ] Password security tested
+- [ ] API security validated
+- [ ] Performance benchmarks met
+
+## Acceptance Criteria
+
+**Security-Enhanced Criteria**:
+1. ✅ Users can register with validated email addresses
+2. ✅ Passwords meet security requirements (8+ chars, mixed case, numbers)
+3. ✅ Login process includes brute force protection
+4. ✅ JWT tokens expire appropriately (15 min access, 7 day refresh)
+5. ✅ All authentication endpoints return consistent error messages
+6. ✅ Security headers implemented (CSRF, XSS protection)
+
+**Implementation Notes**:
+- Security persona ensures OWASP compliance from day one
+- Backend persona optimizes API design and database interactions  
+- Combined expertise prevents common security vulnerabilities
+EOF
+```
+
+#### 2. Try Different Persona Combinations
+
+**Your Turn**: Experiment with persona-enhanced task execution:
+
+```bash
+# Security-focused development for authentication
+/project:simone:do_task TASK_002 --persona-security --persona-backend --introspect
+
+# The --introspect flag shows you the AI reasoning process:
+# 🤔 Security Thinking: "JWT implementation needs secure signing algorithm"
+# 🎯 Backend Decision: "Use HS256 with 256-bit secret for development"
+# 🔍 Analysis: "Rate limiting prevents brute force attacks"
+# ✅ Conclusion: "Implementation follows OWASP authentication guidelines"
+```
+
+#### 3. Create Frontend Task with UX Focus
+
+**Your Turn**: Create a UI task enhanced with frontend expertise:
+
+```bash
+cat > .simone/03_SPRINTS/S01_M01_Blog_Foundation/task_003_responsive_design.md << 'EOF'
+---
+task_id: "TASK_003"
+title: "Create Responsive Blog Layout"
+type: "feature"
+priority: "medium"
+complexity: "medium"
+estimated_hours: 6
+
+# Multi-Persona Enhancement
+personas_applied: ["frontend", "performance", "qa"]
+ux_considerations: "Mobile-first design, accessibility compliance"
+performance_targets: "Loading time <2s, optimized images"
+quality_standards: "Cross-browser testing, accessibility audit"
+---
+
+# TASK_003: Create Responsive Blog Layout
+
+**Enhanced with Frontend + Performance + QA Personas**
+
+## Frontend Excellence (Frontend Persona)
+- [ ] Mobile-first responsive design
+- [ ] WCAG 2.1 AA accessibility compliance
+- [ ] Semantic HTML structure
+- [ ] Progressive enhancement approach
+
+## Performance Optimization (Performance Persona)
+- [ ] Image optimization and lazy loading
+- [ ] CSS/JS minification and compression
+- [ ] Critical CSS inlining
+- [ ] Web Vitals benchmarks met
+
+## Quality Assurance (QA Persona)
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Accessibility testing with screen readers
+- [ ] Performance testing on 3G networks
+- [ ] Visual regression testing
+EOF
+```
+
+#### 4. Experience Multi-Persona Analysis
+
+**Your Turn**: Try the comprehensive analysis approach:
+
+```bash
+# Multi-persona consultation for complex decisions
+/project:simone:create_milestone "User Management System" --persona-security --persona-backend --persona-frontend --consensus
+
+# What happens:
+# - Security persona identifies compliance requirements
+# - Backend persona designs scalable data architecture  
+# - Frontend persona plans user experience flows
+# - Consensus mode validates decisions across all perspectives
+```
+
+### Persona Learning Outcomes
+
+After this step, you understand:
+
+- ✅ **Domain Expertise**: How different personas approach the same problem
+- ✅ **Quality Enhancement**: How personas prevent common mistakes upfront  
+- ✅ **Learning Acceleration**: How mentor persona helps team growth
+- ✅ **Cost Optimization**: How UltraCompressed mode reduces AI costs
+- ✅ **Transparent AI**: How introspection mode shows reasoning
+
+### When to Use Personas
+
+| Task Type | Recommended Personas | Why |
+|-----------|---------------------|-----|
+| **Authentication** | Security + Backend | OWASP compliance, secure patterns |
+| **User Interface** | Frontend + Performance + QA | UX optimization, speed, testing |
+| **Database Design** | Backend + Security + Analyzer | Performance, security, complexity |
+| **API Development** | Backend + Security + QA | RESTful design, security, testing |
+| **Complex Features** | Multiple + Consensus | Comprehensive validation |
+
+**✅ Checkpoint**: You've experienced how cognitive personas enhance development quality and accelerate learning!
+
+---
+
+## 🎯 Step 8: Track Your Progress
 
 Now let's see how to track progress in your Simone project.
 
@@ -430,7 +614,7 @@ And in the acceptance criteria:
 
 ---
 
-## 📊 Step 8: Create a Quick Status Overview
+## 📊 Step 9: Create a Quick Status Overview
 
 Let's create a simple way to see your project status at a glance.
 
