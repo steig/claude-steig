@@ -156,23 +156,46 @@ install_commands() {
         
         # Copy commands, preserving existing ones
         if [[ -d "$source_dir/.claude/commands" ]]; then
-            # Use more robust copying with error checking
-            if cp -r "$source_dir/.claude/commands/"* .claude/commands/ 2>/dev/null; then
-                success "Claude Code commands installed"
-            else
-                warn "Failed to copy some Claude Code commands, attempting individual copy..."
-                # Try copying each subdirectory individually
-                for cmd_dir in "$source_dir/.claude/commands/"*; do
-                    if [[ -d "$cmd_dir" ]]; then
-                        local cmd_name=$(basename "$cmd_dir")
-                        mkdir -p ".claude/commands/$cmd_name"
-                        cp -r "$cmd_dir/"* ".claude/commands/$cmd_name/" 2>/dev/null || warn "Failed to copy $cmd_name commands"
+            log "Copying commands from: $source_dir/.claude/commands"
+            
+            # Copy each command directory individually for better error handling
+            local commands_copied=0
+            for cmd_dir in "$source_dir/.claude/commands/"*; do
+                if [[ -d "$cmd_dir" ]]; then
+                    local cmd_name=$(basename "$cmd_dir")
+                    log "Installing $cmd_name commands..."
+                    mkdir -p ".claude/commands/$cmd_name"
+                    
+                    if cp -r "$cmd_dir/"* ".claude/commands/$cmd_name/" 2>/dev/null; then
+                        success "$cmd_name commands installed"
+                        ((commands_copied++))
+                    else
+                        # Try copying files individually if directory copy fails
+                        local files_copied=0
+                        for file in "$cmd_dir/"*; do
+                            if [[ -f "$file" ]]; then
+                                if cp "$file" ".claude/commands/$cmd_name/" 2>/dev/null; then
+                                    ((files_copied++))
+                                fi
+                            fi
+                        done
+                        if [[ $files_copied -gt 0 ]]; then
+                            success "$cmd_name commands installed ($files_copied files)"
+                            ((commands_copied++))
+                        else
+                            warn "Failed to copy $cmd_name commands"
+                        fi
                     fi
-                done
-                success "Claude Code commands installed (with warnings)"
+                fi
+            done
+            
+            if [[ $commands_copied -gt 0 ]]; then
+                success "Claude Code commands installed ($commands_copied command sets)"
+            else
+                warn "No commands were successfully copied"
             fi
         else
-            warn "No Claude Code commands found in source"
+            warn "No Claude Code commands found in source: $source_dir/.claude/commands"
         fi
         
         # Create claude commands folder if it doesn't exist

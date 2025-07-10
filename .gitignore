@@ -20,6 +20,9 @@ Thumbs.db
 !/install-simone.sh
 !/INSTALL.md
 !/docs
+!/tests
+!/.github
+.version
 
 # Editor directories and files
 .cursor/
