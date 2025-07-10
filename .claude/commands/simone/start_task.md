@@ -15,7 +15,7 @@ Creates a Git branch for a task and sets up the development environment without 
 
 ### 1. Parse task arguments and validate
 
-**Arguments Format:** `<Task_ID>` (e.g., "T01_S02", "T003", "BUG001")
+**Arguments Format:** `<Task_ID>` (e.g., "t01-s02", "t003", "bug001")
 
 **Validation Process:**
 - Accept task IDs: T##_S##, T###, or BUG### formats
@@ -24,7 +24,7 @@ Creates a Git branch for a task and sets up the development environment without 
 - Support both full task names and just IDs
 
 **Task Type Detection:**
-- **Sprint Tasks**: T##_S## pattern (e.g., T01_S02)
+- **Sprint Tasks**: t##-s## pattern (e.g., t01-s02)
 - **General Tasks**: T### pattern (e.g., T003)
 - **Bug Tasks**: BUG### pattern (e.g., BUG001)
 
@@ -74,32 +74,30 @@ Creates a Git branch for a task and sets up the development environment without 
 
 **For Sprint Tasks:**
 ```
-task/T##_S##_<task_title_snake_case>
+task/t##-s##
 ```
-Example: `task/T01_S02_user_authentication`
+Example: `task/t01-s02`
 
 **For General Tasks:**
 ```
-task/T###_<task_title_snake_case>
+task/t###
 ```
-Example: `task/T003_refactor_logging_system`
+Example: `task/t003`
 
 **For Bug Tasks:**
 ```
-bug/BUG###_<bug_title_snake_case>
-hotfix/BUG###_<bug_title_snake_case>  # for critical/high severity
+bug/bug###
+hotfix/bug###  # for critical/high severity
 ```
 Examples: 
-- `bug/BUG001_login_validation_error`
-- `hotfix/BUG002_security_vulnerability`
+- `bug/bug001`
+- `hotfix/bug002`
 
 **Branch Creation Process:**
-1. **Extract Title**: Get task title from task file metadata
-2. **Convert to Snake Case**: Replace spaces with underscores, lowercase
-3. **Limit Length**: Keep total branch name under 50 characters
-4. **Check Uniqueness**: If branch exists, append timestamp `_YYYYMMDD_HHMM`
-5. **Create Branch**: `git checkout -b <branch_name>`
-6. **Verify Creation**: `git branch --show-current`
+1. **Generate Branch Name**: Use task/milestone ID only (no title or description)
+2. **Check Uniqueness**: If branch exists, append timestamp `-YYYYMMDD-HHMM`
+3. **Create Branch**: `git checkout -b <branch_name>`
+4. **Verify Creation**: `git branch --show-current`
 
 **Severity-Based Branching (for bugs):**
 - **Critical/High Severity**: Use `hotfix/` prefix for fast-track process
@@ -203,7 +201,7 @@ Examples:
 - Always use prefixes: `task/`, `bug/`, `hotfix/`
 - Include task/bug ID for traceability
 - Use descriptive but concise names
-- Follow snake_case for readability
+- Follow slug format (kebab-case) for readability and URL compatibility
 
 ### Branch Lifecycle
 - Branch created from latest main/master

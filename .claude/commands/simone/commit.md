@@ -23,8 +23,8 @@ Follow these instructions from top to bottom.
 - Run these commands in parallel for maximum efficiency: `git status`, `git diff --staged`, `git diff`, `git branch --show-current`
 - List all changed files with their folder structure to understand the scope
 - **Branch Context Analysis**: Check current branch name for automatic context detection:
-  - If on `task/T##_S##_*` branch, automatically detect task context from branch name
-  - If on `bug/BUG###_*` or `hotfix/BUG###_*` branch, automatically detect bug context
+  - If on `task/T##-S##-*` branch, automatically detect task context from branch name
+  - If on `bug/BUG###-*` or `hotfix/BUG###-*` branch, automatically detect bug context
   - If context argument provided, verify it matches current branch context
   - If mismatch detected, warn user and ask how to proceed
 
@@ -38,16 +38,16 @@ Follow these instructions from top to bottom.
 - **PRIMARY FOCUS**: Only commit files directly related to this context
 - **SECONDARY CONSIDERATION**: After handling the primary context, ask if user wants to commit other unrelated changes
 
-**Task ID Pattern** (e.g., T01_S02, TX03_S01, T003):
+**Task ID Pattern** (e.g., T01-S02, TX03-S01, T003):
 
-- Sprint Tasks: `T<NN>_S<NN>` format (e.g., T01_S02, T03_S02)
-- Completed Sprint Tasks: `TX<NN>_S<NN>` format (e.g., TX01_S02, TX03_S01)
+- Sprint Tasks: `T<NN>-S<NN>` format (e.g., T01-S02, T03-S02)
+- Completed Sprint Tasks: `TX<NN>-S<NN>` format (e.g., TX01-S02, TX03-S01)
 - General Tasks: `T<NNN>` format (e.g., T001, T002)
 - Completed General Tasks: `TX<NNN>` format (e.g., TX001, TX002)
 - Search for this task ID in:
   - `.simone/03_SPRINTS/` directory (for sprint tasks)
   - `.simone/04_GENERAL_TASKS/` directory (for general tasks)
-  - Task metadata in files (look for `task_id: T01_S02` in frontmatter)
+  - Task metadata in files (look for `task_id: T01-S02` in frontmatter)
   - Git diff content (to see if code comments or commits reference the task)
 - Identify ALL files that were modified as part of this task's implementation
 - This includes: source code, tests, configuration, and the task documentation file itself
@@ -66,8 +66,8 @@ Follow these instructions from top to bottom.
 **Sprint ID Pattern** (e.g., S01, S02):
 
 - When only sprint ID is provided, commit all changes related to ANY task within that sprint
-- Search pattern: `T*_S<NN>` in the sprint directory
-- Example: "S02" would include changes for T01_S02, T02_S02, T03_S02, etc.
+- Search pattern: `T*-S<NN>` in the sprint directory
+- Example: "S02" would include changes for T01-S02, T02-S02, T03-S02, etc.
 
 **No Context Provided** (when <$ARGUMENTS> is empty):
 
@@ -127,8 +127,8 @@ For the next commit to create:
 - **Files**: List the specific files to be included
 - **Commit message**: Use conventional commit format, be clear and concise
   - **CRITICAL:** Must not contain any attribution to Claude, Anthropic, or AI assistance
-  - **Task-related commits**: Include task ID in message (e.g., "feat(auth): implement T01_S02 user authentication" or "refactor(api): optimize T003 response handling")
-  - **Bug fix commits**: Include bug ID in message (e.g., "fix(login): resolve BUG001 validation error" or "hotfix(security): patch BUG002 authentication bypass")
+  - **Task-related commits**: Include task ID in message (e.g., "feat(auth): implement t01-s02 user authentication" or "refactor(api): optimize t003 response handling")
+  - **Bug fix commits**: Include bug ID in message (e.g., "fix(login): resolve bug001 validation error" or "hotfix(security): patch bug002 authentication bypass")
   - **Branch Context**: Use conventional commit types that match the work being done:
     - `feat:` for new features (task branches)
     - `fix:` for bug fixes (bug branches)

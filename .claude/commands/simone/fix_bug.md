@@ -20,7 +20,7 @@ Executes bug fix tasks with specialized bug tracking integration and comprehensi
 
 ### 1. Parse bug arguments and locate bug report
 
-**Arguments Format:** `<Bug_ID>` (e.g., "BUG001" or "BUG001_Login_Failure")
+**Arguments Format:** `<Bug_ID>` (e.g., "bug001" or "bug001-login-failure")
 
 **Bug Location Process:**
 - Search `.simone/06_BUGS/BUG*.md` for bug reports
@@ -99,19 +99,18 @@ related_bug: "{BUG_ID}"
    - Pull latest changes: `git pull origin main`
 
 3. **Generate Bug Fix Branch Name:**
-   - **For Regular Bugs**: `bug/BUG###_<bug_title_snake_case>`
-   - **For Critical/Hotfixes**: `hotfix/BUG###_<bug_title_snake_case>`
+   - **For Regular Bugs**: `bug/bug###`
+   - **For Critical/Hotfixes**: `hotfix/bug###`
    - **Examples**:
-     - `bug/BUG001_login_validation_error`
-     - `hotfix/BUG002_critical_security_fix`
-   - Extract bug title from bug report and convert to snake_case
-   - Limit branch name to 50 characters total
+     - `bug/bug001`
+     - `hotfix/bug002`
+   - Use bug ID only (no title or description)
 
 4. **Create and Switch Branch:**
-   - For critical/high severity: `git checkout -b hotfix/BUG###_<title>`
-   - For medium/low severity: `git checkout -b bug/BUG###_<title>`
+   - For critical/high severity: `git checkout -b hotfix/bug###`
+   - For medium/low severity: `git checkout -b bug/bug###`
    - Verify branch creation: `git branch --show-current`
-   - **CRITICAL**: If branch already exists, append timestamp: `_YYYYMMDD_HHMM`
+   - **CRITICAL**: If branch already exists, append timestamp: `-YYYYMMDD-HHMM`
 
 5. **Update Bug and Task Metadata:**
    - Add `git_branch: "<branch_name>"` to bug YAML frontmatter

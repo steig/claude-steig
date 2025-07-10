@@ -19,7 +19,7 @@ Intelligently merges pull requests with task/bug status updates and branch clean
 **Arguments Format:** `<TASK_ID/BUG_ID/PR_URL>` or auto-detect from branch
 
 **Context Detection Methods:**
-- **Task/Bug ID**: T01_S02, T003, BUG001 → Find associated PR
+- **Task/Bug ID**: t01-s02, t003, bug001 → Find associated PR
 - **PR URL**: Full GitHub PR URL → Extract PR number
 - **PR Number**: #123 → Use directly
 - **Auto-detect**: Extract from current branch name

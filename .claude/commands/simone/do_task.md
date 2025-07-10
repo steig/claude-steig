@@ -58,18 +58,17 @@ Read the task description. If anything is unclear, ask clarifying questions befo
    - Pull latest changes: `git pull origin main`
 
 3. **Generate Branch Name:**
-   - **For Sprint Tasks**: `task/T##_S##_<task_title_snake_case>`
-   - **For General Tasks**: `task/T###_<task_title_snake_case>`
+   - **For Sprint Tasks**: `task/t##-s##`
+   - **For General Tasks**: `task/t###`
    - **Examples**: 
-     - `task/T01_S02_user_authentication`
-     - `task/T003_refactor_logging_system`
-   - Extract task title from task file and convert to snake_case
-   - Limit branch name to 50 characters total
+     - `task/t01-s02`
+     - `task/t003`
+   - Use task ID and milestone ID only (no title or description)
 
 4. **Create and Switch Branch:**
    - Create branch: `git checkout -b <branch_name>`
    - Verify branch creation: `git branch --show-current`
-   - **CRITICAL**: If branch already exists, append timestamp: `_YYYYMMDD_HHMM`
+   - **CRITICAL**: If branch already exists, append timestamp: `-YYYYMMDD-HHMM`
 
 5. **Update Task Metadata:**
    - Add `git_branch: "<branch_name>"` to task YAML frontmatter

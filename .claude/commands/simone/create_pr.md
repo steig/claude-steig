@@ -20,11 +20,11 @@ Creates pull requests with auto-generated descriptions, checklists, and proper l
 **Arguments Format:** `<TASK_ID/BUG_ID>` or auto-detect from branch
 
 **Context Detection:**
-- **From Arguments**: T##_S##, T###, or BUG### format
+- **From Arguments**: t##-s##, t###, or bug### format
 - **From Branch Name**: Extract from current branch if no argument
-  - `task/T01_S02_*` → T01_S02
-  - `bug/BUG001_*` → BUG001
-  - `hotfix/BUG002_*` → BUG002
+  - `task/t01-s02` → t01-s02
+  - `bug/bug001` → bug001
+  - `hotfix/bug002` → bug002
 - **Validation**: Ensure context exists and is valid
 
 **Error Handling:**
@@ -82,9 +82,9 @@ Creates pull requests with auto-generated descriptions, checklists, and proper l
 ```
 
 **Examples:**
-- `feat(auth): implement user authentication (T01_S02)`
-- `fix(login): resolve validation error (BUG001)`
-- `hotfix(security): patch authentication bypass (BUG002)`
+- `feat(auth): implement user authentication (t01-s02)`
+- `fix(login): resolve validation error (bug001)`
+- `hotfix(security): patch authentication bypass (bug002)`
 
 **PR Description Template:**
 ```markdown
@@ -92,7 +92,7 @@ Creates pull requests with auto-generated descriptions, checklists, and proper l
 {AI-generated summary based on task/bug and code changes}
 
 ## Related Work
-- **Task/Bug**: [{TASK_ID/BUG_ID}]({link_to_task_file})
+- **Task/Bug**: [{TASK-ID/BUG-ID}]({link_to_task_file})
 - **Type**: {task_type}
 - **Complexity**: {complexity}
 - **Estimated Effort**: {effort}h
@@ -193,7 +193,7 @@ EOF
 - **URL**: {pr_url}
 - **Title**: {pr_title}
 - **Base**: {target_branch} ← **Head**: {current_branch}
-- **Context**: {TASK_ID/BUG_ID}
+- **Context**: {TASK-ID/BUG-ID}
 
 📊 **Metrics**:
 - **Files Changed**: {file_count}
@@ -205,12 +205,12 @@ EOF
 1. **Review**: Wait for code review from team members
 2. **Testing**: Ensure all checks pass
 3. **Updates**: Address any review feedback
-4. **Merge**: Use `/project:simone:merge {TASK_ID/BUG_ID}` when approved
+4. **Merge**: Use `/project:simone:merge {TASK-ID/BUG-ID}` when approved
 
 🔧 **PR Management Commands**:
 - **Update PR**: Make additional commits and push
-- **Review PR**: `/project:simone:review_pr {TASK_ID/BUG_ID}` (coming soon)
-- **Merge PR**: `/project:simone:merge {TASK_ID/BUG_ID}` (coming soon)
+- **Review PR**: `/project:simone:review_pr {TASK-ID/BUG-ID}` (coming soon)
+- **Merge PR**: `/project:simone:merge {TASK-ID/BUG-ID}` (coming soon)
 - **Close PR**: Use GitHub UI if not needed
 ```
 

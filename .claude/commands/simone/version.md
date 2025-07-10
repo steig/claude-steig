@@ -177,8 +177,8 @@ Auto-generate changelog from commit history and templates:
 ## [1.2.3] - 2024-12-01
 
 ### Added
-- User authentication system (T01_S02)
-- Password reset functionality (T02_S02)
+- User authentication system (t01-s02)
+- Password reset functionality (t02-s02)
 
 ### Fixed
 - Login validation error (BUG001)

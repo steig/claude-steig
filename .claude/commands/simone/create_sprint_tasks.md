@@ -49,7 +49,7 @@ Use PARALLEL SUBAGENTS to READ and UNDERSTAND the project's context:
 
 **USE PARALLEL SUBAGENTS** to execute these commands:
 
-- SEARCH `.simone/05_ARCHITECTURE_DECISIONS/` for ADRs matching sprint ID (e.g., `ADR*_S02_*.md`)
+- SEARCH `.simone/05_ARCHITECTURE_DECISIONS/` for ADRs matching sprint ID (e.g., `ADR*-s02-*.md`)
 - READ all found ADRs to understand technical decisions
 - CHECK sprint meta for ADR references section
 - NOTE which technical decisions will affect task implementation
@@ -218,8 +218,8 @@ Review all created tasks for complexity and split any High complexity tasks:
     - [No other splits needed]
 
     **Final Task List:**
-    1. T01_S02 - [Title] (Complexity: [Level])
-    2. T02_S02 - [Title] (Complexity: [Level])
+    1. t01-s02 - [Title] (Complexity: [Level])
+    2. t02-s02 - [Title] (Complexity: [Level])
     [Continue for all tasks]
 
     **Next Steps:**

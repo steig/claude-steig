@@ -168,16 +168,16 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 
 ```bash
 # Start working on a task
-/project:simone:update_task_status T01_S01 in_progress
+/project:simone:update_task_status t01-s01 in_progress
 
 # Mark ready for review with time tracking
-/project:simone:update_task_status T01_S01 review 3.5
+/project:simone:update_task_status t01-s01 review 3.5
 
 # Block a task with reason
-/project:simone:update_task_status T01_S01 blocked
+/project:simone:update_task_status t01-s01 blocked
 
 # Complete a task
-/project:simone:update_task_status T01_S01 completed 4
+/project:simone:update_task_status t01-s01 completed 4
 ```
 
 ## Integration Notes
