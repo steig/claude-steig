@@ -94,33 +94,6 @@ backup_installation() {
     fi
 }
 
-# Download and extract Simone framework
-download_simone() {
-    local temp_dir=$(mktemp -d)
-    
-    log "Downloading Simone framework..."
-    
-    # Try git clone first, fallback to curl if needed
-    if command -v git &> /dev/null; then
-        git clone --depth 1 "$SIMONE_REPO" "$temp_dir" 2>/dev/null || {
-            warn "Git clone failed, trying direct download..."
-            download_simone_curl "$temp_dir"
-        }
-    else
-        download_simone_curl "$temp_dir"
-    fi
-    
-    echo "$temp_dir"
-}
-
-# Fallback download method using curl
-download_simone_curl() {
-    local temp_dir="$1"
-    # This would need to be updated based on your actual hosting
-    curl -L -o "$temp_dir/simone.zip" "https://github.com/steig/claude-steig/archive/main.zip"
-    unzip -q "$temp_dir/simone.zip" -d "$temp_dir"
-    mv "$temp_dir"/claude-steig-main/* "$temp_dir/"
-}
 
 # Install core Simone structure
 install_core_structure() {
@@ -129,7 +102,14 @@ install_core_structure() {
     log "Installing core Simone structure..."
     
     # Create main directories
-    mkdir -p "$SIMONE_DIR"/{01_PROJECT_DOCS,02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,05_ARCHITECTURAL_DECISIONS,10_STATE_OF_PROJECT,99_TEMPLATES}
+    mkdir -p "$SIMONE_DIR"
+    mkdir -p "$SIMONE_DIR/01_PROJECT_DOCS"
+    mkdir -p "$SIMONE_DIR/02_REQUIREMENTS"
+    mkdir -p "$SIMONE_DIR/03_SPRINTS"
+    mkdir -p "$SIMONE_DIR/04_GENERAL_TASKS"
+    mkdir -p "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
+    mkdir -p "$SIMONE_DIR/10_STATE_OF_PROJECT"
+    mkdir -p "$SIMONE_DIR/99_TEMPLATES"
     
     # Copy templates
     if [[ -d "$source_dir/.simone/99_TEMPLATES" ]]; then
@@ -170,12 +150,12 @@ install_commands() {
     if [[ -d "$source_dir/.claude" ]]; then
         log "Installing Claude Code commands..."
         
-        # Create .claude directory if it doesn't exist
+        # Create .claude directory structure
         mkdir -p .claude
+        mkdir -p .claude/commands
         
         # Copy commands, preserving existing ones
         if [[ -d "$source_dir/.claude/commands" ]]; then
-            mkdir -p .claude/commands
             # Use more robust copying with error checking
             if cp -r "$source_dir/.claude/commands/"* .claude/commands/ 2>/dev/null; then
                 success "Claude Code commands installed"
@@ -195,6 +175,13 @@ install_commands() {
             warn "No Claude Code commands found in source"
         fi
         
+        # Create claude commands folder if it doesn't exist
+        if [[ ! -d ".claude/commands/claude" ]]; then
+            log "Creating claude commands folder..."
+            mkdir -p .claude/commands/claude
+            success "Claude commands folder created"
+        fi
+        
         # Copy other .claude files
         local claude_files=("CLAUDE.md")
         for file in "${claude_files[@]}"; do
@@ -209,8 +196,8 @@ install_commands() {
 upgrade_installation() {
     log "Upgrading existing Simone installation..."
     
-    # Download new version
-    local temp_dir=$(download_simone)
+    # Use local repository directory
+    local source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     
     # Backup current installation
     backup_installation
@@ -235,8 +222,8 @@ upgrade_installation() {
         [[ -d "$SIMONE_DIR/10_STATE_OF_PROJECT" ]] && backup_reviews="$SIMONE_DIR/10_STATE_OF_PROJECT"
         
         # Install new version
-        install_core_structure "$temp_dir"
-        install_commands "$temp_dir"
+        install_core_structure "$source_dir"
+        install_commands "$source_dir"
         
         # Restore user content
         [[ -n "$backup_manifest" ]] && echo "$backup_manifest" > "$SIMONE_DIR/00_PROJECT_MANIFEST.md"
@@ -253,9 +240,6 @@ upgrade_installation() {
     
     preserve_user_data
     
-    # Cleanup
-    rm -rf "$temp_dir"
-    
     success "Upgrade completed successfully!"
 }
 
@@ -263,18 +247,15 @@ upgrade_installation() {
 fresh_installation() {
     log "Performing fresh Simone installation..."
     
-    # Download Simone
-    local temp_dir=$(download_simone)
+    # Use local repository directory
+    local source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     
     # Install everything
-    install_core_structure "$temp_dir"
-    install_commands "$temp_dir"
+    install_core_structure "$source_dir"
+    install_commands "$source_dir"
     
     # Create initial project manifest
     create_initial_manifest
-    
-    # Cleanup
-    rm -rf "$temp_dir"
     
     success "Fresh installation completed successfully!"
 }
