@@ -1,0 +1,184 @@
+name: Bug Report
+description: Report a bug to help us improve the Simone Framework
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! This helps us maintain and improve the Simone Framework.
+        
+        **Note**: If you're working within a Simone project, you can also use `/project:simone:do_bug` command to create a comprehensive bug report locally.
+
+  - type: input
+    id: bug_id
+    attributes:
+      label: Bug ID
+      description: If this relates to a local bug report, enter the Bug ID (e.g., BUG001)
+      placeholder: BUG001
+    validations:
+      required: false
+
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Which component of the Simone Framework is affected?
+      placeholder: "e.g., commands, templates, project-structure, documentation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Critical (system unusable, data loss)
+        - High (major functionality broken)
+        - Medium (some functionality impacted)
+        - Low (minor issue, workaround available)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did this bug occur?
+      options:
+        - Production
+        - Staging
+        - Development
+        - Local
+        - Testing
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clearly describe what the bug is. What did you expect to happen vs. what actually happened?
+      placeholder: |
+        **Expected Behavior:**
+        What should have happened?
+        
+        **Actual Behavior:**
+        What actually happened?
+        
+        **Context:**
+        Any additional context about the problem?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Provide detailed steps to reproduce the bug
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Run command '...'
+        4. See error
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment_details
+    attributes:
+      label: Environment Details
+      description: Provide information about your environment
+      placeholder: |
+        - OS: [e.g., macOS 14.0, Ubuntu 22.04]
+        - Shell: [e.g., bash, zsh]
+        - Claude Code Version: [e.g., 1.2.0]
+        - Simone Framework Version: [e.g., commit hash or release]
+        - Project Type: [e.g., web app, CLI tool, etc.]
+      value: |
+        - OS: 
+        - Shell: 
+        - Claude Code Version: 
+        - Simone Framework Version: 
+        - Project Type: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence & Logs
+      description: Include any error messages, logs, screenshots, or other evidence
+      placeholder: |
+        ```
+        Error messages or logs here
+        ```
+        
+        [Attach screenshots if relevant]
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact Assessment
+      description: How does this bug affect your workflow or project?
+      placeholder: |
+        - Who is affected? (developers, end users, etc.)
+        - What workflows are disrupted?
+        - Is there a workaround available?
+        - Business/project impact?
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or relevant information
+      placeholder: |
+        - Related issues or bugs
+        - Recent changes that might have caused this
+        - Similar problems in the past
+        - Potential solutions you've considered
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Bug Report Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have searched for existing issues that might be related
+          required: true
+        - label: I have provided clear steps to reproduce the bug
+          required: true
+        - label: I have included relevant environment details
+          required: true
+        - label: I have assessed the severity appropriately
+          required: true
+        - label: I am willing to help test a fix if needed
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## What happens next?
+        
+        1. **Triage**: We'll review and label your bug report
+        2. **Investigation**: We'll investigate the issue and may ask for more details
+        3. **Fix**: We'll work on a fix and may ask you to test it
+        4. **Resolution**: We'll close the issue once the fix is verified
+        
+        **For Simone Framework users**: If you're working in a Simone project, you can also create a local bug report using `/project:simone:do_bug` which provides enhanced tracking and resolution workflows.
+        
+        Thank you for helping improve the Simone Framework!
