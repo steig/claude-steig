@@ -4,7 +4,7 @@ Complete reference for all Simone Framework commands available in Claude Code.
 
 ## Overview
 
-The Simone Framework provides 23 specialized commands for project management, development workflow, and quality assurance. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
+The Simone Framework provides 22 specialized commands for project management, development workflow, and quality assurance. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
 
 ## Command Categories
 
@@ -17,7 +17,7 @@ The Simone Framework provides 23 specialized commands for project management, de
 ### 📋 Task Management
 - [`create_general_task`](#create_general_task) - Create new general tasks
 - [`create_sprint_tasks`](#create_sprint_tasks) - Create sprint-specific tasks
-- [`create_bug`](#create_bug) - Create bug reports and tracking
+- [`create_bug`](#create_bug) - Create bug reports with GitHub integration
 - [`start_task`](#start_task) - Set up task development environment
 - [`do_task`](#do_task) - Execute task implementation
 - [`update_task_status`](#update_task_status) - Update task progress
@@ -147,7 +147,7 @@ The Simone Framework provides 23 specialized commands for project management, de
 
 ### create_bug
 
-**Purpose**: Create comprehensive bug reports with tracking and resolution workflow.
+**Purpose**: Create comprehensive bug reports with tracking, task generation, and GitHub integration.
 
 **Usage**:
 ```
@@ -157,13 +157,34 @@ The Simone Framework provides 23 specialized commands for project management, de
 **Arguments**:
 - `bug_description` - Description of the bug to report
 
+**Enhanced Workflow** (NEW in v2.0.6):
+1. **Bug Analysis**: Parse arguments and research codebase impact
+2. **Comprehensive Documentation**: Create detailed bug report with technical analysis
+3. **Task Generation**: Automatically create associated fix tasks
+4. **GitHub Integration**: Create GitHub issue with proper cross-referencing
+5. **Project Tracking**: Update manifest and establish traceability
+
+**New GitHub Integration Features**:
+- **Automatic Issue Creation**: Uses GitHub CLI to create issues with template
+- **Cross-Referencing**: Links local bug reports to GitHub issues
+- **Label Management**: Applies severity and component labels automatically
+- **Bidirectional Tracking**: Updates both local and GitHub issue status
+
 **Process**:
-1. Creates detailed bug report with metadata
-2. Assigns severity and priority levels
-3. Sets up reproduction steps and environment info
-4. Links to relevant code sections
-5. Creates associated fix task if needed
-6. Updates project tracking
+1. Creates detailed bug report with metadata and technical analysis
+2. Assigns severity and priority levels based on impact assessment
+3. Sets up reproduction steps and environment information
+4. Links to relevant code sections with specific file references
+5. **NEW**: Creates GitHub issue with comprehensive template
+6. **NEW**: Establishes bidirectional linking between local and GitHub
+7. Creates associated fix task with cross-references
+8. Updates project tracking with GitHub issue information
+
+**Output Includes**:
+- Local bug report in `.simone/06_BUGS/BUG###_Title.md`
+- Associated fix task in appropriate sprint or general tasks
+- GitHub issue with proper labeling and cross-references
+- Updated project manifest with GitHub issue links
 
 ---
 

@@ -298,8 +298,7 @@ Every task includes comprehensive quality sections:
 ```
 
 #### 🚀 **Maintenance Commands**
-- `/project:simone:create_bug` - Structured bug reporting and tracking
-- `/project:simone:fix_bug bug001` - Context-aware bug resolution
+- `/project:simone:do_bug` - Unified bug handling (reporting, tracking, and resolution)
 - `/project:simone:status` - Comprehensive project health monitoring
 
 #### 📊 **Evolution Metrics**

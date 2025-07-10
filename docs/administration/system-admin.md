@@ -98,6 +98,44 @@ curl -s https://api.github.com/repos/steig/claude-steig/releases/latest | grep t
 
 ## Maintenance Tasks
 
+### Documentation Validation
+
+#### Automated Validation Script
+**NEW in v2.0.6**: Comprehensive documentation validation script to ensure consistency and prevent documentation drift.
+
+```bash
+# Run complete validation
+./scripts/validate-docs.sh
+
+# Run quietly (errors and warnings only)
+./scripts/validate-docs.sh --quiet
+
+# Strict mode (treat warnings as errors)
+./scripts/validate-docs.sh --strict
+```
+
+#### Validation Features
+- **Documentation Structure**: Verifies all required directories and files exist
+- **Internal Links**: Checks for broken links between documentation files
+- **YAML Frontmatter**: Validates metadata consistency
+- **Simone Structure**: Validates .simone directory organization
+- **File Permissions**: Ensures correct file permissions
+- **Command Reference**: Verifies all commands are documented
+
+#### Integration with CI/CD
+```yaml
+# GitHub Actions example
+name: Documentation Validation
+on: [push, pull_request]
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Documentation
+        run: ./scripts/validate-docs.sh --strict
+```
+
 ### Regular Maintenance
 
 #### Weekly Tasks

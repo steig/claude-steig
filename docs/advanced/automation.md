@@ -493,7 +493,7 @@ workflows:
     triggers:
       - quality_gate_status: "failed"
     steps:
-      - create_bug_task
+      - do_bug
       - assign_to_developer
       - notify_team_lead
       - schedule_review_meeting

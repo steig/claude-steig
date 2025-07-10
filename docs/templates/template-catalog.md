@@ -202,8 +202,8 @@ technical_value: "{TECHNICAL_VALUE}"   # low, medium, high, critical
 
 ### Bug Template
 **File**: `bug_template.md`  
-**Purpose**: Structured bug reporting and resolution tracking  
-**When to Use**: All bug reports and issue tracking
+**Purpose**: Unified bug handling covering reporting, investigation, resolution, and tracking  
+**When to Use**: All bug lifecycle activities from initial report to final resolution
 
 #### Key Features
 - **Detailed reproduction steps** and environment information
@@ -391,7 +391,7 @@ Many Simone commands automatically use templates:
 |---------|---------------|----------------------|
 | `/project:simone:initialize` | Project Manifest, Architecture | Project metadata, tech stack |
 | `/project:simone:create_sprint_tasks` | Task Template | Task metadata, implementation guidance |
-| `/project:simone:create_bug` | Bug Template | Bug metadata, reproduction steps |
+| `/project:simone:do_bug` | Bug Template | Bug metadata, reproduction steps, resolution tracking |
 | `/project:simone:commit` | Commit Template | Semantic commit messages |
 | `/project:simone:create_pr` | PR Template | PR description, quality checklists |
 | `/project:simone:project_review` | Project Review Template | Health metrics, recommendations |

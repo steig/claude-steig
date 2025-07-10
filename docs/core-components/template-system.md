@@ -22,7 +22,7 @@ The template system is located in `.simone/99_TEMPLATES/` and provides standardi
 
 ### 🎯 Task & Development Templates
 - [`task_template.md`](#task-template) - Individual task specification
-- [`bug_template.md`](#bug-template) - Bug reporting and tracking
+- [`bug_template.md`](#bug-template) - Unified bug handling (reporting, tracking, and resolution)
 - [`commit_template.md`](#commit-template) - Structured commit messages
 - [`pr_template.md`](#pr-template) - Pull request documentation
 
@@ -236,7 +236,7 @@ success_metrics:
 
 ### bug_template.md
 
-**Purpose**: Comprehensive bug reporting and tracking system.
+**Purpose**: Unified bug handling system covering the complete lifecycle from reporting through resolution.
 
 **Key Features**:
 - **Bug description** with reproduction steps
@@ -253,7 +253,7 @@ success_metrics:
 - **Resolution**: Fix description, testing validation
 - **Prevention**: Measures to prevent recurrence
 
-**Usage**: Created by `create_bug` command and updated during resolution.
+**Usage**: Created and managed by `do_bug` command throughout the bug lifecycle.
 
 ---
 
@@ -480,7 +480,7 @@ related_docs: ["../01_PROJECT_DOCS/ARCHITECTURE.md"]
 | `initialize` | `project_manifest_template.md` | `architecture_template.md` |
 | `create_general_task` | `task_template.md` | - |
 | `create_sprint_tasks` | `task_template.md` | `sprint_meta_template.md` |
-| `create_bug` | `bug_template.md` | `task_template.md` |
+| `do_bug` | `bug_template.md` | `task_template.md` |
 | `create_sprints_from_milestone` | `sprint_meta_template.md` | `milestone_meta_template.md` |
 | `create_pr` | `pr_template.md` | - |
 | `commit` | `commit_template.md` | - |
