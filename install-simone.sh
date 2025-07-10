@@ -478,7 +478,7 @@ case "${1:-}" in
         echo "  $0 /path/to/project         # Install in specified directory"
         echo "  $0 --force ./my-project     # Force reinstall in ./my-project"
         echo "  $0 --remote                 # Install from GitHub repository"
-        echo "  curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash"
+        echo "  curl -sSL https://raw.githubusercontent.com/steig/claude-steig/master/install-simone.sh | bash"
         echo
         echo "The script automatically detects existing installations and upgrades smartly."
         exit 0

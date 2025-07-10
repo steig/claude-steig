@@ -46,10 +46,10 @@ This fork includes specialized improvements for comprehensive project management
 #### Quick Install (Remote)
 ```bash
 # Install directly from GitHub to current directory
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/master/install-simone.sh | bash
 
 # Or install to a specific directory
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- /path/to/my-project
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/master/install-simone.sh | bash -s -- /path/to/my-project
 ```
 
 #### Local Development Install
