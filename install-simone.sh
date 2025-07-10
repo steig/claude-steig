@@ -17,7 +17,8 @@ SIMONE_REPO="https://github.com/steig/claude-steig"
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="2.0.1"
+CURRENT_VERSION="2.0.2"
+TARGET_DIR=""
 
 # Utility functions
 log() {
@@ -47,6 +48,21 @@ check_project_directory() {
             log "Installation cancelled."
             exit 0
         fi
+    fi
+}
+
+# Change to target directory if specified
+change_to_target_directory() {
+    if [[ -n "$TARGET_DIR" ]]; then
+        # Create target directory if it doesn't exist
+        mkdir -p "$TARGET_DIR"
+        
+        # Convert to absolute path and change to it
+        local abs_target_dir=$(cd "$TARGET_DIR" && pwd)
+        log "Installing to directory: $abs_target_dir"
+        cd "$abs_target_dir"
+    else
+        log "Installing to current directory: $(pwd)"
     fi
 }
 
@@ -149,6 +165,8 @@ install_core_structure() {
 install_commands() {
     local source_dir="$1"
     
+    log "Checking for Claude Code commands in: $source_dir/.claude"
+    
     if [[ -d "$source_dir/.claude" ]]; then
         log "Installing Claude Code commands..."
         
@@ -158,8 +176,23 @@ install_commands() {
         # Copy commands, preserving existing ones
         if [[ -d "$source_dir/.claude/commands" ]]; then
             mkdir -p .claude/commands
-            cp -r "$source_dir/.claude/commands/"* .claude/commands/ 2>/dev/null || true
-            success "Claude Code commands installed"
+            # Use more robust copying with error checking
+            if cp -r "$source_dir/.claude/commands/"* .claude/commands/ 2>/dev/null; then
+                success "Claude Code commands installed"
+            else
+                warn "Failed to copy some Claude Code commands, attempting individual copy..."
+                # Try copying each subdirectory individually
+                for cmd_dir in "$source_dir/.claude/commands/"*; do
+                    if [[ -d "$cmd_dir" ]]; then
+                        local cmd_name=$(basename "$cmd_dir")
+                        mkdir -p ".claude/commands/$cmd_name"
+                        cp -r "$cmd_dir/"* ".claude/commands/$cmd_name/" 2>/dev/null || warn "Failed to copy $cmd_name commands"
+                    fi
+                done
+                success "Claude Code commands installed (with warnings)"
+            fi
+        else
+            warn "No Claude Code commands found in source"
         fi
         
         # Copy other .claude files
@@ -291,6 +324,9 @@ main() {
     echo "🚀 Simone Framework Installer/Upgrader v$CURRENT_VERSION"
     echo "=================================================="
     
+    # Change to target directory first
+    change_to_target_directory
+    
     check_project_directory
     
     if detect_installation; then
@@ -324,6 +360,8 @@ main() {
     echo "🎉 Simone Framework Setup Complete!"
     echo "======================================"
     echo
+    echo "Installation location: $(pwd)"
+    echo
     echo "Next steps:"
     echo "1. Review: $SIMONE_DIR/00_PROJECT_MANIFEST.md"
     echo "2. Initialize: Run 'claude code' and use /project:simone:initialize"
@@ -343,12 +381,21 @@ case "${1:-}" in
     --help|-h)
         echo "Simone Framework Installer/Upgrader"
         echo
-        echo "Usage: $0 [options]"
+        echo "Usage: $0 [options] [target_directory]"
+        echo
+        echo "Arguments:"
+        echo "  target_directory   Directory to install Simone framework (optional)"
+        echo "                     If not specified, installs in current directory"
         echo
         echo "Options:"
-        echo "  --help, -h     Show this help message"
-        echo "  --force        Force reinstall even if up to date"
-        echo "  --version      Show version information"
+        echo "  --help, -h         Show this help message"
+        echo "  --force            Force reinstall even if up to date"
+        echo "  --version          Show version information"
+        echo
+        echo "Examples:"
+        echo "  $0                           # Install in current directory"
+        echo "  $0 /path/to/project         # Install in specified directory"
+        echo "  $0 --force ./my-project     # Force reinstall in ./my-project"
         echo
         echo "The script automatically detects existing installations and upgrades smartly."
         exit 0
@@ -359,6 +406,19 @@ case "${1:-}" in
         ;;
     --force)
         FORCE_INSTALL=true
+        # Check if next argument is a directory
+        if [[ -n "$2" && "$2" != --* ]]; then
+            TARGET_DIR="$2"
+        fi
+        ;;
+    --*)
+        error "Unknown option: $1. Use --help for usage information."
+        ;;
+    *)
+        # First non-option argument is target directory
+        if [[ -n "$1" ]]; then
+            TARGET_DIR="$1"
+        fi
         ;;
 esac
 

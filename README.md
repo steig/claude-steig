@@ -58,6 +58,18 @@ chmod +x install-simone.sh
 ./install-simone.sh
 ```
 
+#### Install to Specific Directory
+```bash
+# Install to a specific directory
+./install-simone.sh /path/to/my-project
+
+# Install to a relative directory  
+./install-simone.sh ./my-new-project
+
+# Force reinstall in a specific directory
+./install-simone.sh --force /path/to/existing-project
+```
+
 **Smart Installation Features:**
 - **Automatic detection** of existing installations vs fresh installs
 - **Intelligent upgrades** that preserve all your project data
@@ -366,4 +378,3 @@ The original Simone framework was created by [Helmi](https://github.com/helmi).
 
 - **Original Repository**: Check Helmi's repositories for the original implementation
 - **Anthropic Discord**: Find @helmi for discussions about the original framework
-
