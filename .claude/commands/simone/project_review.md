@@ -267,7 +267,7 @@ Based on your findings recommend Action items - chose whatever fits your finding
 **Review File Creation:**
 
 1. **Use Template:**
-   - Copy `/Users/tom/code/claude-simone/.simone/99_TEMPLATES/project_review_template.md`
+   - Copy `.simone/99_TEMPLATES/project_review_template.md`
    - Create timestamped file: `.simone/10_STATE_OF_PROJECT/YYYY-MM-DD_HH-MM_Project_Review.md`
 
 2. **Populate YAML Frontmatter:**

@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-SIMONE_REPO="https://github.com/steig/claude-simone"
+SIMONE_REPO="https://github.com/steig/claude-steig"
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
@@ -101,9 +101,9 @@ download_simone() {
 download_simone_curl() {
     local temp_dir="$1"
     # This would need to be updated based on your actual hosting
-    curl -L -o "$temp_dir/simone.zip" "https://github.com/your-repo/claude-simone/archive/main.zip"
+    curl -L -o "$temp_dir/simone.zip" "https://github.com/steig/claude-steig/archive/main.zip"
     unzip -q "$temp_dir/simone.zip" -d "$temp_dir"
-    mv "$temp_dir"/claude-simone-main/* "$temp_dir/"
+    mv "$temp_dir"/claude-steig-main/* "$temp_dir/"
 }
 
 # Install core Simone structure
@@ -329,7 +329,7 @@ main() {
     echo "2. Initialize: Run 'claude code' and use /project:simone:initialize"
     echo "3. Documentation: Check $SIMONE_DIR/CLAUDE.md for guidance"
     echo
-    echo "For help: https://github.com/your-repo/claude-simone"
+    echo "For help: https://github.com/your-repo/claude-steig"
     
     if [[ -d "$BACKUP_DIR" ]]; then
         echo

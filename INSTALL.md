@@ -4,14 +4,14 @@
 
 ```bash
 # Download and run installer
-curl -sSL https://raw.githubusercontent.com/steig/claude-simone/main/install-simone.sh | bash
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
 ## Manual Install
 
 1. **Download the installer:**
    ```bash
-   wget https://raw.githubusercontent.com/steig/claude-simone/main/install-simone.sh
+   wget https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh
    chmod +x install-simone.sh
    ```
 
