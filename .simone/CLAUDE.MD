@@ -97,6 +97,29 @@ graph TD
 5. **Use underscores** for spaces in folder and file names
 6. **Use Mermaid diagrams** when visual representations would improve understanding
 
+## 🚨 CRITICAL: Step-by-Step Adherence Rule
+
+**MANDATORY WORKFLOW COMPLIANCE:**
+- **ALL commands MUST follow their documented steps EXACTLY as written**
+- **NO shortcuts, consolidations, or "optimizations" of defined workflows**
+- **EACH step must be completed in sequence before moving to the next**
+- **NO assumptions about what the user wants beyond the documented process**
+- **ALWAYS execute steps as numbered - never skip or combine steps**
+
+**Examples of Required Adherence:**
+- `do_task.md` has 9 numbered steps → Execute ALL 9 steps in order
+- `commit.md` has 6 numbered steps → Execute ALL 6 steps in order
+- `create_milestone.md` has specific sections → Fill ALL sections as documented
+
+**Drift Prevention:**
+- ✅ Read the command file completely before starting
+- ✅ Execute each step fully before proceeding
+- ✅ Use TodoWrite to track progress through all steps
+- ✅ Mark steps completed only when fully executed
+- ❌ Never skip steps for "efficiency"
+- ❌ Never combine steps unless explicitly documented
+- ❌ Never assume user intent beyond what's documented
+
 ## Workflow Automation
 
 ### Claude Code Integration
