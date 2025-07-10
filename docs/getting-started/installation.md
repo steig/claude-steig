@@ -7,19 +7,34 @@ Complete guide to installing and setting up the Simone Framework.
 - Git installed on your system
 - A project directory (optional - Simone can be installed anywhere)
 - Basic familiarity with command line tools
+- Internet connection (for remote installation)
 
 ## Quick Installation
 
-### 1. Clone the Repository
+### Option 1: Remote Installation (Recommended)
+
+The fastest way to install Simone directly from GitHub:
 
 ```bash
-git clone https://github.com/steig/claude-steig.git
-cd claude-steig
+# Install in current directory
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
+
+# Install to a specific directory
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- /path/to/project
+
+# Using wget instead of curl
+wget -qO- https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
-### 2. Run the Installer
+### Option 2: Local Installation (For Development)
+
+If you want to customize Simone or contribute to its development:
 
 ```bash
+# Clone the repository
+git clone https://github.com/steig/claude-steig.git
+cd claude-steig
+
 # Install in current directory
 ./install-simone.sh
 
@@ -30,15 +45,39 @@ cd claude-steig
 The installer will:
 - Create the `.simone/` directory structure
 - Copy all templates and configuration files
-- Set up command integration with Claude
+- Set up command integration with Claude Code
 - Create an initial project manifest
+- Detect if upgrading and preserve your data
 
 ## Installation Options
+
+### Command Line Options
+
+```bash
+./install-simone.sh [options] [target_directory]
+
+Options:
+  --help, -h     Show help message
+  --force        Force reinstall even if up to date
+  --version      Show version information  
+  --remote       Force remote installation (fetch from GitHub)
+
+Examples:
+  ./install-simone.sh                      # Install in current directory
+  ./install-simone.sh ./my-project         # Install in ./my-project
+  ./install-simone.sh --force              # Force reinstall
+  ./install-simone.sh --remote /tmp/test   # Remote install to /tmp/test
+```
 
 ### Install to Current Directory
 
 ```bash
 cd your-project
+
+# Remote install (recommended)
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
+
+# Local install from cloned repo
 /path/to/claude-steig/install-simone.sh
 ```
 
@@ -47,10 +86,13 @@ This creates a `.simone/` folder in your current project directory.
 ### Install to Specific Directory
 
 ```bash
-# Install to absolute path
+# Remote install to specific path
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- /path/to/project
+
+# Local install to absolute path
 ./install-simone.sh /Users/username/my-project
 
-# Install to relative path
+# Local install to relative path
 ./install-simone.sh ./my-new-project
 
 # Create new directory and install
@@ -62,6 +104,10 @@ This creates a `.simone/` folder in your current project directory.
 If you need to reinstall over an existing installation:
 
 ```bash
+# Remote force reinstall
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- --force
+
+# Local force reinstall
 ./install-simone.sh --force /path/to/existing-project
 ```
 
@@ -72,32 +118,42 @@ If you need to reinstall over an existing installation:
 ### Directory Structure
 
 ```
-.simone/
-├── 00_PROJECT_MANIFEST.md          # Project overview and status
-├── 01_PROJECT_DOCS/                # Project documentation
-├── 02_REQUIREMENTS/                 # Requirements and specifications
-├── 03_SPRINTS/                      # Sprint planning and execution
-├── 04_GENERAL_TASKS/                # Individual tasks and todos
-├── 05_ARCHITECTURAL_DECISIONS/      # ADRs and design decisions
-├── 10_STATE_OF_PROJECT/             # Project reviews and retrospectives
-└── 99_TEMPLATES/                    # All available templates
+your-project/
+├── .simone/
+│   ├── 00_PROJECT_MANIFEST.md          # Project overview and status
+│   ├── 01_PROJECT_DOCS/                # Project documentation
+│   ├── 02_REQUIREMENTS/                 # Requirements and specifications
+│   ├── 03_SPRINTS/                      # Sprint planning and execution
+│   ├── 04_GENERAL_TASKS/                # Individual tasks and todos
+│   ├── 05_ARCHITECTURAL_DECISIONS/      # ADRs and design decisions
+│   ├── 10_STATE_OF_PROJECT/             # Project reviews and retrospectives
+│   └── 99_TEMPLATES/                    # All available templates
+└── .claude/
+    └── commands/
+        └── simone/                     # 23 Simone-specific commands
 ```
 
-### Templates Installed
+### Features Included
 
-The installer copies 14+ templates including:
-- Project planning templates
-- Sprint execution templates
-- Task management templates
-- Quality assurance templates
-- DevOps workflow templates
+**14 Templates** covering:
+- Task management with YAML frontmatter
+- Sprint planning and execution
+- Architecture decision records (ADRs)
+- Quality assurance and code reviews
+- DevOps workflows and deployment
+- Project reviews and retrospectives
 
-### Claude Integration
+**23 Commands** for Claude Code:
+- `/project:simone:initialize` - Project setup
+- `/project:simone:create_milestone` - Milestone creation
+- `/project:simone:plan_sprint` - Sprint planning
+- `/project:simone:do_task` - Task execution
+- And 19 more specialized commands
 
-Each directory includes a `CLAUDE.md` file that provides Claude with:
-- Context about the directory's purpose
-- Instructions for working with files in that directory
-- Templates and patterns to follow
+**CLAUDE.md Context Files**:
+- Each directory includes instructions for Claude
+- Provides context about directory purpose
+- Ensures consistent AI assistance
 
 ## Verification
 
@@ -150,11 +206,36 @@ cp -r .simone .simone.backup.$(date +%Y%m%d)
 ### Permission Issues
 
 ```bash
-# Make installer executable
+# Make installer executable (local install)
 chmod +x install-simone.sh
 
-# Run with sudo if needed (not recommended)
-sudo ./install-simone.sh
+# For permission errors during remote install
+sudo curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | sudo bash
+```
+
+### Git Not Found
+
+```bash
+# Install git first
+# macOS
+brew install git
+
+# Ubuntu/Debian
+sudo apt-get update && sudo apt-get install git
+
+# Windows (use Git Bash or WSL)
+# Download from https://git-scm.com
+```
+
+### Behind Corporate Proxy
+
+```bash
+# Set proxy environment variables
+export HTTP_PROXY=http://proxy.company.com:8080
+export HTTPS_PROXY=http://proxy.company.com:8080
+
+# Then run installation
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
 ### Directory Already Exists
@@ -174,9 +255,20 @@ rm -rf .simone
 # Check current version
 cat .simone/.version
 
-# Clean install if needed
-rm -rf .simone
-./install-simone.sh
+# Force upgrade to latest
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- --force
+```
+
+### Installation Verification Failed
+
+```bash
+# Verify installation manually
+ls -la .simone/
+ls -la .claude/commands/simone/
+
+# Check for specific files
+test -f .simone/00_PROJECT_MANIFEST.md && echo "✓ Manifest exists" || echo "✗ Manifest missing"
+test -d .simone/99_TEMPLATES && echo "✓ Templates exist" || echo "✗ Templates missing"
 ```
 
 ## Uninstallation
@@ -204,3 +296,10 @@ After installation:
 - **GitHub Issues**: [Report problems](https://github.com/steig/claude-steig/issues)
 - **Documentation**: See [framework overview](framework-overview.md)
 - **Templates**: Reference [template catalog](../templates/template-catalog.md)
+- **Discussions**: [Community forum](https://github.com/steig/claude-steig/discussions)
+
+## Version Information
+
+- **Current Version**: 2.0.2
+- **Minimum Claude Code Version**: Latest stable release
+- **Repository**: https://github.com/steig/claude-steig

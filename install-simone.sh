@@ -17,8 +17,10 @@ SIMONE_REPO="https://github.com/steig/claude-steig"
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="2.0.2"
+CURRENT_VERSION="2.0.3"
 TARGET_DIR=""
+REMOTE_INSTALL=false
+TEMP_DIR=""
 
 # Utility functions
 log() {
@@ -219,8 +221,24 @@ install_commands() {
 upgrade_installation() {
     log "Upgrading existing Simone installation..."
     
-    # Use local repository directory
-    local source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local source_dir
+    
+    # Determine source directory based on installation method
+    if [[ "$REMOTE_INSTALL" == true ]]; then
+        # Clone from remote repository
+        TEMP_DIR=$(mktemp -d)
+        log "Fetching latest Simone framework from $SIMONE_REPO..."
+        git clone --quiet --depth 1 "$SIMONE_REPO" "$TEMP_DIR" || error "Failed to clone repository"
+        source_dir="$TEMP_DIR"
+    else
+        # Use local repository directory
+        source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        
+        # Verify we have the necessary files
+        if [[ ! -d "$source_dir/.simone" ]]; then
+            error "Local upgrade requires running from the Simone repository directory"
+        fi
+    fi
     
     # Backup current installation
     backup_installation
@@ -248,6 +266,11 @@ upgrade_installation() {
         install_core_structure "$source_dir"
         install_commands "$source_dir"
         
+        # Clean up temp directory if used
+        if [[ -n "$TEMP_DIR" && -d "$TEMP_DIR" ]]; then
+            rm -rf "$TEMP_DIR"
+        fi
+        
         # Restore user content
         [[ -n "$backup_manifest" ]] && echo "$backup_manifest" > "$SIMONE_DIR/00_PROJECT_MANIFEST.md"
         
@@ -270,8 +293,24 @@ upgrade_installation() {
 fresh_installation() {
     log "Performing fresh Simone installation..."
     
-    # Use local repository directory
-    local source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local source_dir
+    
+    # Determine source directory based on installation method
+    if [[ "$REMOTE_INSTALL" == true ]]; then
+        # Clone from remote repository
+        TEMP_DIR=$(mktemp -d)
+        log "Cloning Simone framework from $SIMONE_REPO..."
+        git clone --quiet --depth 1 "$SIMONE_REPO" "$TEMP_DIR" || error "Failed to clone repository"
+        source_dir="$TEMP_DIR"
+    else
+        # Use local repository directory
+        source_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        
+        # Verify we have the necessary files
+        if [[ ! -d "$source_dir/.simone" ]]; then
+            error "Local installation requires running from the Simone repository directory"
+        fi
+    fi
     
     # Install everything
     install_core_structure "$source_dir"
@@ -279,6 +318,11 @@ fresh_installation() {
     
     # Create initial project manifest
     create_initial_manifest
+    
+    # Clean up temp directory if used
+    if [[ -n "$TEMP_DIR" && -d "$TEMP_DIR" ]]; then
+        rm -rf "$TEMP_DIR"
+    fi
     
     success "Fresh installation completed successfully!"
 }
@@ -371,7 +415,7 @@ main() {
     echo "2. Initialize: Run 'claude code' and use /project:simone:initialize"
     echo "3. Documentation: Check $SIMONE_DIR/CLAUDE.md for guidance"
     echo
-    echo "For help: https://github.com/your-repo/claude-steig"
+    echo "For help: https://github.com/steig/claude-steig"
     
     if [[ -d "$BACKUP_DIR" ]]; then
         echo
@@ -379,6 +423,11 @@ main() {
         echo "   (Safe to delete after verifying the upgrade)"
     fi
 }
+
+# Detect if script is being run from a remote source (curl/wget)
+if [[ "$0" == "bash" || "$0" == "sh" || ! -f "$0" ]]; then
+    REMOTE_INSTALL=true
+fi
 
 # Handle script arguments
 case "${1:-}" in
@@ -395,11 +444,14 @@ case "${1:-}" in
         echo "  --help, -h         Show this help message"
         echo "  --force            Force reinstall even if up to date"
         echo "  --version          Show version information"
+        echo "  --remote           Force remote installation (fetch from GitHub)"
         echo
         echo "Examples:"
         echo "  $0                           # Install in current directory"
         echo "  $0 /path/to/project         # Install in specified directory"
         echo "  $0 --force ./my-project     # Force reinstall in ./my-project"
+        echo "  $0 --remote                 # Install from GitHub repository"
+        echo "  curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash"
         echo
         echo "The script automatically detects existing installations and upgrades smartly."
         exit 0
@@ -410,6 +462,13 @@ case "${1:-}" in
         ;;
     --force)
         FORCE_INSTALL=true
+        # Check if next argument is a directory
+        if [[ -n "$2" && "$2" != --* ]]; then
+            TARGET_DIR="$2"
+        fi
+        ;;
+    --remote)
+        REMOTE_INSTALL=true
         # Check if next argument is a directory
         if [[ -n "$2" && "$2" != --* ]]; then
             TARGET_DIR="$2"
