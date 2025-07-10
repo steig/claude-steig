@@ -130,7 +130,7 @@ mv .simone.backup.TIMESTAMP .simone
 If the script fails, you can manually copy the framework:
 ```bash
 # Clone repository
-git clone https://github.com/steig/claude-workflow.git temp-simone
+git clone https://github.com/steig/claude-steig.git temp-simone
 
 # Copy framework
 cp -r temp-simone/.simone .
@@ -156,5 +156,5 @@ The installer tracks versions in `.simone/.version`. This enables:
 ## Support
 
 - **Documentation:** Check `.simone/CLAUDE.md`
-- **Issues:** [GitHub Issues](https://github.com/steig/claude-workflow/issues)
+- **Issues:** [GitHub Issues](https://github.com/steig/claude-steig/issues)
 - **Updates:** Run installer again to upgrade

@@ -45,13 +45,13 @@ This fork includes specialized improvements for comprehensive project management
 
 #### Quick Install
 ```bash
-curl -sSL https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh | bash
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
 #### Manual Install
 ```bash
 # Download installer
-wget https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh
+wget https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh
 chmod +x install-simone.sh
 
 # Run installer
@@ -356,9 +356,9 @@ claude config list -g
 
 ## Contributing & Feedback
 
-This version is maintained at [steig/claude-workflow](https://github.com/steig/claude-workflow).
+This version is maintained at [steig/claude-steig](https://github.com/steig/claude-steig).
 
-- **GitHub Issues**: [Report bugs and feature requests](https://github.com/steig/claude-workflow/issues)
+- **GitHub Issues**: [Report bugs and feature requests](https://github.com/steig/claude-steig/issues)
 - **Pull Requests**: Contributions welcome! Let's make this better together
 
 ### Original Framework

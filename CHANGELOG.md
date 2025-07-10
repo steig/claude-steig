@@ -94,7 +94,7 @@ This release represents a complete overhaul of the Simone framework with compreh
 ### Technical Details
 
 #### Repository Structure
-- **Updated repository references** to `steig/claude-workflow`
+- **Updated repository references** to `steig/claude-steig`
 - **Proper attribution** to original Simone framework by Helmi
 
 #### Backward Compatibility
@@ -106,12 +106,12 @@ This release represents a complete overhaul of the Simone framework with compreh
 
 #### Quick Install
 ```bash
-curl -sSL https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh | bash
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
 #### Manual Install
 ```bash
-wget https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh
+wget https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh
 chmod +x install-simone.sh
 ./install-simone.sh
 ```
