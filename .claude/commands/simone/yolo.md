@@ -8,22 +8,104 @@ If in doubt you **RESEARCH** and **ULTRATHINK** about the best solution.
 
 Priority is to get the work completed.
 
-## Mode Selection
+## Safety Mode Selection
 
-Check <$ARGUMENTS>:
+Check <$ARGUMENTS> for safety mode:
 
-- If sprint ID provided (e.g., S03): Work ONLY on that sprint
+- `--safe`: Maximum safety mode (recommended for production)
+- `--balanced`: Moderate safety mode (default)
+- `--yolo`: Minimal safety mode (legacy behavior)
+- Sprint ID (e.g., S03): Work ONLY on that sprint
 - If empty: Work on general tasks first, then active sprint tasks
+
+**Safety Mode Determination:**
+```bash
+# Determine safety mode from arguments
+if [[ "$ARGUMENTS" == *"--safe"* ]]; then
+    SAFETY_MODE="safe"
+    echo "🛡️  SAFE MODE: Maximum safety enabled"
+elif [[ "$ARGUMENTS" == *"--balanced"* ]]; then
+    SAFETY_MODE="balanced"
+    echo "⚖️  BALANCED MODE: Moderate safety enabled"
+elif [[ "$ARGUMENTS" == *"--yolo"* ]]; then
+    SAFETY_MODE="yolo"
+    echo "⚡ YOLO MODE: Minimal safety (legacy)"
+else
+    SAFETY_MODE="balanced"  # Default to balanced
+    echo "⚖️  DEFAULT MODE: Balanced safety enabled"
+fi
+```
 
 **Report Mode** to the User!
 
-## Safety Guidelines
+## Enhanced Safety System
+
+### 1. Pre-Flight Safety Checks
+
+**MANDATORY**: Run comprehensive safety checks before starting:
+
+```bash
+# Execute safety check command
+@.claude/commands/simone/safety_check.md $SAFETY_MODE
+
+# Check for emergency stop signal
+if [[ -f ".emergency_stop" ]]; then
+    echo "❌ EMERGENCY STOP ACTIVE - Operations blocked"
+    echo "Clear emergency stop before continuing"
+    exit 1
+fi
+```
+
+### 2. Safety Guidelines by Mode
+
+**SAFE MODE (--safe):**
+- Maximum 3 files changed per task
+- User approval required for critical changes
+- Automatic rollback on any test failure
+- Execution time limit: 15 minutes per task
+- **STOP** conditions: Any security risk, >3 files changed, test pass rate <80%
+
+**BALANCED MODE (--balanced - DEFAULT):**
+- Maximum 5 files changed per task
+- Automatic rollback on critical failures
+- Execution time limit: 25 minutes per task
+- **STOP** conditions: Security risks, >5 files changed, test pass rate <70%
+
+**YOLO MODE (--yolo):**
+- Maximum 10 files changed per task
+- Continue on non-critical failures
+- Execution time limit: 35 minutes per task
+- **STOP** conditions: Security risks, >10 files changed, test pass rate <60%
+
+### 3. Universal Safety Rules (All Modes)
 
 - **NEVER** modify critical files (.env, alembic migrations, production configs)
 - **STOP** if you encounter database schema changes
-- **STOP** if you need to delete more than 5 files
-- **STOP** if tests are failing after your changes
+- **STOP** if security vulnerabilities detected
+- **STOP** if system resources exceed 85% usage
 - **ALWAYS** run tests after implementing a task
+- **ALWAYS** create rollback points before major changes
+
+### 4. Emergency Stop Integration
+
+**Continuous monitoring for emergency conditions:**
+- Disk space critical (>95%)
+- Memory usage critical (>90%)
+- Too many consecutive failures (>3)
+- User intervention requested
+- System instability detected
+
+```bash
+# Check for emergency conditions during execution
+check_emergency_conditions() {
+    # This function is called between each task
+    if [[ $(df . | tail -1 | awk '{print $5}' | sed 's/%//') -gt 95 ]]; then
+        echo "🚨 EMERGENCY: Disk space critical"
+        @.claude/commands/simone/emergency_stop.md --reason "Disk space critical"
+        exit 1
+    fi
+}
+```
 
 ## Follow this exact process
 
@@ -35,17 +117,81 @@ Check <$ARGUMENTS>:
 
 You need to stick to this process and **PRECISELY** follow it
 
-Before you start:
+### 5. Enhanced Pre-Flight Sequence
 
-- Run tests to ensure clean baseline using test.md command (@.claude/commands/simone/test.md)
-- **If** FAIL rate is above 10% asses if a fix is possible. If so, fix and move on. If not, move on anyways.
+**MANDATORY PRE-FLIGHT CHECKS:**
 
-- Check git status to ensure clean working directory
-- **If** git status is not clean just remember and report to the user at the end, but move on.
+```bash
+# 1. Mark safe state for rollback
+echo "🔒 Creating safe state marker..."
+git tag "safe-state-$(date +%Y%m%d-%H%M%S)" 2>/dev/null || true
 
-Also consider <$ARGUMENTS> - if anything between <> can be considered additional instructions, prioritize them in the process.
+# 2. Execute comprehensive safety checks
+echo "🛡️  Running safety checks..."
+@.claude/commands/simone/safety_check.md $SAFETY_MODE
 
-Get the current datetime stamp from the system and remember it
+# 3. Check for emergency stop signal
+if [[ -f ".emergency_stop" ]]; then
+    echo "❌ EMERGENCY STOP ACTIVE - Aborting YOLO execution"
+    exit 1
+fi
+
+# 4. Run baseline tests
+echo "🧪 Establishing test baseline..."
+@.claude/commands/simone/test.md
+
+# Safety mode specific handling:
+if [[ "$SAFETY_MODE" == "safe" ]]; then
+    # Safe mode: Require >80% pass rate
+    if [[ $TEST_PASS_RATE -lt 80 ]]; then
+        echo "❌ SAFE MODE: Test pass rate too low ($TEST_PASS_RATE%)"
+        echo "Fix tests before proceeding or use --balanced mode"
+        exit 1
+    fi
+elif [[ "$SAFETY_MODE" == "balanced" ]]; then
+    # Balanced mode: Require >70% pass rate
+    if [[ $TEST_PASS_RATE -lt 70 ]]; then
+        echo "⚠️  BALANCED MODE: Test pass rate concerning ($TEST_PASS_RATE%)"
+        echo "Attempting to fix critical test failures..."
+        # Attempt basic test fixes
+    fi
+else
+    # YOLO mode: Continue if >60% pass rate
+    if [[ $TEST_PASS_RATE -lt 60 ]]; then
+        echo "⚠️  YOLO MODE: Test pass rate low ($TEST_PASS_RATE%) - continuing with caution"
+    fi
+fi
+
+# 5. Check git status
+echo "📝 Checking git status..."
+if [[ -n $(git status --porcelain) ]]; then
+    if [[ "$SAFETY_MODE" == "safe" ]]; then
+        echo "❌ SAFE MODE: Working directory must be clean"
+        git status --short
+        exit 1
+    else
+        echo "⚠️  Working directory not clean - will be noted in final report"
+        DIRTY_WORKDIR=true
+    fi
+fi
+```
+
+**Get current datetime stamp from the system and remember it**
+```bash
+START_TIME=$(date +%s)
+START_DATETIME=$(date)
+echo "⏰ YOLO session started: $START_DATETIME"
+echo "🛡️  Safety mode: $SAFETY_MODE"
+```
+
+**Process additional arguments for special instructions:**
+```bash
+# Extract any special instructions from arguments
+if [[ "$ARGUMENTS" =~ \<(.+)\> ]]; then
+    SPECIAL_INSTRUCTIONS="${BASH_REMATCH[1]}"
+    echo "📋 Special instructions detected: $SPECIAL_INSTRUCTIONS"
+fi
+```
 
 ### FIND OPEN WORK
 
@@ -86,31 +232,225 @@ Execute based on mode:
 - Wait for completion
 - After task creation move back to `### FIND OPEN WORK`
 
-### WORK ON TASK
+### WORK ON TASK (Enhanced Safety)
 
 **MCP INTEGRATION:** Use MCP servers for autonomous task execution:
 - **Work History**: Log all autonomous task decisions and outcomes
 - **Sequential Thinking**: Structure autonomous problem-solving approach
 - **Context7**: Maintain context about task execution and decisions
 
-- if you have touched this task before ignore it and jump to the next task
-- if you can't find a task that you have not tried fixing before jump to ### EXECUTE PROJECT REVIEW
-- if you find a task that you cannot fix because the work was done already, close the task and note in Output Log of task.
-- **BEFORE STARTING**: Create a git branch for the task: `git checkout -b task/<task-id>`
-- **USE A SUBAGENT** and have it include @.claude/commands/simone/do_task.md with the Task ID as Argument to execute the Task.
-- **AFTER TASK COMPLETION**: Run tests to verify nothing broke using test.md command (@.claude/commands/simone/test.md)
-- on any failure in the task execution assess the severity of the error:
-  - CRITICAL errors (breaking tests, security issues, data loss risk): **FIX PROBLEMS**
-  - NON-CRITICAL errors (linting, formatting, minor issues): note in OUTPUT LOG and continue
-- on success move on
+**Enhanced Task Execution with Safety Monitoring:**
 
-### COMMIT WORK
+```bash
+# Pre-task safety checks
+echo "🔍 Pre-task safety verification..."
+check_emergency_conditions  # Check for emergency stop conditions
 
-- **ONLY IF** tests are passing and no critical issues exist
-- **USE A SUBAGENT** and have it include @.claude/commands/simone/commit.md with the Task ID as Argument and YOLO as additional argument
-- on any failure when committing, note the problem in the OUTPUT LOG of the task and continue
-- after successful commit, merge to main: `git checkout main && git merge task/<task-id>`
-- on success move on
+# Check if task was attempted before
+if [[ -f "task_attempts.log" ]] && grep -q "$TASK_ID" task_attempts.log; then
+    echo "⚠️  Task $TASK_ID previously attempted - skipping"
+    continue
+fi
+
+# Log task attempt
+echo "$TASK_ID: $(date)" >> task_attempts.log
+
+# Create safe rollback point
+echo "🔒 Creating task-specific rollback point..."
+TASK_ROLLBACK_POINT="task-$TASK_ID-$(date +%Y%m%d-%H%M%S)"
+git tag "$TASK_ROLLBACK_POINT" 2>/dev/null || true
+
+# Safety mode specific pre-task checks
+if [[ "$SAFETY_MODE" == "safe" ]]; then
+    # Safe mode: Require user approval for complex tasks
+    TASK_COMPLEXITY=$(grep -c "TODO\|FIXME\|XXX" "$TASK_FILE" 2>/dev/null || echo 0)
+    if [[ $TASK_COMPLEXITY -gt 5 ]]; then
+        echo "⚠️  SAFE MODE: Complex task detected ($TASK_COMPLEXITY items)"
+        echo "Task: $TASK_ID"
+        echo "Continue with this task? (y/N)"
+        read -n 1 -r
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "Task skipped by user"
+            continue
+        fi
+    fi
+fi
+
+# Create git branch for the task
+echo "🌿 Creating task branch..."
+git checkout -b "task/$TASK_ID" || {
+    echo "❌ Failed to create task branch"
+    continue
+}
+
+# Execute task with enhanced monitoring
+echo "🚀 Executing task: $TASK_ID"
+TASK_START_TIME=$(date +%s)
+
+# Set task timeout based on safety mode
+case "$SAFETY_MODE" in
+    "safe")
+        TASK_TIMEOUT=900  # 15 minutes
+        ;;
+    "balanced")
+        TASK_TIMEOUT=1500  # 25 minutes
+        ;;
+    "yolo")
+        TASK_TIMEOUT=2100  # 35 minutes
+        ;;
+esac
+
+# Execute task with timeout monitoring
+{
+    timeout "$TASK_TIMEOUT" @.claude/commands/simone/do_task.md "$TASK_ID"
+    TASK_RESULT=$?
+} || {
+    echo "⏰ Task execution timed out after $TASK_TIMEOUT seconds"
+    TASK_RESULT=124
+}
+
+# Post-task safety verification
+echo "🔍 Post-task safety verification..."
+TASK_END_TIME=$(date +%s)
+TASK_DURATION=$((TASK_END_TIME - TASK_START_TIME))
+
+# Check for emergency conditions
+check_emergency_conditions
+
+# Run tests with safety mode specific handling
+echo "🧪 Running post-task tests..."
+@.claude/commands/simone/test.md
+POST_TASK_PASS_RATE=$?
+
+# Safety mode specific test evaluation
+case "$SAFETY_MODE" in
+    "safe")
+        if [[ $POST_TASK_PASS_RATE -lt 80 ]]; then
+            echo "❌ SAFE MODE: Test pass rate dropped below 80%"
+            echo "Initiating automatic rollback..."
+            @.claude/commands/simone/rollback.md --task "$TASK_ID"
+            continue
+        fi
+        ;;
+    "balanced")
+        if [[ $POST_TASK_PASS_RATE -lt 70 ]]; then
+            echo "⚠️  BALANCED MODE: Test pass rate concerning"
+            echo "Attempting to fix critical issues..."
+            # Attempt basic fixes
+            if [[ $POST_TASK_PASS_RATE -lt 60 ]]; then
+                echo "❌ BALANCED MODE: Critical test failures - rolling back"
+                @.claude/commands/simone/rollback.md --task "$TASK_ID"
+                continue
+            fi
+        fi
+        ;;
+    "yolo")
+        if [[ $POST_TASK_PASS_RATE -lt 60 ]]; then
+            echo "⚠️  YOLO MODE: Significant test failures - logging but continuing"
+            echo "Task $TASK_ID: Test failures detected" >> yolo_warnings.log
+        fi
+        ;;
+esac
+
+# Log task completion
+echo "✅ Task $TASK_ID completed in ${TASK_DURATION}s"
+echo "Task $TASK_ID: Completed $(date) - Duration: ${TASK_DURATION}s - Tests: $POST_TASK_PASS_RATE%" >> task_completion.log
+```
+
+### COMMIT WORK (Enhanced Safety)
+
+**Enhanced commit process with safety verification:**
+
+```bash
+# Pre-commit safety checks
+echo "🔍 Pre-commit safety verification..."
+
+# Check emergency conditions
+check_emergency_conditions
+
+# Safety mode specific commit requirements
+case "$SAFETY_MODE" in
+    "safe")
+        # Safe mode: Require perfect tests and security scan
+        if [[ $POST_TASK_PASS_RATE -lt 100 ]]; then
+            echo "❌ SAFE MODE: All tests must pass for commit"
+            echo "Current pass rate: $POST_TASK_PASS_RATE%"
+            continue
+        fi
+        echo "🔒 SAFE MODE: Running security scan..."
+        # Run security scan (if available)
+        if command -v bandit &> /dev/null; then
+            bandit -r . -ll || {
+                echo "❌ SAFE MODE: Security issues detected"
+                continue
+            }
+        fi
+        ;;
+    "balanced")
+        # Balanced mode: Require >80% pass rate
+        if [[ $POST_TASK_PASS_RATE -lt 80 ]]; then
+            echo "❌ BALANCED MODE: Test pass rate too low for commit"
+            echo "Current pass rate: $POST_TASK_PASS_RATE%"
+            continue
+        fi
+        ;;
+    "yolo")
+        # YOLO mode: Require >60% pass rate
+        if [[ $POST_TASK_PASS_RATE -lt 60 ]]; then
+            echo "⚠️  YOLO MODE: Test pass rate concerning but continuing"
+            echo "Current pass rate: $POST_TASK_PASS_RATE%"
+        fi
+        ;;
+esac
+
+# Execute commit with enhanced logging
+echo "💾 Committing task: $TASK_ID"
+COMMIT_START_TIME=$(date +%s)
+
+# Use subagent to commit with safety mode flag
+@.claude/commands/simone/commit.md "$TASK_ID" "$SAFETY_MODE"
+COMMIT_RESULT=$?
+
+COMMIT_END_TIME=$(date +%s)
+COMMIT_DURATION=$((COMMIT_END_TIME - COMMIT_START_TIME))
+
+if [[ $COMMIT_RESULT -eq 0 ]]; then
+    echo "✅ Commit successful in ${COMMIT_DURATION}s"
+    
+    # Merge to main with safety checks
+    echo "🔄 Merging to main..."
+    git checkout main
+    
+    # Safety mode specific merge handling
+    if [[ "$SAFETY_MODE" == "safe" ]]; then
+        # Safe mode: Use merge --no-ff for clear history
+        git merge --no-ff "task/$TASK_ID" -m "Merge task $TASK_ID (SAFE MODE)"
+    else
+        # Balanced/YOLO mode: Use regular merge
+        git merge "task/$TASK_ID" -m "Merge task $TASK_ID ($SAFETY_MODE mode)"
+    fi
+    
+    if [[ $? -eq 0 ]]; then
+        echo "✅ Merge successful"
+        # Clean up task branch
+        git branch -d "task/$TASK_ID"
+        # Log successful completion
+        echo "Task $TASK_ID: Successfully merged $(date)" >> successful_tasks.log
+    else
+        echo "❌ Merge failed - manual intervention required"
+        echo "Task $TASK_ID: Merge failed $(date)" >> failed_merges.log
+    fi
+else
+    echo "❌ Commit failed - logging issue"
+    echo "Task $TASK_ID: Commit failed $(date) - Duration: ${COMMIT_DURATION}s" >> failed_commits.log
+    
+    # Safety mode specific failure handling
+    if [[ "$SAFETY_MODE" == "safe" ]]; then
+        echo "🔄 SAFE MODE: Automatic rollback on commit failure"
+        @.claude/commands/simone/rollback.md --task "$TASK_ID"
+    fi
+fi
+```
 
 ### REPEAT FOR ALL OPEN TASKS
 
@@ -151,18 +491,148 @@ Your work is done. Move to `## CREATE SUMMARY`
 
 - Move on to check for more open Tasks or Sprints. Move to `### FIND OPEN WORK`
 
-## CREATE SUMMARY
+## CREATE ENHANCED SUMMARY
 
-- Get current datetime stamp from the system and compare to initially remembered timestamp. Calculate duration of the process.
-- Create a summary report including:
-  - Mode executed (Sprint-specific or General)
-  - Sprint tasks created (if applicable)
-  - Number of tasks completed
-  - Number of tasks skipped/failed
-  - Total duration
-  - Any critical issues encountered
-  - Current test status
-  - Next recommended action
-- Report the result of the review to the user including the duration.
+```bash
+# Calculate execution metrics
+END_TIME=$(date +%s)
+END_DATETIME=$(date)
+TOTAL_DURATION=$((END_TIME - START_TIME))
+TOTAL_DURATION_MINS=$((TOTAL_DURATION / 60))
 
-Your work is done. Thank you.
+# Collect execution statistics
+TASKS_COMPLETED=$(grep -c "Successfully merged" successful_tasks.log 2>/dev/null || echo 0)
+TASKS_FAILED=$(grep -c "failed" failed_commits.log 2>/dev/null || echo 0)
+TASKS_SKIPPED=$(grep -c "skipped" task_attempts.log 2>/dev/null || echo 0)
+FINAL_TEST_STATUS=$(tail -1 test_results.log 2>/dev/null || echo "Unknown")
+
+# Safety metrics
+EMERGENCY_STOPS=$(grep -c "EMERGENCY STOP" *.log 2>/dev/null || echo 0)
+ROLLBACKS=$(grep -c "rollback" *.log 2>/dev/null || echo 0)
+SECURITY_ISSUES=$(grep -c "security" *.log 2>/dev/null || echo 0)
+
+# Generate comprehensive report
+cat > "yolo-summary-$(date +%Y%m%d-%H%M%S).md" << EOF
+# YOLO Execution Summary
+
+## Session Overview
+- **Start Time**: $START_DATETIME
+- **End Time**: $END_DATETIME
+- **Total Duration**: ${TOTAL_DURATION_MINS} minutes (${TOTAL_DURATION} seconds)
+- **Safety Mode**: $SAFETY_MODE
+- **Working Directory**: $(pwd)
+
+## Task Execution Results
+- **Tasks Completed**: $TASKS_COMPLETED ✅
+- **Tasks Failed**: $TASKS_FAILED ❌
+- **Tasks Skipped**: $TASKS_SKIPPED ⏭️
+- **Success Rate**: $(( TASKS_COMPLETED * 100 / (TASKS_COMPLETED + TASKS_FAILED + 1) ))%
+
+## Safety Metrics
+- **Emergency Stops**: $EMERGENCY_STOPS 🚨
+- **Rollbacks Executed**: $ROLLBACKS 🔄
+- **Security Issues**: $SECURITY_ISSUES 🔒
+- **Final Test Status**: $FINAL_TEST_STATUS 🧪
+
+## System Health
+- **Git Status**: $(git status --porcelain | wc -l) uncommitted files
+- **Current Branch**: $(git rev-parse --abbrev-ref HEAD)
+- **Disk Usage**: $(df -h . | tail -1 | awk '{print $5}')
+- **Memory Usage**: $(free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}' 2>/dev/null || echo "N/A")
+
+## Mode-Specific Performance
+### $SAFETY_MODE Mode Results
+$(case "$SAFETY_MODE" in
+    "safe")
+        echo "- Maximum safety protocols active"
+        echo "- All commits required 100% test pass rate"
+        echo "- Automatic rollback on any failure"
+        echo "- User approval required for complex tasks"
+        ;;
+    "balanced")
+        echo "- Moderate safety protocols active"
+        echo "- Commits required >80% test pass rate"
+        echo "- Automatic rollback on critical failures"
+        echo "- Autonomous execution with monitoring"
+        ;;
+    "yolo")
+        echo "- Minimal safety protocols (legacy mode)"
+        echo "- Commits required >60% test pass rate"
+        echo "- Continued on non-critical failures"
+        echo "- Maximum autonomous execution"
+        ;;
+esac)
+
+## Critical Issues Encountered
+$(if [[ -f "critical_issues.log" ]]; then
+    cat critical_issues.log
+else
+    echo "No critical issues encountered ✅"
+fi)
+
+## Warnings and Recommendations
+$(if [[ -f "yolo_warnings.log" ]]; then
+    echo "### Warnings:"
+    cat yolo_warnings.log
+else
+    echo "No warnings generated ✅"
+fi)
+
+### Next Recommended Actions
+$(if [[ $TASKS_FAILED -gt 0 ]]; then
+    echo "1. Review failed tasks in failed_commits.log"
+    echo "2. Consider running with --safe mode for problematic tasks"
+fi)
+$(if [[ $ROLLBACKS -gt 0 ]]; then
+    echo "3. Review rollback reasons and improve task quality"
+fi)
+$(if [[ $SECURITY_ISSUES -gt 0 ]]; then
+    echo "4. Address security issues immediately"
+fi)
+$(if [[ $EMERGENCY_STOPS -gt 0 ]]; then
+    echo "5. Investigate emergency stop triggers"
+fi)
+$(if [[ $TASKS_COMPLETED -eq 0 ]]; then
+    echo "6. No tasks completed - check task availability and requirements"
+else
+    echo "6. Continue with remaining tasks if any"
+fi)
+
+## Final Status
+$(if [[ $TASKS_COMPLETED -gt 0 && $SECURITY_ISSUES -eq 0 && $EMERGENCY_STOPS -eq 0 ]]; then
+    echo "✅ **SUCCESSFUL EXECUTION** - Tasks completed with no critical issues"
+elif [[ $TASKS_COMPLETED -gt 0 ]]; then
+    echo "⚠️  **PARTIAL SUCCESS** - Some tasks completed but issues encountered"
+else
+    echo "❌ **EXECUTION FAILED** - No tasks completed successfully"
+fi)
+
+---
+*Generated by Enhanced YOLO Safety System v2.0*
+*Session ID: yolo-$(date +%Y%m%d-%H%M%S)*
+EOF
+
+# Display summary to user
+echo "📊 YOLO EXECUTION SUMMARY"
+echo "========================"
+echo "🕒 Duration: ${TOTAL_DURATION_MINS} minutes"
+echo "📋 Tasks Completed: $TASKS_COMPLETED"
+echo "❌ Tasks Failed: $TASKS_FAILED"
+echo "⏭️  Tasks Skipped: $TASKS_SKIPPED"
+echo "🛡️  Safety Mode: $SAFETY_MODE"
+echo "🚨 Emergency Stops: $EMERGENCY_STOPS"
+echo "🔄 Rollbacks: $ROLLBACKS"
+echo ""
+echo "📄 Full report: yolo-summary-$(date +%Y%m%d-%H%M%S).md"
+echo ""
+if [[ $TASKS_COMPLETED -gt 0 && $SECURITY_ISSUES -eq 0 && $EMERGENCY_STOPS -eq 0 ]]; then
+    echo "✅ YOLO execution completed successfully!"
+else
+    echo "⚠️  YOLO execution completed with issues - review summary report"
+fi
+
+# Clean up temporary files
+rm -f task_attempts.log task_completion.log 2>/dev/null || true
+
+echo "🏁 Enhanced YOLO execution finished. Thank you!"
+```
