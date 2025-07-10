@@ -118,12 +118,15 @@ stateDiagram-v2
 - Validates prerequisite completion
 
 #### in_progress → review
-**Trigger**: Task completion via `do_task` command or manual status update
+**Trigger**: Task completion via `do_task` command with approval gates
 **Actions**:
-- Commits all changes with semantic commit message
+- **NEW**: User approval gate for commit review with change preview
+- **NEW**: Auto-commit execution with proper task reference
+- **NEW**: User approval gate for PR creation with team assignment
+- **NEW**: Auto-PR creation with comprehensive documentation
 - Updates effort tracking with actual time spent
-- Generates implementation summary in task file
-- Triggers integrated code review process
+- Links PR to task metadata for full traceability
+- Updates task status to "review" for team collaboration
 
 #### review → testing
 **Trigger**: Code review approval (manual or automated)
@@ -250,14 +253,26 @@ test_coverage:
 ### Core Commands
 
 #### `/project:simone:do_task [TASK_ID]`
-**Purpose**: Execute a specific task with full context loading
-**Process**:
+**Purpose**: Execute complete task implementation with guided approval workflow
+**Enhanced Process**:
 1. Validates task readiness and dependencies
-2. Creates git branch with proper naming
+2. Creates git branch with proper naming convention
 3. Loads comprehensive project context
 4. Implements solution following established patterns
-5. Runs integrated code review and quality checks
-6. Updates task status and metadata
+5. **NEW**: Implementation quality review and validation
+6. Runs integrated code review with parallel subagents
+7. **NEW**: Commit approval gate with change preview and user control
+8. **NEW**: Auto-commit execution with task reference
+9. **NEW**: PR approval gate with team assignment and documentation
+10. **NEW**: Auto-PR creation with proper linking and metadata
+11. **NEW**: Task status update to "review" with full traceability
+
+**Approval Gate Benefits**:
+- **User Control**: Developer reviews each step before execution
+- **Quality Assurance**: Comprehensive validation before integration
+- **Team Integration**: Automatic PR creation with proper reviewers
+- **Safety First**: Ability to modify, skip, or abort at any checkpoint
+- **Complete Workflow**: End-to-end task completion with Git integration
 
 #### `/project:simone:create_sprint_tasks`
 **Purpose**: Generate implementation-ready tasks for current sprint

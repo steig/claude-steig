@@ -136,19 +136,32 @@ This analyzes your sprints, reviews documentation, researches necessary informat
 
 *Important: Only create tasks for your next sprint, not all sprints upfront. After completing Sprint 1, then create tasks for Sprint 2. This ensures the system can reference your existing codebase and incorporate completed work into future task creation.*
 
-### 6. Start Working
+### 6. Start Working with Enhanced Approval Workflow
 
 ```
 /project:simone:do_task
 ```
 
-This will automatically pick a task from your general tasks or sprints. For faster execution, specify a task ID:
+Experience the **new guided approval workflow** with user control at every step:
+
+- **Commit Approval Gate**: Preview changes and approve commits
+- **PR Approval Gate**: Review PR details before creation  
+- **Auto-execution**: Commands run automatically after approval
+- **Complete Integration**: End-to-end task completion with Git workflow
+
+For faster execution, specify a task ID:
 
 ```
 /project:simone:do_task T01_S01
 ```
 
-Claude will then work through the specified task with full project context.
+**Enhanced Workflow Benefits**:
+- 🛡️ **User Control**: Review and approve each critical step
+- 🔍 **Quality Assurance**: Comprehensive validation before integration
+- 🔄 **Complete Workflow**: Task → Commit → PR → Review in one command
+- ⚡ **Team Ready**: PRs created with proper documentation and reviewers
+
+Claude will execute the task with full project context and guide you through approval gates for commits and PR creation.
 
 That's the basic workflow to get started! You can also:
 
@@ -325,7 +338,7 @@ Custom Claude Code commands that power the Simone workflow:
 - `initialize` - Set up project structure and documentation
 - `create_sprints_from_milestone` - Break milestones into logical sprints
 - `create_sprint_tasks` - Generate detailed tasks from sprint plans
-- `do_task` - Execute individual tasks with full context
+- `do_task` - Execute individual tasks with guided approval workflow for commits and PRs
 - `yolo` - Autonomous sprint execution (use with caution)
 - And many more for testing, reviewing, and project management
 

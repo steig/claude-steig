@@ -103,14 +103,30 @@ ls .simone/03_SPRINTS/S01_M01_*/task-*.md
 
 #### Task Execution Process
 
-##### Standard Task Execution
+##### Enhanced Task Execution with Approval Gates
 ```bash
-# Execute next available task
+# Execute next available task with guided workflow
 /project:simone:do_task
 
-# Or execute specific task
+# Or execute specific task with approval gates
 /project:simone:do_task task-03-s01
 ```
+
+**New Approval Gate Features**:
+- **Commit Review**: Preview all changes before committing
+- **PR Review**: Review PR details before creation
+- **User Control**: Modify, skip, or abort at any checkpoint
+- **Auto-execution**: Commands run automatically after approval
+
+**Complete Workflow Process**:
+1. Task implementation with quality checks
+2. **NEW**: Implementation quality review
+3. Automated code review with parallel validation
+4. **NEW**: Commit approval gate with change preview
+5. **NEW**: Auto-commit with proper task reference
+6. **NEW**: PR approval gate with team assignment
+7. **NEW**: Auto-PR creation with documentation
+8. **NEW**: Task status update to "review"
 
 ##### YOLO Mode Execution (Advanced)
 ```bash
@@ -139,7 +155,7 @@ When executing a task, Simone loads:
 4. **Architecture decisions** - Relevant ADRs and technical constraints
 5. **Existing codebase** - Patterns, conventions, and integration points
 
-#### Implementation Process
+#### Enhanced Implementation Process with Approval Gates
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
@@ -147,18 +163,29 @@ sequenceDiagram
     participant Git as Git Repository
     participant Review as Code Review
     participant Tests as Test Suite
+    participant PR as Pull Request
     
     Dev->>Simone: /project:simone:do_task task-01-s01
     Simone->>Simone: Load project context
     Simone->>Simone: Validate dependencies
     Simone->>Git: Create branch task/t01-s01-feature
     Simone->>Simone: Implement solution
+    Simone->>Simone: Implementation quality review
     Simone->>Tests: Run test suite
     Simone->>Review: Integrated code review
     Review->>Simone: Quality validation results
-    Simone->>Git: Commit with semantic message
-    Simone->>Simone: Update task metadata
-    Simone->>Dev: Task completion report
+    
+    Note over Simone,Dev: NEW: Approval Gate Process
+    Simone->>Dev: Show commit preview and changes
+    Dev->>Simone: Approve/Modify/Skip commit
+    Simone->>Git: Auto-commit with task reference
+    
+    Simone->>Dev: Show PR preview with team assignment
+    Dev->>Simone: Approve/Modify/Skip PR creation
+    Simone->>PR: Auto-create PR with documentation
+    Simone->>Simone: Link PR to task metadata
+    Simone->>Simone: Update task status to "review"
+    Simone->>Dev: Complete workflow report with PR link
 ```
 
 #### Quality Gates Integration

@@ -140,19 +140,30 @@ This advanced command will:
 
 ## Step 6: Execute Your First Task (5 minutes)
 
-Let Simone execute a task with full context:
+Let Simone execute a task with the new guided approval workflow:
 
 ```
 /project:simone:do_task task-01-s01
 ```
 
-Watch Simone work:
+Experience the enhanced workflow:
 1. **Load rich context** - Project requirements, architecture decisions, existing code patterns
 2. **Validate scope** - Ensures task is ready for execution
 3. **Create git branch** - Automatic branch creation with proper naming
 4. **Implement with quality** - Code generation following your project's patterns
-5. **Run integrated code review** - Quality checks and architectural compliance
-6. **Update task status** - Complete metadata tracking and documentation
+5. **Quality review** - Pre-commit assessment and validation
+6. **Run integrated code review** - Quality checks and architectural compliance
+7. **NEW: Commit approval gate** - Review changes and approve commit with preview
+8. **NEW: Auto-commit** - Automatic commit execution with task reference
+9. **NEW: PR approval gate** - Review PR details and approve creation
+10. **NEW: Auto-PR creation** - Automatic PR with documentation and team assignment
+11. **NEW: Status sync** - Task status updated to "review" with full traceability
+
+**Approval Gate Benefits**:
+- 🛡️ **User Control**: Review and approve each step
+- 🔍 **Quality Assurance**: Validate changes before integration
+- 🔄 **Complete Workflow**: End-to-end task completion with Git integration
+- ⚡ **Team Ready**: PRs created with proper reviewers and documentation
 
 **Example execution:**
 ```

@@ -196,7 +196,7 @@ The Simone Framework provides 23 specialized commands for project management, de
 
 ### do_task
 
-**Purpose**: Execute the complete implementation of a task.
+**Purpose**: Execute complete task implementation with guided approval workflow for commits and PR creation.
 
 **Usage**:
 ```
@@ -204,14 +204,44 @@ The Simone Framework provides 23 specialized commands for project management, de
 ```
 
 **Arguments**:
-- `task_id` - Task identifier to implement
+- `task_id` - Task identifier to implement (e.g., T01-S02, T003, BUG001)
 
-**Features**:
-- Full task implementation following requirements
-- Automated testing and validation
-- Code quality checks
-- Documentation updates
-- Progress tracking and status updates
+**Complete Workflow**:
+1. **Implementation**: Full task execution following requirements
+2. **Quality Review**: Pre-commit assessment and validation
+3. **Code Review**: Automated code quality and security checks
+4. **Approval Gates**: User-controlled commit and PR creation
+5. **Integration**: Automatic Git workflow with user approval
+
+**New Approval Gate Features**:
+- **Commit Approval**: Review changes and approve commit with custom message
+- **PR Approval**: Review PR details and approve creation with team assignment
+- **User Control**: Modify, skip, or abort at any checkpoint
+- **Auto-execution**: Commands run automatically after user approval
+
+**Implementation Process**:
+1. Create and switch to task branch
+2. Execute task work with progress tracking
+3. Implementation quality review and validation
+4. Automated code review with parallel subagents
+5. **NEW**: Commit approval gate with change preview
+6. **NEW**: Auto-commit execution with task reference
+7. **NEW**: PR approval gate with team assignment
+8. **NEW**: Auto-PR creation with proper linking
+9. **NEW**: Task status update to "review" state
+
+**Quality Features**:
+- Comprehensive acceptance criteria validation
+- Automated testing and code quality checks
+- Documentation updates and verification
+- Security and performance impact assessment
+- Full audit trail and progress tracking
+
+**Integration Benefits**:
+- **Complete Workflow**: End-to-end task completion with Git integration
+- **Safety First**: User approval required for all commits and PRs
+- **Team Ready**: PRs created with proper reviewers and documentation
+- **Traceability**: Full linking between tasks, commits, and PRs
 
 ---
 
