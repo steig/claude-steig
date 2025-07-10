@@ -17,6 +17,8 @@ Thumbs.db
 !/SYNC_GUIDE.md
 !/sync-simone.sh
 !/CHANGELOG.md
+!/install-simone.sh
+!/INSTALL.md
 
 # Editor directories and files
 .cursor/
@@ -49,3 +51,5 @@ yarn-error.log*
 
 # Folders
 mixed_notes
+
+.claude/settings.local.json

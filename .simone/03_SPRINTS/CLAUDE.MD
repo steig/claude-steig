@@ -35,7 +35,7 @@ Update status as progress occurs:
 
 - planning → in_progress → review → complete
 
-Always use the template at `.simone/99_TEMPLATES/sprint_template.md` when creating new sprint meta files.
+Always use the template at `.simone/99_TEMPLATES/sprint_meta_template.md` when creating new sprint meta files.
 
 ## Sprint Tasks
 

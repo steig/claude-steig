@@ -2,9 +2,40 @@
 
 ## What is this?
 
-Simone is a directory-based project management system I built to work better with Claude Code. It's basically a set of folders, markdown files, and custom commands that help break down software projects into manageable chunks that AI can handle effectively.
+Simone is a directory-based project management system designed to work better with Claude Code. It's a sophisticated framework of folders, markdown files, and custom commands that help break down software projects into manageable chunks that AI can handle effectively.
+
+**🙏 Attribution**: This is a specialized fork of the original Simone framework created by [Helmi](https://github.com/helmi). The original work provided the foundational concepts and workflow design. This fork adds comprehensive metadata management and project tracking capabilities.
 
 **⚠️ Complexity Warning**: Simone is a sophisticated system that requires time to understand properly. It's not a simple plug-and-play solution, but rather a framework that works best when you take the time to learn how it operates and adapt it to your workflow.
+
+## 🚀 Key Features
+
+This fork includes specialized improvements for comprehensive project management:
+
+### 📋 **Comprehensive Templates**
+- **Detailed YAML frontmatter** with complete metadata tracking
+- **Structured sections** for requirements, implementation, testing, and quality control
+- **Progress tracking** and status management throughout the project lifecycle
+- **Risk assessment** and mitigation planning built into templates
+- **Quality checklists** and review processes
+
+### 🔧 **Smart Installation System**
+- **Automated installer** with intelligent upgrade detection
+- **Backup and rollback** capabilities for safe upgrades
+- **Version management** to track framework updates
+- **Preservation of user data** during upgrades
+
+### 📊 **Advanced Project Management**
+- **Detailed task breakdown** with implementation guidance
+- **Architecture decision tracking** with comprehensive ADR templates
+- **Project health monitoring** with detailed review templates
+- **Success metrics** and measurement frameworks
+
+### 🎯 **Quality & Process Improvements**
+- **Built-in quality gates** and approval workflows
+- **Compliance tracking** and governance processes
+- **Documentation requirements** integrated into workflows
+- **Review checklists** for technical, business, and process validation
 
 **📋 Latest Updates**: See [CHANGELOG.md](CHANGELOG.md) for recent changes and improvements.
 
@@ -12,11 +43,29 @@ Simone is a directory-based project management system I built to work better wit
 
 ### 1. Install Simone
 
+#### Quick Install
 ```bash
-npx hello-simone
+curl -sSL https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh | bash
 ```
 
-This sets up the folder structure and installs/updates the command files in your project. Can also be used to update an existing installation - command files get backed up automatically.
+#### Manual Install
+```bash
+# Download installer
+wget https://raw.githubusercontent.com/steig/claude-workflow/main/install-simone.sh
+chmod +x install-simone.sh
+
+# Run installer
+./install-simone.sh
+```
+
+**Smart Installation Features:**
+- **Automatic detection** of existing installations vs fresh installs
+- **Intelligent upgrades** that preserve all your project data
+- **Backup creation** before any changes (`.simone.backup.TIMESTAMP/`)
+- **Version tracking** to prevent unnecessary reinstalls
+- **Complete setup** including comprehensive templates and Claude Code commands
+
+The installer works with both new and existing projects, automatically preserving your manifests, milestones, sprints, tasks, and architectural decisions while updating the framework components.
 
 ### 2. Initialize Your Project
 
@@ -72,10 +121,91 @@ Claude will then work through the specified task with full project context.
 That's the basic workflow to get started! You can also:
 
 - Create general tasks with `/project:simone:create_general_task`
+- Update task status and metadata with `/project:simone:update_task_status T01_S01 completed`
 - Use YOLO mode to run a full sprint autonomously
 - Explore other commands in `.claude/commands/simone/`
 
+### 7. Task Status Management
+
+```
+/project:simone:update_task_status T01_S01 in_progress
+```
+
+The `update_task_status` command provides comprehensive status management with full metadata tracking:
+
+- **Status transitions**: pending → in_progress → review → completed (and blocked states)
+- **Metadata updates**: Automatically updates YAML frontmatter with timestamps, effort tracking, and progress
+- **Content updates**: Updates task sections based on status (logs, checklists, etc.)
+- **Integration**: Updates project manifest and sprint tracking
+- **Quality gates**: Ensures all acceptance criteria are met before completion
+
+**Usage Examples:**
+```bash
+# Start working on a task
+/project:simone:update_task_status T01_S01 in_progress
+
+# Mark ready for review with time tracking  
+/project:simone:update_task_status T01_S01 review 3.5
+
+# Complete a task
+/project:simone:update_task_status T01_S01 completed 4
+```
+
 **Important**: Simone is a complex system, not a simple set-and-forget tool. It works best when you understand how it operates. Take time to read through the commands and consider adapting them to your workflow.
+
+## MCP Server Integration
+
+Simone now includes automatic integration with multiple MCP servers that provide comprehensive IDE assistance, project management, and context management capabilities.
+
+### Automatic Setup
+
+All MCP servers are automatically installed during project initialization:
+
+```bash
+# Installed automatically during /project:simone:initialize
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+claude mcp add context7 -- uvx --from git+https://github.com/upstash/context7 context7-mcp-server
+claude mcp add playwright -- uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server
+claude mcp add work-history -- uvx mcp-work-history
+claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking
+```
+
+### Capabilities
+
+**Serena** provides:
+- **Enhanced IDE assistance** and code analysis
+- **Improved project management** capabilities  
+- **Context-aware development** support throughout Simone operations
+
+**Context7** provides:
+- **Advanced context management** and retrieval
+- **Smart context preservation** across sessions
+- **Advanced memory capabilities** for complex projects
+
+**Playwright** provides:
+- **Browser automation** and web testing capabilities
+- **End-to-end testing** support
+- **Web scraping** and interaction tools
+
+**Work History** provides:
+- **Command tracking** and output logging for all Simone operations
+- **Historical context** of project development activities
+- **Audit trail** of all executed commands and their results
+
+**Sequential Thinking** provides:
+- **Structured reasoning** and step-by-step problem-solving capabilities
+- **Enhanced logical thinking** for complex development challenges
+- **Systematic approach** to breaking down and solving technical problems
+
+### Usage
+
+Every time you prime your knowledge with `/project:simone:prime`, all MCP servers are automatically initialized:
+
+1. **Verifies MCP server status** to ensure all are active
+2. **Loads Serena instructions** with `/mcp__serena__initial_instructions`
+3. **Ensures proper configuration** for using all MCP tools
+
+**Important**: Always run `/mcp__serena__initial_instructions` when starting a new conversation or after any compacting operation to ensure Claude remains properly configured to use Serena's tools.
 
 ## How it Works
 
@@ -134,12 +264,27 @@ Contains timestamped project review snapshots created by the `project_review` co
 
 ### 99_TEMPLATES/
 
-Contains standardized templates for different document types to ensure consistency for both humans and Claude:
+Contains comprehensive, templates for all document types:
 
-- Task templates with structured objectives and acceptance criteria
-- Sprint and milestone metadata templates
-- ADR template for documenting architectural decisions
-- All templates use simplified date formats (YYYY-MM-DD HH:MM)
+**Core Templates:**
+- **`task_template.md`** - Detailed task structure with requirements, implementation, testing, and quality control
+- **`sprint_meta_template.md`** - Sprint planning with goals, capacity, and quality standards
+- **`milestone_meta_template.md`** - Comprehensive milestone tracking with success metrics
+- **`project_manifest_template.md`** - Advanced project overview with metadata and health tracking
+
+**Specialized Templates:**
+- **`adr_template.md`** - Comprehensive Architecture Decision Records with detailed analysis
+- **`architecture_template.md`** - Complete architecture documentation framework
+- **`prd_template.md`** - Product Requirements Document template
+- **`specs_template.md`** - Technical specifications template
+- **`project_review_template.md`** - Project health and progress review template
+
+**Features:**
+- Rich YAML frontmatter with metadata tracking
+- Built-in quality gates and review processes
+- Progress tracking and status management
+- Risk assessment and mitigation planning
+- Success metrics and measurement frameworks
 
 ### .claude/commands/simone/
 
@@ -174,10 +319,16 @@ Custom Claude Code commands that power the Simone workflow:
 │   ├── ADR001_Database_Selection.md
 │   └── ...
 ├── 10_STATE_OF_PROJECT/         # Project review snapshots
-└── 99_TEMPLATES/
-    ├── task_template.md
+└── 99_TEMPLATES/                 # Template collection
+    ├── adr_template.md           # Architecture Decision Records
+    ├── architecture_template.md  # Complete architecture docs
+    ├── milestone_meta_template.md
+    ├── prd_template.md          # Product Requirements
+    ├── project_manifest_template.md
+    ├── project_review_template.md
+    ├── specs_template.md        # Technical specifications
     ├── sprint_meta_template.md
-    └── milestone_meta_template.md
+    └── task_template.md
 ```
 
 ## Configuration Tips
@@ -205,15 +356,14 @@ claude config list -g
 
 ## Contributing & Feedback
 
-I'd love to hear from you! This is very much shaped by how I work, and I'm sure there are tons of improvements to be made.
+This version is maintained at [steig/claude-workflow](https://github.com/steig/claude-workflow).
 
-- **GitHub Issues**: Best place for bugs and feature requests
-- **Anthropic Discord**: Find me @helmi if you want to chat about it
-- **Pull Requests**: Very welcome! Let's make this better together
+- **GitHub Issues**: [Report bugs and feature requests](https://github.com/steig/claude-workflow/issues)
+- **Pull Requests**: Contributions welcome! Let's make this better together
 
-I'm particularly interested in:
+### Original Framework
+The original Simone framework was created by [Helmi](https://github.com/helmi). 
 
-- How you're using it differently
-- What's missing for your workflow
-- Ideas for better Claude Code integration
-- Different organizational approaches
+- **Original Repository**: Check Helmi's repositories for the original implementation
+- **Anthropic Discord**: Find @helmi for discussions about the original framework
+

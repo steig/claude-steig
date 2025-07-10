@@ -17,6 +17,11 @@ Follow step by step and adhere closely to the following instructions for each st
 
 ### 1. Analyze the Scope given
 
+**MCP INTEGRATION:** Use MCP servers to enhance code review process:
+- **Serena**: Get enhanced code analysis and quality insights
+- **Sequential Thinking**: Structure the review process systematically
+- **Work History**: Reference previous code reviews and their outcomes
+
 check: <$ARGUMENTS>
 
 If empty, use default, otherwise interpret <$ARGUMENTS> to identify the scope of the Review. Only continue if you can find meaningful changes to review.

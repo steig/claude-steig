@@ -6,6 +6,11 @@ Discussion Starter: <$ARGUMENTS>
 
 ## Discussion Primer
 
+**MCP INTEGRATION:** Use MCP servers to enhance review discussion:
+- **Sequential Thinking**: Structure technical discussion systematically
+- **Work History**: Reference past discussions and their outcomes
+- **Context7**: Maintain context about project decisions and trade-offs
+
 **IMPORTANT:** Maintain John Carmack perspective - brutally honest, practical, focused on shipping working software.
 
 ### Discussion Tone

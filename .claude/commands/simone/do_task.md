@@ -26,6 +26,12 @@ If no open task matches, pause and ask the user how to proceed.
 
 Read the task description. If anything is unclear, ask clarifying questions before continuing.
 
+**MCP INTEGRATION:** Use available MCP servers to enhance task analysis:
+- **Sequential Thinking**: Structure the task analysis and break down complex problems
+- **Serena**: Enhance code analysis and project understanding
+- **Context7**: Maintain context about project state and requirements
+- **Work History**: Review similar past tasks and their outcomes
+
 **CRITICAL CONTEXT VALIDATION:** Before executing any task spin up Parallel Subagents for these tasks:
 
 1. **Sprint Context:** Confirm task belongs to current sprint scope
@@ -37,20 +43,38 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 
 ## 4 · Set status to in_progress
 
-- Find out the current local timestamp (YYYY-MM-DD HH:MM).
-- Update front-matter to **status: in_progress** and set Updated time
-- Update ./simone/00_PROJECT_MANIFEST.md to set task in progress, updated time and current Sprint Status.
+**Metadata Update:**
+- Find out the current local timestamp (YYYY-MM-DD HH:MM)
+- Update YAML frontmatter with comprehensive status change:
+  - **status**: "in_progress"
+  - **updated_date**: Current timestamp
+  - **assignee**: "Claude" (if not already set)
+  - Initialize **actual_effort**: "0" (if not already tracking)
+- Update header status line: **Status**: in_progress
+- Update ./simone/00_PROJECT_MANIFEST.md to set task in progress, updated time and current Sprint Status
+- Log status change in Output Log: `[YYYY-MM-DD HH:MM] Task started - status changed to in_progress`
 
 ## 5 · Execute task work
 
+**MCP INTEGRATION:** Leverage MCP servers during task execution:
+- **Sequential Thinking**: Structure implementation approach step-by-step
+- **Serena**: Get enhanced code analysis and suggestions
+- **Work History**: Log all task execution details and outcomes
+- **Context7**: Maintain context about implementation decisions
+
 - Follow Description, Goal and Acceptance Criteria.
 - Consult supporting docs in .simone/01_PROJECT_DOCS/ and .simone/02_REQUIREMENTS/.
-- Iterate over subtasks:
+- **Progress Tracking**: Iterate over subtasks with comprehensive metadata updates:
   1. Pick the next incomplete subtask.
   2. Implement the required changes, consulting docs as needed.
-  3. Mark the subtask done.
-  4. Append a log entry to **## Output Log** using the format `[YYYY-MM-DD HH:MM]: <message>`.
-  5. Repeat until all subtasks are complete.
+  3. Mark the subtask done with [x].
+  4. Update **actual_effort** in YAML frontmatter (estimate time spent).
+  5. Update **updated_date** in YAML frontmatter with current timestamp.
+  6. Append detailed log entry to **## Output Log**: `[YYYY-MM-DD HH:MM]: <subtask_completed> - <implementation_notes>`
+  7. If issues encountered, update **blocked_by** field if applicable.
+  8. Use **Work History** to track implementation progress and decisions.
+  9. **Update progress percentage** based on completed subtasks vs total.
+  10. Repeat until all subtasks are complete.
 
 ## 6 · Placeholder
 
@@ -73,14 +97,44 @@ Follow these steps for a Code Review (in order)
 
 ## 8 · Finalize task status
 
-- set the Task status to **completed**
-- Rename the Task file accordingly to enable proper Completed recognition from the filename (TX[TASK_ID]...)
-- Update .simone/00_PROJECT_MANIFEST.md to reflect the new status
-- **Report** the result to the user
+**MCP INTEGRATION:** Complete task tracking:
+- **Work History**: Log final task completion and outcomes
+- **Context7**: Store task completion context for future reference
 
-  ✅ **Result**: Quick statement of success
+**Comprehensive Task Completion:**
+1. **Update YAML Frontmatter:**
+   - **status**: "completed" 
+   - **updated_date**: Current timestamp
+   - **actual_effort**: Final time spent (hours)
+   - Ensure all **dependencies** are resolved
+   - Clear any **blocked_by** entries if resolved
+   
+2. **Update Task Content:**
+   - Mark all **Success Criteria** as [x] completed
+   - Mark all **Acceptance Criteria** as [x] completed
+   - Update **Progress** to 100%
+   - Update header status line: **Status**: completed
+   
+3. **Final Documentation:**
+   - Add completion entry to **Output Log**: `[YYYY-MM-DD HH:MM] Task completed successfully - all acceptance criteria met`
+   - Fill in **Retrospective Notes** section with lessons learned
+   - Update **Next Action** field to indicate completion
+   
+4. **File Management:**
+   - Rename the Task file to TX prefix (TX[TASK_ID]...) for completed recognition
+   - Update .simone/00_PROJECT_MANIFEST.md to reflect the new status
+   
+5. **Quality Verification:**
+   - Verify all **Quality Checklist** items are addressed
+   - Ensure **Review & Approval** section is complete if required
 
-  🔎 **Scope**: Identified task or reason none was processed
+**Report** the comprehensive result to the user:
+
+  ✅ **Result**: Task completed with full metadata tracking
+
+  📊 **Metrics**: {estimated_effort}h estimated vs {actual_effort}h actual
+  
+  🔎 **Scope**: {task_description_summary}
 
   💬 **Summary**: One-paragraph recap of what was done or why blocked
 

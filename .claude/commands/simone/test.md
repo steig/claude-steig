@@ -13,6 +13,11 @@ Follow these instructions from top to bottom.
 
 ## 1 · Execute test suite
 
+**MCP INTEGRATION:** Use MCP servers to enhance testing:
+- **Playwright**: Enable browser automation and E2E testing capabilities
+- **Work History**: Track test results and common failure patterns
+- **Sequential Thinking**: Structure test execution and debugging process
+
 ### First, detect the project's test runner:
 
 1. **Python projects:**

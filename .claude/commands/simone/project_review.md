@@ -17,13 +17,19 @@ Perform a comprehensive project-level review focusing on architecture, progress,
 6. Audit file organization and workflow compliance
 7. Evaluate technical decisions and complexity
 8. Critique implementation quality (John Carmack perspective)
-9. Provide comprehensive assessment with recommendations
+9. Create comprehensive project review file with metadata
 
 Follow step by step and adhere closely to the following instructions for each step.
 
 ## DETAILS on every TODO item
 
 ### 1. Analyze review scope and timing
+
+**MCP INTEGRATION:** Use MCP servers to enhance project review:
+- **Sequential Thinking**: Structure comprehensive project analysis systematically
+- **Context7**: Maintain context about project evolution and architectural decisions
+- **Work History**: Track review outcomes and recommendations over time
+- **Serena**: Enhance project analysis and architecture assessment
 
 Check: <$ARGUMENTS>
 
@@ -256,4 +262,41 @@ Based on your findings recommend Action items - chose whatever fits your finding
 
 ```
 
-**IMPORTANT:** Be specific with file paths and line numbers. This review should be actionable and permanently archived.
+### 9. Create comprehensive project review file
+
+**Review File Creation:**
+
+1. **Use Template:**
+   - Copy `/Users/tom/code/claude-simone/.simone/99_TEMPLATES/project_review_template.md`
+   - Create timestamped file: `.simone/10_STATE_OF_PROJECT/YYYY-MM-DD_HH-MM_Project_Review.md`
+
+2. **Populate YAML Frontmatter:**
+   - **review_id**: "PR_YYYY_MM_DD_HH_MM"
+   - **title**: "Project Health Review - {Current_Milestone}"
+   - **review_type**: "comprehensive" (or focus area if specified)
+   - **date**: Current timestamp (YYYY-MM-DD)
+   - **reviewed_by**: "Claude"
+   - **milestone_id**: Current milestone from manifest
+   - **sprint_id**: Current sprint if applicable
+   - **project_health**: "healthy" | "warning" | "critical"
+   - **overall_score**: 1-10 rating
+   - **technical_debt_level**: "low" | "medium" | "high" | "critical"
+   - **risk_level**: "low" | "medium" | "high" | "critical"
+   - **review_scope**: ["architecture", "progress", "quality", "infrastructure"]
+   - **next_review_date**: Recommended next review date
+   - **action_items_count**: Number of critical action items identified
+
+3. **Populate All Template Sections:**
+   - **Executive Summary** with key findings
+   - **Technical Assessment** with architecture analysis
+   - **Progress Analysis** with milestone/sprint status
+   - **Quality Metrics** with specific measurements
+   - **Risk Assessment** with identified risks and mitigations
+   - **Recommendations** with prioritized action items
+   - **Historical Context** comparing to previous reviews if available
+
+4. **Link Integration:**
+   - Update `.simone/00_PROJECT_MANIFEST.md` with reference to new review
+   - Cross-reference any identified issues with existing tasks or ADRs
+
+**IMPORTANT:** Be specific with file paths and line numbers. This review should be actionable and permanently archived with full metadata tracking.

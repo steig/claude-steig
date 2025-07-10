@@ -29,6 +29,12 @@ The argument format is: `<Task Title or Description>`
 
 ### 2. Load project context and documentation requirements
 
+**MCP INTEGRATION:** Use MCP servers to enhance general task creation:
+- **Sequential Thinking**: Structure task creation process systematically
+- **Work History**: Reference similar tasks and their outcomes
+- **Context7**: Maintain context about project requirements and goals
+- **Serena**: Enhance project analysis and task scoping
+
 Use PARALLEL SUBAGENTS to READ and UNDERSTAND the project's context:
 
 - READ `.simone/00_PROJECT_MANIFEST.md` - Get current project state
@@ -70,14 +76,37 @@ Based on the task description, use PARALLEL SUBAGENTS to:
 
 ### 6. Fill in task details with proper context
 
-Populate the task file with:
+**Template Population - Complete ALL YAML frontmatter fields:**
 
+**YAML Frontmatter (CRITICAL - populate every field):**
+- **task_id**: "T###" (generated ID)
+- **task_title**: Clear, actionable task name
+- **task_type**: Select from: feature, bug, refactor, documentation, infrastructure, research
+- **milestone_id**: Current milestone or "N/A" for general tasks
+- **sprint_id**: "N/A" for general tasks
+- **created_date**: Current timestamp (YYYY-MM-DD)
+- **updated_date**: Current timestamp (YYYY-MM-DD)
+- **status**: "pending"
+- **priority**: Assess as: low, medium, high, critical
+- **complexity**: Assess as: simple, medium, complex, very_complex
+- **estimated_effort**: Estimate in hours based on research
+- **actual_effort**: "0" (initialize)
+- **assignee**: "TBD" or specific person
+- **dependencies**: Array of dependent task IDs or ["none"]
+- **blocked_by**: ["none"] initially
+- **tags**: Relevant tags like ["backend", "api", "testing"]
+- **risk_level**: Assess as: low, medium, high
+- **business_value**: Assess as: low, medium, high, critical
+- **technical_value**: Assess as: low, medium, high, critical
+
+**Content Sections (populate thoroughly):**
 - **Title**: Clear, actionable task name
 - **Context**: Link to architecture docs and project state
-- **Requirements**: Specific, measurable outcomes
-- **Acceptance Criteria**: Clear definition of done
-- **Dependencies**: Reference relevant sprints/milestones
+- **Requirements**: Specific, measurable outcomes with acceptance criteria
+- **Dependencies**: Reference relevant sprints/milestones and specific task dependencies
 - **Implementation Notes**: Technical approach aligned with architecture
+- **Risk Assessment**: Identify potential risks and mitigation strategies
+- **Success Metrics**: How success will be measured
 - **CRITICAL:** All content must reference existing documentation
 
 ### 7. Add technical guidance and codebase references

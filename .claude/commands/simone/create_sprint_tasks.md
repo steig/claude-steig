@@ -30,6 +30,11 @@ Check: <$ARGUMENTS>
 
 ### 2. Load sprint context and related documentation
 
+**MCP INTEGRATION:** Use MCP servers to enhance context understanding:
+- **Sequential Thinking**: Structure the sprint analysis process systematically
+- **Context7**: Maintain context about sprint goals and project state
+- **Serena**: Enhance project analysis and documentation understanding
+
 Use PARALLEL SUBAGENTS to READ and UNDERSTAND the project's context:
 
 - READ `.simone/00_PROJECT_MANIFEST.md` for project context
@@ -56,6 +61,11 @@ Use PARALLEL SUBAGENTS to READ and UNDERSTAND the project's context:
 
 ### 4. Analyze sprint deliverables for task breakdown
 
+**MCP INTEGRATION:** Use MCP servers for systematic task breakdown:
+- **Sequential Thinking**: Structure the task breakdown process methodically
+- **Serena**: Enhance analysis of deliverables and technical requirements
+- **Work History**: Reference similar task breakdowns from past sprints
+
 Based on sprint goals and deliverables (execute in Parallel Subagents):
 
 - BREAK DOWN high-level deliverables into concrete, implementable tasks
@@ -65,6 +75,11 @@ Based on sprint goals and deliverables (execute in Parallel Subagents):
 - DEFER complexity assessment until after tasks are fully created with subtasks
 
 ### 5. Create individual task files with implementation guidance
+
+**MCP INTEGRATION:** Use MCP servers for enhanced task creation:
+- **Sequential Thinking**: Structure each task creation process systematically
+- **Work History**: Track task creation decisions and rationale
+- **Context7**: Maintain context about task relationships and dependencies
 
 **NOW** For each identified Task spin up a Parallel Subagent with these Instructions:
 
@@ -77,11 +92,35 @@ Based on sprint goals and deliverables (execute in Parallel Subagents):
 
     ### 1. Create basic task structure
 
+    **Task Creation with Full Metadata:**
+    
     - ALL TASK FILES must to be created in the Sprint Directory (where the sprint meta file is)
     - CREATE file with naming: `T<NN>_S<NN>_<Descriptive_Name>.md`
     - USE sequential numbering starting from T01
     - FOLLOW task template structure exactly from `.simone/99_TEMPLATES/task_template.md`
-    - ADD basic description and objectives from sprint goals
+    
+    **CRITICAL: Populate ALL YAML frontmatter fields:**
+    - **task_id**: "T##_S##" format
+    - **task_title**: Clear, actionable task name
+    - **task_type**: Select appropriate type (feature, bug, refactor, etc.)
+    - **milestone_id**: Parent milestone ID from sprint context
+    - **sprint_id**: Current sprint ID
+    - **created_date**: Current timestamp (YYYY-MM-DD)
+    - **updated_date**: Current timestamp (YYYY-MM-DD)  
+    - **status**: "pending"
+    - **priority**: Assess based on sprint goals (low, medium, high, critical)
+    - **complexity**: Assess based on research (simple, medium, complex, very_complex)
+    - **estimated_effort**: Estimate hours based on codebase analysis
+    - **actual_effort**: "0" (initialize)
+    - **assignee**: "TBD" or specific person if known
+    - **dependencies**: Array of dependent task IDs from sprint
+    - **blocked_by**: ["none"] initially
+    - **tags**: Sprint-relevant tags like sprint focus area
+    - **risk_level**: Assess potential risks (low, medium, high)
+    - **business_value**: Assess value to sprint/milestone goals
+    - **technical_value**: Assess technical importance
+    
+    - ADD comprehensive description and objectives from sprint goals with proper context
 
     ### 2. Research codebase interfaces
 

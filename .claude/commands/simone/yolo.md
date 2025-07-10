@@ -27,6 +27,12 @@ Check <$ARGUMENTS>:
 
 ## Follow this exact process
 
+**MCP INTEGRATION:** YOLO mode requires comprehensive MCP server usage:
+- **Work History**: Critical for tracking all autonomous operations and decisions
+- **Sequential Thinking**: Structure autonomous decision-making processes
+- **Context7**: Maintain context across autonomous task execution
+- **Serena**:  Code analysis for autonomous development
+
 You need to stick to this process and **PRECISELY** follow it
 
 Before you start:
@@ -81,6 +87,11 @@ Execute based on mode:
 - After task creation move back to `### FIND OPEN WORK`
 
 ### WORK ON TASK
+
+**MCP INTEGRATION:** Use MCP servers for autonomous task execution:
+- **Work History**: Log all autonomous task decisions and outcomes
+- **Sequential Thinking**: Structure autonomous problem-solving approach
+- **Context7**: Maintain context about task execution and decisions
 
 - if you have touched this task before ignore it and jump to the next task
 - if you can't find a task that you have not tried fixing before jump to ### EXECUTE PROJECT REVIEW

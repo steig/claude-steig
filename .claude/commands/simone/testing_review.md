@@ -25,6 +25,12 @@ Follow step by step and adhere closely to the following instructions for each st
 
 ### 1. Load testing strategy document (or define review criteria)
 
+**MCP INTEGRATION:** Use MCP servers to enhance testing review:
+- **Playwright**: Analyze browser automation and E2E testing coverage
+- **Sequential Thinking**: Structure comprehensive test analysis systematically
+- **Work History**: Track testing improvements and review outcomes
+- **Serena**: Enhance test code analysis and quality assessment
+
 **Option A - Strategy document exists:**
 - LOAD `.simone/01_PROJECT_DOCS/TESTING_STRATEGY.md`
 - EXTRACT key principles and priorities

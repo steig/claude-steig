@@ -5,12 +5,13 @@ Initialize the Simone project management framework through an adaptive, interact
 ## Create a TODO with EXACTLY these items
 
 1. Scan and analyze the project
-2. Interactive confirmation with user
-3. Check for existing Simone documents
-4. Guide document creation process
-5. Create first milestone for Simone
-6. Generate project manifest
-7. Provide next steps
+2. Install Serena MCP server
+3. Interactive confirmation with user
+4. Check for existing Simone documents
+5. Guide document creation process
+6. Create first milestone for Simone
+7. Generate project manifest
+8. Provide next steps
 
 ## DETAILS on every TODO item
 
@@ -25,7 +26,45 @@ Initialize the Simone project management framework through an adaptive, interact
 
 **Keep findings brief** - Just identify the essentials
 
-### 2. Interactive confirmation with user
+### 2. Install MCP servers
+
+**Automatically install Serena for enhanced capabilities:**
+```bash
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+```
+
+**Automatically install Context7 for context management:**
+```bash
+claude mcp add context7 -- uvx --from git+https://github.com/upstash/context7 context7-mcp-server
+```
+
+**Automatically install Playwright MCP for browser automation:**
+```bash
+claude mcp add playwright -- uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server
+```
+
+**Automatically install Work History MCP for command tracking:**
+```bash
+claude mcp add work-history -- uvx mcp-work-history
+```
+
+**Automatically install Sequential Thinking MCP for enhanced reasoning:**
+```bash
+claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking
+```
+
+**This provides:**
+- Enhanced IDE assistance and code analysis (Serena)
+- Improved project management capabilities (Serena)
+- Context-aware development support throughout Simone initialization (Serena)
+- Advanced context management and retrieval (Context7)
+- Browser automation and testing capabilities (Playwright)
+- Command history tracking and output logging (Work History)
+- Sequential reasoning and structured thinking capabilities (Sequential Thinking)
+
+**No user interaction needed** - Just inform when complete
+
+### 3. Interactive confirmation with user
 
 **Present findings conversationally:**
 ```
@@ -35,7 +74,7 @@ Is this correct? Should I proceed with Simone setup?
 
 **Get user confirmation before continuing**
 
-### 3. Check for existing Simone documents
+### 4. Check for existing Simone documents
 
 **Scan .simone/ directory for:**
 - Any documents in 01_PROJECT_DOCS/
@@ -53,18 +92,30 @@ Is this correct? Should I proceed with Simone setup?
 - Start fresh
 - Cancel to add documents manually first
 
-### 4. Guide document creation process
+### 5. Guide document creation process
 
 **Based on user's choice:**
 
 **If starting fresh or extending:**
-- Perform deep analysis of the codebase
+- Perform deep analysis of the codebase using **MCP servers**:
+  - **Serena**: Code analysis and structure detection
+  - **Sequential Thinking**: Systematic architecture analysis
+  - **Context7**: Maintain context about architectural decisions
 - Identify key components and architecture patterns
-- Create draft ARCHITECTURE.md based on analysis
+- **Use architecture_template.md** from `.simone/99_TEMPLATES/`
+- Create comprehensive ARCHITECTURE.md with:
+  - **Auto-detected tech stack** (language, framework, database, testing tools)
+  - **Project structure analysis** (folder organization, patterns)
+  - **Development workflow patterns** (testing, deployment, CI/CD)
+  - **Performance and scalability considerations**
+  - **Security and compliance requirements**
 - Use Q&A style to refine and complete:
-  - "What's the main purpose of this project?"
-  - "What are the key technical decisions?"
-  - "Any important constraints or requirements?"
+  - "What's the main purpose and business goals of this project?"
+  - "What are the key technical decisions and why were they made?"
+  - "What are the performance and scalability requirements?"
+  - "What are the security and compliance considerations?"
+  - "How should the development workflow be organized?"
+  - "What are the testing and quality standards?"
 
 **If using existing docs:**
 - Import and adapt existing documentation
@@ -73,7 +124,7 @@ Is this correct? Should I proceed with Simone setup?
 
 **Keep it conversational and adaptive**
 
-### 5. Create first milestone for Simone
+### 6. Create first milestone for Simone
 
 **Determine appropriate first milestone:**
 - If new project: Start with setup/foundation milestone
@@ -85,7 +136,7 @@ Is this correct? Should I proceed with Simone setup?
 - Create milestone structure with initial requirements
 - Keep scope realistic and focused
 
-### 6. Generate project manifest
+### 7. Generate project manifest
 
 **Automatically generate manifest using:**
 - Information gathered during setup
@@ -95,7 +146,7 @@ Is this correct? Should I proceed with Simone setup?
 
 **No user interaction needed** - Just inform when complete
 
-### 7. Provide next steps
+### 8. Provide next steps
 
 **Customized guidance based on setup:**
 ```
