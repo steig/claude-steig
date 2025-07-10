@@ -401,7 +401,7 @@ Research and choose the best static site generator for the personal blog project
 
 ## 🧠 Step 7: Experience Cognitive Personas
 
-Now that you have concrete tasks, let's learn how to execute them with specialized AI expertise! Simone includes 9 cognitive personas that provide domain-specific guidance.
+Now that you have concrete tasks, let's learn how to execute them with specialized AI expertise! Simone includes 9 cognitive personas that provide domain-specific guidance. These revolutionary cognitive patterns were pioneered by **SuperClaude** and adapted for enterprise development workflows.
 
 ### Understanding Personas
 

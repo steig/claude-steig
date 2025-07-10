@@ -205,7 +205,7 @@ In 15 minutes, you've:
 
 ## Step 7: Experience Domain Expertise with Cognitive Personas (3 minutes)
 
-Simone includes **9 specialized AI personas** that provide domain-specific expertise to enhance your development workflow. These personas automatically analyze your work and provide specialized guidance:
+Simone includes **9 specialized AI personas** that provide domain-specific expertise to enhance your development workflow. These personas automatically analyze your work and provide specialized guidance. This innovative system builds upon concepts pioneered by **SuperClaude**, bringing advanced cognitive AI patterns to enterprise development workflows:
 
 ### Basic Persona Usage
 
