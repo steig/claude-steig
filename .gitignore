@@ -22,7 +22,18 @@ Thumbs.db
 !/docs
 !/tests
 !/.github
-.version
+!/.pre-commit-config.yaml
+!/.markdownlint.yaml
+!/examples
+
+!/scripts
+
+!/.version
+!/.secrets.baseline
+
+
+# Pre-commit
+.secrets.baseline
 
 # Editor directories and files
 .cursor/

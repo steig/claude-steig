@@ -1,0 +1,7 @@
+extends: default
+rules:
+  line-length:
+    line_length: 120
+  no-inline-html: false
+  no-duplicate-heading: false
+  no-trailing-punctuation: false
