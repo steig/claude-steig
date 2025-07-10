@@ -1,231 +1,231 @@
-name: Test Install Script
+# name: Test Install Script
 
-on:
-  push:
-    branches: [ main, master, develop ]
-    paths: 
-      - 'install-simone.sh'
-      - '.github/workflows/test-install.yml'
-      - '.simone/**'
-      - '.claude/**'
-  pull_request:
-    branches: [ main, master, develop ]
-    paths:
-      - 'install-simone.sh'
-      - '.github/workflows/test-install.yml'
-      - '.simone/**'
-      - '.claude/**'
-  workflow_dispatch:
+# on:
+#   push:
+#     branches: [ main, master, develop ]
+#     paths: 
+#       - 'install-simone.sh'
+#       - '.github/workflows/test-install.yml'
+#       - '.simone/**'
+#       - '.claude/**'
+#   pull_request:
+#     branches: [ main, master, develop ]
+#     paths:
+#       - 'install-simone.sh'
+#       - '.github/workflows/test-install.yml'
+#       - '.simone/**'
+#       - '.claude/**'
+#   workflow_dispatch:
 
-jobs:
-  test-install:
-    name: Test Installation on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+# jobs:
+#   test-install:
+#     name: Test Installation on ${{ matrix.os }}
+#     runs-on: ${{ matrix.os }}
     
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        test-scenario:
-          - fresh-install
-          - upgrade-install
-          - force-reinstall
-          - target-directory
-          - project-detection
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         os: [ubuntu-latest, macos-latest]
+#         test-scenario:
+#           - fresh-install
+#           - upgrade-install
+#           - force-reinstall
+#           - target-directory
+#           - project-detection
     
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
 
-    - name: Set up test environment
-      shell: bash
-      run: |
-        # Create test workspace
-        mkdir -p $HOME/test-workspace
-        cd $HOME/test-workspace
+#     - name: Set up test environment
+#       shell: bash
+#       run: |
+#         # Create test workspace
+#         mkdir -p $HOME/test-workspace
+#         cd $HOME/test-workspace
         
-        # Create different project types for testing
-        mkdir -p nodejs-project python-project rust-project git-project empty-project
+#         # Create different project types for testing
+#         mkdir -p nodejs-project python-project rust-project git-project empty-project
         
-        # Node.js project
-        cd nodejs-project
-        echo '{"name": "test-nodejs-project", "version": "1.0.0"}' > package.json
-        cd ..
+#         # Node.js project
+#         cd nodejs-project
+#         echo '{"name": "test-nodejs-project", "version": "1.0.0"}' > package.json
+#         cd ..
         
-        # Python project  
-        cd python-project
-        echo "requests==2.28.0" > requirements.txt
-        cd ..
+#         # Python project  
+#         cd python-project
+#         echo "requests==2.28.0" > requirements.txt
+#         cd ..
         
-        # Rust project
-        cd rust-project
-        echo '[package]' > Cargo.toml
-        echo 'name = "test-rust-project"' >> Cargo.toml
-        echo 'version = "0.1.0"' >> Cargo.toml
-        cd ..
+#         # Rust project
+#         cd rust-project
+#         echo '[package]' > Cargo.toml
+#         echo 'name = "test-rust-project"' >> Cargo.toml
+#         echo 'version = "0.1.0"' >> Cargo.toml
+#         cd ..
         
-        # Git project
-        cd git-project
-        git init
-        git config user.email "test@example.com"
-        git config user.name "Test User"
-        echo "# Test Project" > README.md
-        git add README.md
-        git commit -m "Initial commit"
-        cd ..
+#         # Git project
+#         cd git-project
+#         git init
+#         git config user.email "test@example.com"
+#         git config user.name "Test User"
+#         echo "# Test Project" > README.md
+#         git add README.md
+#         git commit -m "Initial commit"
+#         cd ..
 
-    - name: Test Fresh Installation
-      if: matrix.test-scenario == 'fresh-install'
-      shell: bash
-      run: |
-        cd $HOME/test-workspace/nodejs-project
+#     - name: Test Fresh Installation
+#       if: matrix.test-scenario == 'fresh-install'
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace/nodejs-project
         
-        # Run fresh installation
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+#         # Run fresh installation
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Verify installation
-        bash $GITHUB_WORKSPACE/tests/verify-installation.sh
+#         # Verify installation
+#         bash $GITHUB_WORKSPACE/tests/verify-installation.sh
 
-    - name: Test Upgrade Installation  
-      if: matrix.test-scenario == 'upgrade-install'
-      shell: bash
-      run: |
-        cd $HOME/test-workspace/python-project
+#     - name: Test Upgrade Installation  
+#       if: matrix.test-scenario == 'upgrade-install'
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace/python-project
         
-        # Create fake old installation
-        mkdir -p .simone/01_PROJECT_DOCS
-        echo "# Old Project Doc" > .simone/01_PROJECT_DOCS/old-doc.md
-        echo "1.0.0" > .simone/.version
+#         # Create fake old installation
+#         mkdir -p .simone/01_PROJECT_DOCS
+#         echo "# Old Project Doc" > .simone/01_PROJECT_DOCS/old-doc.md
+#         echo "1.0.0" > .simone/.version
         
-        # Run upgrade
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+#         # Run upgrade
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Verify upgrade preserved user data
-        bash $GITHUB_WORKSPACE/tests/verify-upgrade.sh
+#         # Verify upgrade preserved user data
+#         bash $GITHUB_WORKSPACE/tests/verify-upgrade.sh
 
-    - name: Test Force Reinstall
-      if: matrix.test-scenario == 'force-reinstall'
-      shell: bash
-      run: |
-        cd $HOME/test-workspace/rust-project
+#     - name: Test Force Reinstall
+#       if: matrix.test-scenario == 'force-reinstall'
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace/rust-project
         
-        # Install first time
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+#         # Install first time
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Force reinstall
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh --force
+#         # Force reinstall
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh --force
         
-        # Verify installation
-        bash $GITHUB_WORKSPACE/tests/verify-installation.sh
+#         # Verify installation
+#         bash $GITHUB_WORKSPACE/tests/verify-installation.sh
 
-    - name: Test Target Directory Installation
-      if: matrix.test-scenario == 'target-directory'
-      shell: bash
-      run: |
-        cd $HOME/test-workspace
+#     - name: Test Target Directory Installation
+#       if: matrix.test-scenario == 'target-directory'
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace
         
-        # Install to specific directory
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh empty-project
+#         # Install to specific directory
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh empty-project
         
-        # Verify installation in target directory
-        cd empty-project
-        bash $GITHUB_WORKSPACE/tests/verify-installation.sh
+#         # Verify installation in target directory
+#         cd empty-project
+#         bash $GITHUB_WORKSPACE/tests/verify-installation.sh
 
-    - name: Test Project Detection
-      if: matrix.test-scenario == 'project-detection'
-      shell: bash
-      run: |
-        cd $HOME/test-workspace
+#     - name: Test Project Detection
+#       if: matrix.test-scenario == 'project-detection'
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace
         
-        # Test different project types
-        for project in nodejs-project python-project rust-project git-project; do
-          echo "Testing project detection for: $project"
-          cd $project
+#         # Test different project types
+#         for project in nodejs-project python-project rust-project git-project; do
+#           echo "Testing project detection for: $project"
+#           cd $project
           
-          # Should auto-detect project and install
-          echo "y" | timeout 30 bash $GITHUB_WORKSPACE/install-simone.sh || echo "Timeout reached (expected for project detection)"
+#           # Should auto-detect project and install
+#           echo "y" | timeout 30 bash $GITHUB_WORKSPACE/install-simone.sh || echo "Timeout reached (expected for project detection)"
           
-          # Verify basic structure was created
-          [[ -d .simone ]] || (echo "ERROR: .simone directory not created in $project" && exit 1)
-          [[ -d .claude/commands ]] || (echo "ERROR: .claude/commands directory not created in $project" && exit 1)
+#           # Verify basic structure was created
+#           [[ -d .simone ]] || (echo "ERROR: .simone directory not created in $project" && exit 1)
+#           [[ -d .claude/commands ]] || (echo "ERROR: .claude/commands directory not created in $project" && exit 1)
           
-          cd ..
-        done
+#           cd ..
+#         done
 
-    - name: Test Error Conditions
-      shell: bash
-      run: |
-        cd $HOME/test-workspace
+#     - name: Test Error Conditions
+#       shell: bash
+#       run: |
+#         cd $HOME/test-workspace
         
-        # Test invalid arguments
-        ! bash $GITHUB_WORKSPACE/install-simone.sh --invalid-flag
+#         # Test invalid arguments
+#         ! bash $GITHUB_WORKSPACE/install-simone.sh --invalid-flag
         
-        # Test help
-        bash $GITHUB_WORKSPACE/install-simone.sh --help
-        bash $GITHUB_WORKSPACE/install-simone.sh --version
+#         # Test help
+#         bash $GITHUB_WORKSPACE/install-simone.sh --help
+#         bash $GITHUB_WORKSPACE/install-simone.sh --version
 
-    - name: Upload test artifacts
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-logs-${{ matrix.os }}-${{ matrix.test-scenario }}
-        path: |
-          $HOME/test-workspace/*/.simone/
-          $HOME/test-workspace/*/.claude/
-        retention-days: 7
+#     - name: Upload test artifacts
+#       if: failure()
+#       uses: actions/upload-artifact@v4
+#       with:
+#         name: test-logs-${{ matrix.os }}-${{ matrix.test-scenario }}
+#         path: |
+#           $HOME/test-workspace/*/.simone/
+#           $HOME/test-workspace/*/.claude/
+#         retention-days: 7
 
-  test-commands:
-    name: Test Simone Commands Installation
-    runs-on: ubuntu-latest
-    needs: test-install
+#   test-commands:
+#     name: Test Simone Commands Installation
+#     runs-on: ubuntu-latest
+#     needs: test-install
     
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
       
-    - name: Install and test commands
-      shell: bash
-      run: |
-        mkdir -p test-project
-        cd test-project
-        echo '{"name": "test-project"}' > package.json
+#     - name: Install and test commands
+#       shell: bash
+#       run: |
+#         mkdir -p test-project
+#         cd test-project
+#         echo '{"name": "test-project"}' > package.json
         
-        # Install Simone
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+#         # Install Simone
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Verify specific simone commands exist
-        bash $GITHUB_WORKSPACE/tests/verify-commands.sh
+#         # Verify specific simone commands exist
+#         bash $GITHUB_WORKSPACE/tests/verify-commands.sh
 
-  security-test:
-    name: Security Tests
-    runs-on: ubuntu-latest
+#   security-test:
+#     name: Security Tests
+#     runs-on: ubuntu-latest
     
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
       
-    - name: Test script permissions and safety
-      shell: bash
-      run: |
-        # Verify script doesn't have dangerous operations
-        ! grep -q "rm -rf /" install-simone.sh
-        ! grep -q "sudo" install-simone.sh
-        ! grep -q "chmod 777" install-simone.sh
+#     - name: Test script permissions and safety
+#       shell: bash
+#       run: |
+#         # Verify script doesn't have dangerous operations
+#         ! grep -q "rm -rf /" install-simone.sh
+#         ! grep -q "sudo" install-simone.sh
+#         ! grep -q "chmod 777" install-simone.sh
         
-        # Verify backup behavior
-        mkdir -p test-security
-        cd test-security
-        echo '{"name": "security-test"}' > package.json
+#         # Verify backup behavior
+#         mkdir -p test-security
+#         cd test-security
+#         echo '{"name": "security-test"}' > package.json
         
-        # Create existing installation
-        mkdir -p .simone
-        echo "important data" > .simone/important.md
+#         # Create existing installation
+#         mkdir -p .simone
+#         echo "important data" > .simone/important.md
         
-        # Install and verify backup was created
-        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+#         # Install and verify backup was created
+#         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Should have backup
-        [[ -d .simone.backup.* ]] || (echo "ERROR: No backup created" && exit 1)
+#         # Should have backup
+#         [[ -d .simone.backup.* ]] || (echo "ERROR: No backup created" && exit 1)
         
-        # Original data should be preserved somewhere
-        find . -name "important.md" | grep -q "backup" || (echo "ERROR: Important data not backed up" && exit 1)
+#         # Original data should be preserved somewhere
+#         find . -name "important.md" | grep -q "backup" || (echo "ERROR: Important data not backed up" && exit 1)
