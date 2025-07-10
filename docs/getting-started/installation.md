@@ -24,6 +24,12 @@ curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simo
 
 # Using wget instead of curl
 wget -qO- https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
+
+# Force remote fetch (even from local repo)
+./install-simone.sh --remote
+
+# Force reinstallation
+curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- --force
 ```
 
 ### Option 2: Local Installation (For Development)

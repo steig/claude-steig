@@ -9,26 +9,11 @@ This guide will get you started with Simone in 15 minutes. You'll set up a proje
 
 ## Step 1: Install Simone (2 minutes)
 
-### Quick Installation
 ```bash
 curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
 ```
 
-### Or Manual Installation
-```bash
-# Download installer
-wget https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh
-chmod +x install-simone.sh
-
-# Run installer
-./install-simone.sh
-```
-
-The installer will:
-- ✅ Create the `.simone/` directory structure
-- ✅ Install all templates in `99_TEMPLATES/`
-- ✅ Set up Claude Code commands in `.claude/commands/simone/`
-- ✅ Create initial project manifest
+> 📖 **Detailed Options**: [Complete Installation Guide](./installation.md)
 
 ## Step 2: Initialize Your Project (3 minutes)
 
@@ -203,71 +188,19 @@ In 15 minutes, you've:
 ✅ **Executed high-quality development** with automated code review  
 ✅ **Established complete traceability** from requirements to implementation  
 
-## Step 7: Experience Domain Expertise with Cognitive Personas (3 minutes)
+## Step 7: Experience Domain Expertise with Cognitive Personas (2 minutes)
 
-Simone includes **9 specialized AI personas** that provide domain-specific expertise to enhance your development workflow. These personas automatically analyze your work and provide specialized guidance. This innovative system builds upon concepts pioneered by **SuperClaude**, bringing advanced cognitive AI patterns to enterprise development workflows:
-
-### Basic Persona Usage
-
-Try executing a task with security expertise:
+Simone includes **9 specialized AI personas** that automatically enhance your development workflow with domain expertise. Try executing a task with security expertise:
 
 ```
-/project:simone:do_task task-03-s01 --persona-security
+/project:simone:do_task task-03-s01 --persona-security --persona-backend
 ```
 
-**What happens**:
-- 🔒 **Security analysis** automatically applied during implementation
-- 🛡️ **OWASP compliance** validation built into code generation
-- 🔍 **Vulnerability assessment** performed on authentication logic
-- ✅ **Security best practices** enforced throughout development
+**What you get**: Automatic OWASP compliance, secure API design, and vulnerability prevention built into the implementation.
 
-### Multi-Domain Analysis
+**Available personas**: 🏗️ Architecture • 🔒 Security • 🎨 Frontend • ⚙️ Backend • 📊 Analysis • 🎓 Mentoring • ⚡ Performance • ✅ QA
 
-For comprehensive analysis, combine multiple personas:
-
-```
-/project:simone:do_task task-03-s01 --persona-security --persona-backend --introspect
-```
-
-**Enhanced capabilities**:
-- 🔒 **Security Persona**: OWASP compliance, vulnerability analysis
-- ⚙️ **Backend Persona**: API design optimization, database security
-- 🤔 **Introspection Mode**: Shows AI reasoning and decision-making process
-
-### Available Personas
-
-| Persona | Domain | Best For |
-|---------|--------|----------|
-| 🏗️ `--persona-architect` | System design | Architecture decisions, scalability |
-| 🔒 `--persona-security` | Security analysis | Auth, API security, data protection |
-| 🎨 `--persona-frontend` | UI/UX optimization | React components, accessibility |
-| ⚙️ `--persona-backend` | API & database | Express APIs, database design |
-| 📊 `--persona-analyzer` | Code quality | Code metrics, technical debt |
-| 🎓 `--persona-mentor` | Best practices | Learning, team guidance |
-| ⚡ `--persona-performance` | Optimization | Performance bottlenecks |
-| ✅ `--persona-qa` | Testing strategy | Test coverage, quality gates |
-
-### Smart Auto-Activation
-
-Personas automatically activate based on task content:
-
-```
-# Creating authentication → Security persona auto-activates
-/project:simone:do_task task-03-s01
-
-# Database optimization → Backend + Performance personas activate
-/project:simone:do_task task-db-optimization
-
-# UI components → Frontend persona activates
-/project:simone:do_task task-dashboard-ui
-```
-
-**Advanced Features** (explore after completing your first sprint):
-- `--consensus`: Multi-model analysis for critical decisions
-- `--think-deep`: Extended reasoning for complex problems
-- `--uc`: Token optimization for large projects
-
-> 📖 **Learn More**: [Complete Cognitive Personas Guide](../advanced/cognitive-personas.md)
+> 📖 **Complete Guide**: [Cognitive Personas Documentation](../advanced/cognitive-personas.md)
 
 ## Next Steps
 
@@ -287,18 +220,7 @@ Personas automatically activate based on task content:
 3. **Release Management** - End-to-end delivery with semantic versioning
 4. **Team Collaboration** - Multi-developer workflows and governance
 
-## Key Commands Reference
-
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| `/project:simone:initialize` | Project setup | Once per project |
-| `/project:simone:create_milestone "<description>"` | AI milestone generation | When planning new features |
-| `/project:simone:create_sprints_from_milestone` | Sprint planning | After milestone creation |
-| `/project:simone:create_sprint_tasks` | Task generation | Start of each sprint |
-| `/project:simone:do_task [ID]` | Task execution | Daily development work |
-| `/project:simone:prime` | Context refresh | Start of each session |
-| `/project:simone:status` | Project overview | Progress check-ins |
-| `/project:simone:project_review` | Health assessment | End of sprint/milestone |
+> 📖 **Commands**: [Complete Command Reference](../core-components/command-reference.md)
 
 ## Troubleshooting
 
