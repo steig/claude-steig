@@ -114,9 +114,33 @@ Read the task description. If anything is unclear, ask clarifying questions befo
   9. **Update progress percentage** based on completed subtasks vs total.
   10. Repeat until all subtasks are complete.
 
-## 7 · Placeholder
+## 7 · Implementation Quality Review
 
-Placeholder - just move on to the next step
+**Pre-Commit Quality Assessment:**
+
+1. **Analyze Implementation Results:**
+   - Review all files modified during task execution
+   - Verify all subtasks marked as completed
+   - Check implementation meets acceptance criteria
+   - Identify any potential issues or improvements
+
+2. **Quality Validation:**
+   - Run any applicable tests or validation scripts
+   - Check code style and formatting compliance
+   - Verify documentation is updated and accurate
+   - Ensure no debugging code or temporary changes remain
+
+3. **Implementation Summary:**
+   - Generate summary of changes made
+   - List files created/modified with purpose
+   - Confirm all acceptance criteria addressed
+   - Note any deviations from original plan
+
+4. **Prepare for User Review:**
+   - Compile comprehensive change overview
+   - Prepare commit proposal for user approval
+   - Ready PR creation plan for user review
+   - Set up approval gates for next steps
 
 ## 8 · Execute Code Review
 
@@ -133,53 +157,129 @@ Follow these steps for a Code Review (in order)
 - on **PASS**
   - move on to next step
 
-## 9 · Finalize task status
+## 9 · Guided Task Completion with Approval Gates
 
 **MCP INTEGRATION:** Complete task tracking:
 - **Work History**: Log final task completion and outcomes
 - **Context7**: Store task completion context for future reference
 
-**Comprehensive Task Completion:**
-1. **Update YAML Frontmatter:**
-   - **status**: "completed" 
-   - **updated_date**: Current timestamp
-   - **actual_effort**: Final time spent (hours)
-   - Ensure all **dependencies** are resolved
-   - Clear any **blocked_by** entries if resolved
-   
-2. **Update Task Content:**
-   - Mark all **Success Criteria** as [x] completed
-   - Mark all **Acceptance Criteria** as [x] completed
-   - Update **Progress** to 100%
-   - Update header status line: **Status**: completed
-   
-3. **Final Documentation:**
-   - Add completion entry to **Output Log**: `[YYYY-MM-DD HH:MM] Task completed successfully - all acceptance criteria met`
-   - Fill in **Retrospective Notes** section with lessons learned
-   - Update **Next Action** field to indicate completion
-   
-4. **File Management:**
-   - Rename the Task file to TX prefix (TX[TASK_ID]...) for completed recognition
-   - Update .simone/00_PROJECT_MANIFEST.md to reflect the new status
-   
-5. **Quality Verification:**
-   - Verify all **Quality Checklist** items are addressed
-   - Ensure **Review & Approval** section is complete if required
+**GUIDED WORKFLOW WITH USER CONTROL:**
 
-**Report** the comprehensive result to the user:
+### 9.1 · Review Implementation Results
 
-  ✅ **Result**: Task completed with full metadata tracking
+**Display Implementation Summary:**
+- **Task Context**: Show task ID, title, and original scope
+- **Changed Files**: List all modified/created files with brief descriptions
+- **Acceptance Criteria**: Confirm all criteria marked as complete
+- **Quality Checklist**: Verify all quality items addressed
+- **Time Tracking**: Compare estimated vs actual effort
 
-  📊 **Metrics**: {estimated_effort}h estimated vs {actual_effort}h actual
-  
-  🔎 **Scope**: {task_description_summary}
+### 9.2 · Approval Gate: Commit Review
 
-  💬 **Summary**: One-paragraph recap of what was done or why blocked
+**Present Commit Proposal to User:**
 
-  ⏭️ **Next steps**: Recommended follow-up actions
+```markdown
+## 📋 Ready to Commit Task Implementation
 
-- **Suggestions** for the User:
+**Task**: {TASK_ID} - {task_title}
+**Branch**: {current_branch}
+**Status**: Implementation complete, ready for commit
 
-  - 🛠️ Use /project:simone:commit `TASK_ID` to commit the changes to git
-  - 🔀 Use /project:simone:create_pr `TASK_ID` to create a pull request (coming soon)
-  - 🧹 Use /clear to clear the context before starting the next Task
+**Files to be committed:**
+{list_changed_files_with_descriptions}
+
+**Proposed commit message:**
+{conventional_commit_format_with_task_id}
+
+**Quality verification:**
+✅ All acceptance criteria met
+✅ Code review passed
+✅ Documentation updated
+✅ Tests passing (if applicable)
+
+**Approve commit? (y/n/modify)**
+```
+
+**Handle User Response:**
+- **Yes**: Proceed to execute commit
+- **No**: Allow user to make additional changes
+- **Modify**: Let user adjust commit message or file selection
+- **Skip**: Leave changes uncommitted for manual handling
+
+### 9.3 · Execute Approved Commit
+
+**If User Approved:**
+1. **Auto-execute**: `/project:simone:commit {TASK_ID} yolo`
+2. **Verify Success**: Confirm commit creation with SHA
+3. **Update Task Metadata**: Add commit SHA to task YAML frontmatter
+4. **Log Entry**: Add commit details to task Output Log
+
+### 9.4 · Approval Gate: PR Creation Review
+
+**Present PR Proposal to User:**
+
+```markdown
+## 🔀 Ready to Create Pull Request
+
+**Current Status:**
+✅ Changes committed to branch: {branch_name}
+✅ Task implementation complete
+✅ Ready for team review
+
+**Proposed PR Details:**
+**Title**: {pr_title_with_task_id}
+**Target Branch**: {target_branch}
+**Reviewers**: {auto_assigned_reviewers}
+**Labels**: {suggested_labels}
+
+**PR Description Preview:**
+{auto_generated_pr_description}
+
+**Create this PR? (y/n/modify/skip)**
+```
+
+**Handle User Response:**
+- **Yes**: Create PR as proposed
+- **No/Skip**: Leave branch ready for manual PR creation
+- **Modify**: Adjust title, description, reviewers, or target branch
+
+### 9.5 · Execute Approved PR Creation
+
+**If User Approved:**
+1. **Auto-execute**: `/project:simone:create_pr {TASK_ID}`
+2. **Link PR**: Add PR URL to task metadata
+3. **Update Status**: Change task status from "completed" to "review"
+4. **Update Manifest**: Reflect PR creation in project tracking
+
+### 9.6 · Final Workflow Summary
+
+**COMPLETION REPORT:**
+
+```markdown
+✅ **Task Workflow Complete**: {TASK_ID}
+
+🔧 **Implementation**: All acceptance criteria met
+💾 **Committed**: {commit_sha} - Ready for integration  
+🔀 **PR Created**: #{pr_number} - Awaiting team review
+📋 **Status**: completed → review
+
+⏭️ **Next Steps**:
+- PR will be reviewed by assigned team members
+- Address any review feedback if needed
+- Use `/project:simone:merge {TASK_ID}` when approved
+- Monitor PR for review comments and CI status
+
+🎯 **Success Metrics**:
+- Estimated: {estimated_effort}h
+- Actual: {actual_effort}h  
+- Efficiency: {efficiency_percentage}%
+
+🧹 **Cleanup**: Use `/clear` to clear context before next task
+```
+
+**Benefits of This Approach:**
+- 🛡️ **User Control**: Developer reviews each step before execution
+- 🔍 **Quality Assurance**: Chance to verify implementation quality
+- ✏️ **Flexibility**: Can modify commit messages, PR details, or scope
+- 🎯 **Transparency**: Clear visibility into what's happening at each step
+- 🚫 **Reversibility**: Can abort or modify at any checkpoint
