@@ -1,5 +1,27 @@
 # Run tests and fix common issues
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise for comprehensive testing strategies.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-qa`: Comprehensive testing strategy and quality assurance validation
+- `--persona-security`: Security testing and vulnerability assessment
+- `--persona-frontend`: Frontend testing, UI/UX validation, and accessibility testing
+- `--persona-backend`: Backend testing, API validation, and performance testing
+- `--persona-analyzer`: Test metrics analysis and coverage assessment
+- `--persona-mentor`: Educational testing guidance and best practices
+- `--persona-performance`: Performance testing and optimization validation
+- `--persona-architect`: Integration testing and system validation
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent reasoning for test strategy and issue diagnosis
+- `--consensus`: Multi-model consensus for complex testing decisions
+- `--think-deep`: Extended analysis for complex test failures and edge cases
+
+**USAGE EXAMPLES:**
+- `/project:simone:test --persona-qa` (Comprehensive QA-focused testing)
+- `/project:simone:test --persona-security --persona-backend` (Security and backend testing)
+- `/project:simone:test --persona-frontend --introspect` (Frontend testing with transparency)
+
 Follow these instructions from top to bottom.
 
 ## Create a TODO with EXACTLY these 4 items
