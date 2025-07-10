@@ -1,5 +1,28 @@
 # Code Review - Execute top to bottom
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports multi-domain code review through persona flags.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect`: System design and architecture review
+- `--persona-security`: Security vulnerabilities and OWASP compliance
+- `--persona-frontend`: UI/UX and frontend code quality  
+- `--persona-backend`: API design and backend performance
+- `--persona-analyzer`: Code metrics and quality analysis
+- `--persona-mentor`: Educational feedback and best practices
+- `--persona-refactorer`: Code optimization opportunities
+- `--persona-performance`: Performance bottlenecks and optimization
+- `--persona-qa`: Testing coverage and quality assurance
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent reasoning with 🤔 Thinking and 🎯 Decision indicators
+- `--consensus`: Multi-model consensus for critical review decisions
+- `--think-deep`: Extended analysis for complex code changes
+
+**USAGE EXAMPLES:**
+- `/project:simone:code_review --persona-security --persona-analyzer` (Security-focused review)
+- `/project:simone:code_review --persona-architect --persona-performance --introspect` (Architecture review with transparency)
+- `/project:simone:code_review --persona-security --consensus --think-deep` (Comprehensive security analysis)
+
 Use the following instructions from top to bottom to execute a Code Review.
 
 ## Create a TODO with EXACTLY these 6 Items
@@ -48,13 +71,68 @@ With the identified Scope use `git diff` (on default: `git diff HEAD~1`) to find
 
 ### 4. Compare code changes against Documentation and Requirements
 
-- Use DEEP THINKING to compare changes against found Requirements and Specs.
-- Compare especially these things:
-  - **Data models / schemas** — fields, types, constraints, relationships.
-  - **APIs / interfaces** — endpoints, params, return shapes, status codes, errors.
-  - **Config / environment** — keys, defaults, required/optional.
-  - **Behaviour** — business rules, side-effects, error handling.
-  - **Quality** — naming, formatting, tests, linter status.
+**PERSONA-DRIVEN ANALYSIS:** Apply domain-specific review criteria based on activated personas:
+
+**🏗️ Architecture Persona (if activated):**
+- **System Design**: Validate design patterns, SOLID principles, dependency management
+- **Scalability**: Assess performance under load, resource usage, bottleneck potential
+- **Integration**: Check service boundaries, API contracts, data flow consistency
+- **Technical Debt**: Identify architectural anti-patterns, coupling issues
+
+**🔒 Security Persona (if activated):**
+- **OWASP Top 10**: Check for injection, broken auth, sensitive data exposure
+- **Input Validation**: Verify sanitization, validation, escape mechanisms
+- **Access Control**: Review authorization logic, privilege escalation risks
+- **Cryptography**: Validate encryption usage, key management, secure protocols
+
+**🎨 Frontend Persona (if activated):**
+- **User Experience**: Review UI consistency, accessibility compliance (WCAG)
+- **Performance**: Check bundle size, loading times, rendering optimization
+- **Browser Compatibility**: Validate cross-browser support, progressive enhancement
+- **Component Design**: Assess reusability, maintainability, state management
+
+**⚙️ Backend Persona (if activated):**
+- **API Design**: Validate RESTful principles, error handling, status codes
+- **Database**: Review queries, indexing, transaction management, data integrity
+- **Performance**: Check N+1 queries, caching strategies, resource efficiency
+- **Scalability**: Assess horizontal scaling, statelessness, bottleneck identification
+
+**📊 Analyzer Persona (if activated):**
+- **Code Metrics**: Complexity analysis, maintainability index, technical debt
+- **Quality Gates**: Test coverage, linting compliance, code duplication
+- **Performance Metrics**: Memory usage, execution time, resource consumption
+- **Maintainability**: Code readability, documentation quality, refactoring needs
+
+**🎓 Mentor Persona (if activated):**
+- **Best Practices**: Industry standards, coding conventions, design patterns
+- **Educational Value**: Code clarity, documentation, learning opportunities
+- **Knowledge Transfer**: Maintainability for team members, onboarding considerations
+- **Growth Opportunities**: Skill development recommendations, improvement suggestions
+
+**⚡ Performance Persona (if activated):**
+- **Bottlenecks**: CPU, memory, I/O, network performance analysis
+- **Optimization**: Algorithm efficiency, data structure choices, caching strategies
+- **Monitoring**: Performance metrics, logging, observability implementation
+- **Scalability**: Load handling, resource management, optimization opportunities
+
+**✅ QA Persona (if activated):**
+- **Test Coverage**: Unit, integration, end-to-end test completeness
+- **Quality Assurance**: Bug prevention, edge case handling, error scenarios
+- **Validation**: Input validation, output verification, boundary testing
+- **Regression Prevention**: Breaking change analysis, backward compatibility
+
+**INTROSPECTION MODE** (if `--introspect` flag present):
+- Show 🤔 Thinking process for each persona analysis
+- Display 🎯 Decision rationale for each finding
+- Provide 🔍 Analysis of severity assessment reasoning
+- Conclude with ✅ Summary of multi-domain findings
+
+**STANDARD REVIEW CRITERIA** (always applied):
+- **Data models / schemas** — fields, types, constraints, relationships.
+- **APIs / interfaces** — endpoints, params, return shapes, status codes, errors.
+- **Config / environment** — keys, defaults, required/optional.
+- **Behaviour** — business rules, side-effects, error handling.
+- **Quality** — naming, formatting, tests, linter status.
 
 **IMPORTANT**:
 

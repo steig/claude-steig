@@ -38,6 +38,7 @@ Simone is a sophisticated, directory-based project management framework specific
 - [Release Management](./workflows/release-management.md) - End-to-end delivery process
 
 ### 🔧 **Advanced Features**
+- [Cognitive Personas](./advanced/cognitive-personas.md) - Domain expertise integration with 9 specialized AI personas
 - [MCP Integration](./advanced/mcp-integration.md) - Model Context Protocol servers
 - [Automation Features](./advanced/automation.md) - YOLO mode, safety features, and rollback capabilities
 - [Customization Guide](./advanced/customization.md) - Adapting Simone to your organization

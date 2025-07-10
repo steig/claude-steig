@@ -1,5 +1,29 @@
 # Process Simone Task based on $Argument
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise enhancement through persona flags.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect`: System design and architecture expertise
+- `--persona-security`: Security analysis and OWASP compliance  
+- `--persona-frontend`: Frontend development and UX optimization
+- `--persona-backend`: Backend systems and API development
+- `--persona-analyzer`: Code analysis and metrics evaluation
+- `--persona-mentor`: Guidance and best practices coaching
+- `--persona-refactorer`: Code optimization and maintainability
+- `--persona-performance`: Performance optimization and scalability
+- `--persona-qa`: Quality assurance and testing strategies
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent AI reasoning with 🤔 Thinking and 🎯 Decision indicators
+- `--uc`: Use UltraCompressed mode for 70% token reduction (auto-triggers for large projects)
+- `--consensus`: Multi-model consensus gathering for critical decisions
+- `--think-deep`: Extended reasoning for complex problems
+
+**USAGE EXAMPLES:**
+- `/project:simone:do_task T001 --persona-security` (Security-focused task execution)
+- `/project:simone:do_task T001 --persona-security --persona-backend --introspect` (Multi-domain with transparency)
+- `/project:simone:do_task T001 --persona-architect --consensus --think-deep` (Comprehensive analysis for complex tasks)
+
 **IMPORTANT:** Follow from Top to Bottom - don't skip anything!
 
 **CREATE A TODO LIST** with exactly these 9 items
@@ -27,9 +51,22 @@ If no open task matches, pause and ask the user how to proceed.
 
 Read the task description. If anything is unclear, ask clarifying questions before continuing.
 
+**PERSONA ACTIVATION:** Analyze task content for automatic persona activation:
+
+1. **Scan task description** for domain-specific keywords:
+   - Security: authentication, authorization, encryption, validation, privacy, OWASP
+   - Architecture: system design, scalability, patterns, integration, structure
+   - Frontend: UI, UX, component, interface, accessibility, user experience
+   - Backend: API, database, server, microservices, performance
+   - QA: testing, quality, validation, verification, coverage
+
+2. **Apply relevant personas automatically** or honor explicit persona flags from user
+3. **If `--introspect` flag present**: Show 🤔 Thinking process for persona selection
+4. **If multiple personas activated**: Plan multi-domain analysis approach
+
 **MCP INTEGRATION:** Use available MCP servers to enhance task analysis:
 - **Sequential Thinking**: Structure the task analysis and break down complex problems
-- **Serena**: Enhance code analysis and project understanding
+- **Serena**: Enhance code analysis and project understanding  
 - **Context7**: Maintain context about project state and requirements
 - **Work History**: Review similar past tasks and their outcomes
 
@@ -93,6 +130,25 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 - Log status change in Output Log: `[YYYY-MM-DD HH:MM] Task started - status changed to in_progress`
 
 ## 6 · Execute task work
+
+**PERSONA-DRIVEN IMPLEMENTATION:** Apply domain expertise throughout task execution:
+
+**For each activated persona, provide specialized guidance:**
+- **🏗️ Architecture Persona**: Validate system design patterns, ensure scalability considerations
+- **🔒 Security Persona**: Enforce OWASP compliance, identify security vulnerabilities  
+- **🎨 Frontend Persona**: Optimize user experience, ensure accessibility compliance
+- **⚙️ Backend Persona**: Optimize API design, database performance, server efficiency
+- **📊 Analyzer Persona**: Track code quality metrics, identify technical debt
+- **🎓 Mentor Persona**: Provide educational guidance and best practices
+- **🔧 Refactorer Persona**: Identify optimization opportunities, improve maintainability
+- **⚡ Performance Persona**: Analyze bottlenecks, recommend optimizations
+- **✅ QA Persona**: Ensure testing coverage, define quality gates
+
+**INTROSPECTION MODE** (if `--introspect` flag present):
+- Show 🤔 Thinking process for each major implementation decision
+- Display 🎯 Decision rationale with persona-specific reasoning
+- Provide 🔍 Analysis of trade-offs and alternatives considered
+- Conclude with ✅ Final recommendation and next steps
 
 **MCP INTEGRATION:** Leverage MCP servers during task execution:
 - **Sequential Thinking**: Structure implementation approach step-by-step

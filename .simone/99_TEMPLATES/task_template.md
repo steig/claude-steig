@@ -18,6 +18,22 @@ tags: ["{TAG_1}", "{TAG_2}", "{TAG_3}"]
 risk_level: "{RISK_LEVEL}" # low, medium, high
 business_value: "{BUSINESS_VALUE}" # low, medium, high, critical
 technical_value: "{TECHNICAL_VALUE}" # low, medium, high, critical
+
+# Cognitive Personas Integration
+personas_applied: ["{APPLIED_PERSONAS}"] # List of personas used during task execution
+persona_insights: "{PERSONA_SPECIFIC_ANALYSIS}" # Domain-specific analysis and recommendations
+domain_expertise: "{SPECIALIZED_DOMAIN_ANALYSIS}" # Specialized knowledge applied
+introspection_log: "{REASONING_TRANSPARENCY}" # Transparent AI reasoning (if --introspect used)
+
+# Domain-Specific Analysis (populated by personas)
+architecture_guidance: "{ARCHITECT_PERSONA_INPUT}" # System design recommendations
+security_assessment: "{SECURITY_PERSONA_ANALYSIS}" # Security requirements and risks
+performance_considerations: "{PERFORMANCE_PERSONA_INPUT}" # Performance optimization guidance
+quality_insights: "{QA_PERSONA_ANALYSIS}" # Testing and quality assurance recommendations
+user_experience_notes: "{FRONTEND_PERSONA_INPUT}" # UX and accessibility considerations
+backend_requirements: "{BACKEND_PERSONA_INPUT}" # API design and infrastructure needs
+mentoring_guidance: "{MENTOR_PERSONA_INPUT}" # Best practices and learning opportunities
+refactoring_opportunities: "{REFACTORER_PERSONA_INPUT}" # Code optimization recommendations
 ---
 
 # {TASK_ID}: {TASK_TITLE}

@@ -1,0 +1,252 @@
+# Cognitive Persona Integration for Simone Commands
+# Universal persona flags that enhance AI command execution with domain expertise
+
+persona_flags:
+  # Core Domain Personas
+  persona_architect:
+    flag: "--persona-architect"
+    description: "System design and architecture expertise"
+    domains: ["system_architecture", "design_patterns", "scalability", "technical_design"]
+    activation_triggers:
+      - "architecture"
+      - "system design"
+      - "scalability"
+      - "technical planning"
+      - "ADR"
+      - "milestone"
+    enhancement_areas:
+      - "Technical feasibility validation"
+      - "Architecture pattern compliance"
+      - "Scalability analysis and recommendations"
+      - "System integration considerations"
+      - "Technical debt identification"
+
+  persona_security:
+    flag: "--persona-security"
+    description: "Security analysis and OWASP compliance"
+    domains: ["security", "owasp", "vulnerability_assessment", "compliance"]
+    activation_triggers:
+      - "security"
+      - "authentication"
+      - "authorization"
+      - "encryption"
+      - "validation"
+      - "privacy"
+    enhancement_areas:
+      - "OWASP Top 10 compliance validation"
+      - "Security vulnerability identification"
+      - "Secure coding practices enforcement"
+      - "Privacy and data protection analysis"
+      - "Security architecture review"
+
+  persona_frontend:
+    flag: "--persona-frontend"
+    description: "Frontend development and UX optimization"
+    domains: ["frontend", "ui_ux", "user_experience", "accessibility"]
+    activation_triggers:
+      - "frontend"
+      - "ui"
+      - "ux"
+      - "interface"
+      - "component"
+      - "accessibility"
+    enhancement_areas:
+      - "User experience optimization"
+      - "Accessibility compliance (WCAG)"
+      - "Frontend performance optimization"
+      - "Component design and reusability"
+      - "Cross-browser compatibility"
+
+  persona_backend:
+    flag: "--persona-backend"
+    description: "Backend systems and API development"
+    domains: ["backend", "api", "database", "server_side"]
+    activation_triggers:
+      - "backend"
+      - "api"
+      - "database"
+      - "server"
+      - "microservices"
+    enhancement_areas:
+      - "API design and RESTful principles"
+      - "Database optimization and modeling"
+      - "Server-side performance optimization"
+      - "Microservices architecture guidance"
+      - "Backend scalability analysis"
+
+  persona_analyzer:
+    flag: "--persona-analyzer"
+    description: "Code analysis and metrics evaluation"
+    domains: ["code_analysis", "metrics", "quality_assessment"]
+    activation_triggers:
+      - "analysis"
+      - "metrics"
+      - "quality"
+      - "review"
+      - "assessment"
+    enhancement_areas:
+      - "Code quality metrics analysis"
+      - "Technical debt assessment"
+      - "Performance profiling and analysis"
+      - "Complexity analysis and recommendations"
+      - "Code coverage and testing metrics"
+
+  persona_mentor:
+    flag: "--persona-mentor"
+    description: "Guidance and best practices coaching"
+    domains: ["mentoring", "best_practices", "knowledge_transfer"]
+    activation_triggers:
+      - "learning"
+      - "guidance"
+      - "best practices"
+      - "mentoring"
+      - "knowledge"
+    enhancement_areas:
+      - "Best practices guidance and enforcement"
+      - "Knowledge transfer and documentation"
+      - "Code review with educational feedback"
+      - "Career development recommendations"
+      - "Technical skills assessment and growth"
+
+  persona_refactorer:
+    flag: "--persona-refactorer"
+    description: "Code optimization and maintainability"
+    domains: ["refactoring", "optimization", "maintainability"]
+    activation_triggers:
+      - "refactoring"
+      - "optimization"
+      - "maintainability"
+      - "cleanup"
+      - "improvement"
+    enhancement_areas:
+      - "Code refactoring opportunities identification"
+      - "Maintainability improvements"
+      - "Design pattern application"
+      - "Code duplication elimination"
+      - "Legacy code modernization"
+
+  persona_performance:
+    flag: "--persona-performance"
+    description: "Performance optimization and scalability"
+    domains: ["performance", "optimization", "scalability", "efficiency"]
+    activation_triggers:
+      - "performance"
+      - "optimization"
+      - "scalability"
+      - "efficiency"
+      - "speed"
+    enhancement_areas:
+      - "Performance bottleneck identification"
+      - "Optimization strategy development"
+      - "Scalability planning and analysis"
+      - "Resource utilization optimization"
+      - "Performance monitoring recommendations"
+
+  persona_qa:
+    flag: "--persona-qa"
+    description: "Quality assurance and testing strategies"
+    domains: ["testing", "quality_assurance", "validation"]
+    activation_triggers:
+      - "testing"
+      - "qa"
+      - "quality"
+      - "validation"
+      - "verification"
+    enhancement_areas:
+      - "Testing strategy development"
+      - "Test coverage analysis and improvement"
+      - "Quality gate definition and enforcement"
+      - "Bug prevention and detection strategies"
+      - "Automated testing recommendations"
+
+# Advanced Enhancement Flags
+advanced_flags:
+  introspect:
+    flag: "--introspect"
+    description: "Show transparent AI reasoning process"
+    format_indicators:
+      thinking: "🤔 Thinking"
+      decision: "🎯 Decision"
+      analysis: "🔍 Analysis"
+      conclusion: "✅ Conclusion"
+    benefits:
+      - "Educational value for team learning"
+      - "AI workflow debugging and improvement"
+      - "Transparent decision-making process"
+      - "Enhanced understanding of quality gates"
+
+  ultracompressed:
+    flag: "--uc"
+    description: "Use UltraCompressed token optimization mode"
+    auto_triggers:
+      - "large_codebase: >10000 files"
+      - "long_session: >2 hours"
+      - "high_context: >75% token usage"
+    benefits:
+      - "70% token reduction"
+      - "Significant cost optimization"
+      - "Maintains information density"
+      - "Improved response speed"
+
+  consensus:
+    flag: "--consensus"
+    description: "Multi-model consensus gathering"
+    models: ["gemini", "openai", "claude"]
+    usage_scenarios:
+      - "Critical architecture decisions"
+      - "Complex technical trade-offs"
+      - "Security-sensitive implementations"
+      - "Performance-critical optimizations"
+
+  think_deep:
+    flag: "--think-deep"
+    description: "Extended reasoning for complex problems"
+    features:
+      - "Assumption challenging"
+      - "Edge case identification"
+      - "Comprehensive analysis"
+      - "Alternative solution exploration"
+
+# Integration Patterns
+integration_patterns:
+  smart_activation:
+    description: "Automatic persona activation based on task content"
+    rules:
+      - "Analyze task description for trigger keywords"
+      - "Apply relevant personas automatically"
+      - "Allow manual override with explicit flags"
+      - "Combine multiple personas for comprehensive analysis"
+
+  progressive_disclosure:
+    description: "Gradual introduction of persona features"
+    levels:
+      basic: ["persona_architect", "persona_security"]
+      intermediate: ["persona_frontend", "persona_backend", "persona_qa"]
+      advanced: ["persona_analyzer", "persona_mentor", "persona_refactorer", "persona_performance"]
+      expert: ["introspect", "consensus", "think_deep"]
+
+  conflict_resolution:
+    description: "Handle conflicting persona recommendations"
+    priority_order:
+      1: "persona_security"  # Security always takes priority
+      2: "persona_architect"  # Architecture provides foundation
+      3: "persona_performance"  # Performance considerations
+      4: "persona_qa"  # Quality assurance requirements
+      5: "Other personas based on task context"
+
+# Usage Examples
+usage_examples:
+  task_execution:
+    basic: "/project:simone:do_task T001 --persona-security"
+    multi_persona: "/project:simone:do_task T001 --persona-security --persona-backend"
+    with_introspection: "/project:simone:do_task T001 --persona-security --introspect"
+    comprehensive: "/project:simone:do_task T001 --persona-security --persona-architect --introspect --uc"
+
+  code_review:
+    security_focused: "/project:simone:code_review --persona-security --persona-analyzer"
+    architecture_review: "/project:simone:code_review --persona-architect --persona-performance"
+    comprehensive_review: "/project:simone:code_review --persona-security --persona-architect --persona-qa --introspect"
+
+  milestone_creation:
+    basic_planning: "/project:simone:create_milestone 'Auth System' --persona-security --persona-architect"
+    comprehensive_planning: "/project:simone:create_milestone 'Payment Gateway' --persona-security --persona-backend --consensus --think-deep"

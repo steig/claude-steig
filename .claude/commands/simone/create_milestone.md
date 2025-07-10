@@ -1,5 +1,27 @@
 # Create AI-Powered Milestone - Execute top to bottom
 
+**COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise enhancement for intelligent milestone creation.
+
+**AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect`: System design and technical architecture planning
+- `--persona-security`: Security requirements and compliance planning
+- `--persona-frontend`: User experience and interface planning
+- `--persona-backend`: API design and backend architecture planning
+- `--persona-analyzer`: Scope analysis and complexity assessment
+- `--persona-mentor`: Best practices and team guidance integration
+- `--persona-performance`: Performance requirements and optimization planning
+- `--persona-qa`: Quality assurance and testing strategy planning
+
+**ADVANCED FLAGS:**
+- `--introspect`: Show transparent AI reasoning for milestone planning decisions
+- `--consensus`: Multi-model consensus for critical milestone architecture decisions
+- `--think-deep`: Extended analysis for complex milestones with assumption challenging
+
+**USAGE EXAMPLES:**
+- `/project:simone:create_milestone "Auth system" --persona-security --persona-architect` (Security-focused auth planning)
+- `/project:simone:create_milestone "Payment gateway" --persona-security --persona-backend --consensus` (Comprehensive payment system)
+- `/project:simone:create_milestone "Dashboard UI" --persona-frontend --persona-performance --introspect` (UX-focused with transparency)
+
 Generate a comprehensive milestone from natural language description using AI-powered template population and intelligent scope analysis.
 
 ## Create a TODO with EXACTLY these 10 Items
@@ -69,6 +91,50 @@ Check: <$ARGUMENTS>
 - Analyze technology stack alignment and integration points
 
 ### 3. Generate milestone metadata using AI analysis
+
+**PERSONA-DRIVEN METADATA GENERATION:** Apply domain expertise to enhance milestone planning:
+
+**🏗️ Architecture Persona Analysis (if activated):**
+- **Technical Complexity**: Assess system integration complexity, design pattern requirements
+- **Architecture Impact**: Evaluate impact on existing system architecture and dependencies
+- **Scalability Planning**: Identify performance requirements and scaling considerations
+- **Integration Points**: Map service boundaries, API contracts, data flow requirements
+
+**🔒 Security Persona Analysis (if activated):**
+- **Security Requirements**: Identify OWASP compliance needs, security standards
+- **Risk Assessment**: Security vulnerability analysis, threat modeling requirements
+- **Compliance Planning**: Data protection, privacy regulations, audit requirements
+- **Security Dependencies**: Authentication, authorization, encryption dependencies
+
+**🎨 Frontend Persona Analysis (if activated):**
+- **UX Requirements**: User experience goals, accessibility compliance needs
+- **Interface Complexity**: Component design requirements, responsive design scope
+- **Performance Goals**: Loading time targets, bundle size optimization requirements
+- **Browser Support**: Cross-browser compatibility requirements and testing scope
+
+**⚙️ Backend Persona Analysis (if activated):**
+- **API Design**: RESTful service requirements, endpoint specifications
+- **Data Management**: Database design requirements, migration planning
+- **Performance Targets**: Response time goals, throughput requirements
+- **Infrastructure**: Server capacity, deployment, monitoring requirements
+
+**📊 Analyzer Persona Analysis (if activated):**
+- **Scope Analysis**: Feature breakdown complexity, effort estimation refinement
+- **Quality Metrics**: Testing coverage requirements, quality gate definitions
+- **Technical Debt**: Legacy system integration challenges, refactoring needs
+- **Success Metrics**: KPI definitions, measurement framework planning
+
+**✅ QA Persona Analysis (if activated):**
+- **Testing Strategy**: Test automation requirements, coverage targets
+- **Quality Assurance**: Bug prevention strategies, validation frameworks
+- **Acceptance Criteria**: Testable requirement definitions, verification plans
+- **Quality Gates**: Review processes, approval workflows, compliance checks
+
+**INTROSPECTION MODE** (if `--introspect` flag present):
+- Show 🤔 Thinking process for each metadata field generation
+- Display 🎯 Decision rationale for effort estimates and complexity assessments
+- Provide 🔍 Analysis of risk assessment and dependency identification
+- Conclude with ✅ Summary of persona-specific planning insights
 
 **AI-Powered Field Population:**
 
