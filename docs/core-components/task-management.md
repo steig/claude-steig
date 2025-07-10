@@ -10,21 +10,21 @@ Simone's task management system is the heart of the framework, providing enterpr
 ## Task Types and Categories
 
 ### Sprint Tasks
-**Format**: `TASK_##_S##` (e.g., `TASK_01_S01`, `TASK_03_S02`)
+**Format**: `task-##-s##` (e.g., `task-01-s01`, `task-03-s02`)
 - **Purpose**: Implementation work tied to specific sprints and milestones
 - **Location**: `.simone/03_SPRINTS/S##_M##_Sprint_Name/`
 - **Lifecycle**: Created → In Progress → Review → Testing → Completed
-- **Branch naming**: `task/T##_S##_feature_name`
+- **Branch naming**: `task/t##-s##-feature-name`
 
 ### General Tasks  
-**Format**: `TASK_###` (e.g., `TASK_001`, `TASK_002`)
+**Format**: `task-###` (e.g., `task-001`, `task-002`)
 - **Purpose**: Work not tied to specific sprints (maintenance, research, debt)
 - **Location**: `.simone/04_GENERAL_TASKS/`
 - **Lifecycle**: Same as sprint tasks
-- **Branch naming**: `task/T###_feature_name`
+- **Branch naming**: `task/t###-feature-name`
 
 ### Completed Tasks
-**Format**: `TX##_S##` or `TX###` (e.g., `TX01_S01`, `TX001`)
+**Format**: `tx##-s##` or `tx###` (e.g., `tx01-s01`, `tx001`)
 - **Purpose**: Archive of completed work for reference and velocity tracking
 - **Status**: Automatically renamed when marked completed
 - **Retention**: Maintained for project history and pattern analysis
@@ -33,7 +33,7 @@ Simone's task management system is the heart of the framework, providing enterpr
 
 ### Core Identification (Required)
 ```yaml
-task_id: "TASK_01_S01"           # Unique identifier
+task_id: "task-01-s01"           # Unique identifier
 task_title: "Implement user authentication"
 task_type: "feature"             # feature, bug, refactor, documentation, infrastructure, research
 milestone_id: "M01"              # Parent milestone
@@ -55,7 +55,7 @@ assignee: "john.doe"             # Developer assigned
 risk_level: "medium"             # low, medium, high
 business_value: "high"           # low, medium, high, critical
 technical_value: "medium"        # low, medium, high, critical
-dependencies: ["TASK_01_S01"]    # Other tasks this depends on
+dependencies: ["task-01-s01"]    # Other tasks this depends on
 blocked_by: ["EXTERNAL_API"]     # Current blockers
 tags: ["auth", "security", "api"] # Searchable categories
 ```
@@ -112,7 +112,7 @@ stateDiagram-v2
 #### pending → in_progress
 **Trigger**: `/project:simone:do_task TASK_ID` or `/project:simone:update_task_status TASK_ID in_progress`
 **Actions**:
-- Creates git branch with format `task/T##_S##_feature_name`
+- Creates git branch with format `task/t##-s##-feature-name`
 - Updates task metadata with start timestamp
 - Loads project context and dependencies
 - Validates prerequisite completion

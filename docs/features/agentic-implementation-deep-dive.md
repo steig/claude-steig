@@ -49,12 +49,12 @@ We have a unique convergence of factors that makes this possible **RIGHT NOW**:
 
 ```yaml
 # This isn't just metadata - it's AGENT INSTRUCTIONS!
-task_id: "T01_S02"
+task_id: "t01-s02"
 status: "pending" 
 priority: "high"
 estimated_effort: "8h"
 assignee: "unassigned"  # ← Perfect for agent assignment!
-dependencies: ["T01_S01"]
+dependencies: ["t01-s01"]
 acceptance_criteria:
   - "User can login successfully"  # ← Perfect for validation!
   - "JWT tokens are generated"

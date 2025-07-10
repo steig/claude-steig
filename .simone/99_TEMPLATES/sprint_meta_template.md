@@ -61,7 +61,7 @@ gantt
     Code Reviews        :active, review, after dev, {REVIEW_DAYS}d
     section Testing
     QA Testing          :test, after review, {TESTING_DAYS}d
-    Bug Fixes           :fixes, after test, {BUGFIX_DAYS}d
+    Bug Fixes           :fixes, after test, {BUGFIX-DAYS}d
     section Completion
     Sprint Review       :retro, after fixes, 1d
 ```

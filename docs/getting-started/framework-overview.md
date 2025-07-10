@@ -104,7 +104,7 @@ Every document includes rich YAML frontmatter providing:
 
 ```yaml
 # Example task metadata (21+ fields)
-task_id: "TASK_01_S01"
+task_id: "task-01-s01"
 task_title: "Implement user authentication"
 task_type: "feature"
 status: "pending"
@@ -113,7 +113,7 @@ complexity: "medium"
 estimated_effort: "3.5"
 business_value: "high"
 technical_value: "medium"
-dependencies: ["TASK_00_S01"]
+dependencies: ["task-00-s01"]
 # ... and many more fields
 ```
 

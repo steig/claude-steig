@@ -1,6 +1,6 @@
 # Simone Framework Documentation
 
-**Version**: 2.0.2
+**Version**: 2.0.7
 **Updated**: 2025-07-10
 **Audience**: Development Teams, Technical Leaders, Project Managers
 
@@ -38,7 +38,7 @@ Simone is a sophisticated, directory-based project management framework specific
 
 ### 🔧 **Advanced Features**
 - [MCP Integration](./advanced/mcp-integration.md) - Model Context Protocol servers
-- [Automation Features](./advanced/automation.md) - YOLO mode and intelligent execution
+- [Automation Features](./advanced/automation.md) - YOLO mode, safety features, and rollback capabilities
 - [Customization Guide](./advanced/customization.md) - Adapting Simone to your organization
 - [Integration Patterns](./advanced/integration-patterns.md) - CI/CD, tooling, and workflow integration
 
@@ -84,6 +84,8 @@ Simone is a sophisticated, directory-based project management framework specific
 ✅ **AI-Enhanced Development** - Deep integration with Claude Code and MCP servers  
 ✅ **Template-Driven Consistency** - Standardized documentation and processes  
 ✅ **Intelligent Automation** - YOLO mode and context-aware task execution  
+✅ **Safety Features** - Comprehensive safety monitoring and rollback capabilities  
+✅ **Emergency Controls** - Emergency stop and user intervention systems  
 ✅ **Scalable Architecture** - Supports projects from startup to enterprise scale  
 ✅ **Complete Traceability** - From business requirements to deployment  
 

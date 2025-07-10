@@ -150,14 +150,14 @@ Simone revolutionizes the SDLC by providing a **structured, AI-integrated framew
 .simone/
 ├── 03_SPRINTS/
 │   ├── S01_M01_Backend_Foundation/
-│   │   ├── T01_S01_Database_Setup.md
-│   │   ├── T02_S01_API_Framework.md
-│   │   └── T03_S01_Authentication.md
+│   │   ├── t01-s01-database-setup.md
+│   │   ├── t02-s01-api-framework.md
+│   │   └── t03-s01-authentication.md
 │   └── S02_M01_Core_Features/
 ├── 04_GENERAL_TASKS/
-│   ├── T001_Code_Review_Process.md
-│   ├── TX002_Logging_Implementation.md  # Completed
-│   └── T003_Performance_Optimization.md
+│   ├── t001-code-review-process.md
+│   ├── tx002-logging-implementation.md  # Completed
+│   └── t003-performance-optimization.md
 └── .claude/commands/simone/
     ├── do_task.md              # Context-aware task execution
     ├── create_sprint_tasks.md  # AI task generation
@@ -170,7 +170,7 @@ Each task includes comprehensive metadata:
 
 ```yaml
 ---
-task_id: "T01_S01"
+task_id: "t01-s01"
 task_title: "Implement User Authentication System"
 task_type: "feature"
 milestone_id: "M01"
@@ -180,7 +180,7 @@ priority: "high"
 complexity: "complex"
 estimated_effort: "8"
 actual_effort: "6.5"
-dependencies: ["T02_S01"]
+dependencies: ["t02-s01"]
 risk_level: "medium"
 business_value: "critical"
 technical_value: "high"
@@ -188,9 +188,9 @@ technical_value: "high"
 ```
 
 #### 🚀 **AI-Enhanced Development Commands**
-- `/project:simone:do_task T01_S01` - Execute task with full project context
+- `/project:simone:do_task t01-s01` - Execute task with full project context
 - `/project:simone:create_sprint_tasks` - Generate detailed, actionable tasks
-- `/project:simone:update_task_status T01_S01 completed` - Progress tracking
+- `/project:simone:update_task_status t01-s01 completed` - Progress tracking
 - `/project:simone:code_review` - AI-driven code quality assessment
 
 #### 📊 **Key Benefits**
@@ -287,9 +287,9 @@ Every task includes comprehensive quality sections:
 ```
 .simone/
 ├── 04_GENERAL_TASKS/
-│   ├── T001_Performance_Monitoring.md
-│   ├── T002_Security_Updates.md
-│   └── T003_Technical_Debt_Reduction.md
+│   ├── t001-performance-monitoring.md
+│   ├── t002-security-updates.md
+│   └── t003-technical-debt-reduction.md
 ├── 05_ARCHITECTURAL_DECISIONS/
 │   ├── ADR005_Performance_Optimization.md
 │   └── ADR006_Scaling_Strategy.md
@@ -299,7 +299,7 @@ Every task includes comprehensive quality sections:
 
 #### 🚀 **Maintenance Commands**
 - `/project:simone:create_bug` - Structured bug reporting and tracking
-- `/project:simone:fix_bug BUG001` - Context-aware bug resolution
+- `/project:simone:fix_bug bug001` - Context-aware bug resolution
 - `/project:simone:status` - Comprehensive project health monitoring
 
 #### 📊 **Evolution Metrics**

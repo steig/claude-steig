@@ -113,13 +113,18 @@ install_core_structure() {
     mkdir -p "$SIMONE_DIR/10_STATE_OF_PROJECT"
     mkdir -p "$SIMONE_DIR/99_TEMPLATES"
     
-    # Copy templates
+    # Copy templates (excluding .version file)
     if [[ -d "$source_dir/.simone/99_TEMPLATES" ]]; then
-        cp -r "$source_dir/.simone/99_TEMPLATES/"* "$SIMONE_DIR/99_TEMPLATES/"
+        # Copy templates while excluding .version file
+        for item in "$source_dir/.simone/99_TEMPLATES/"*; do
+            if [[ -e "$item" && "$(basename "$item")" != ".version" ]]; then
+                cp -r "$item" "$SIMONE_DIR/99_TEMPLATES/"
+            fi
+        done
         success "Templates installed"
     fi
     
-    # Copy CLAUDE.md instruction files
+    # Copy CLAUDE.md instruction files (excluding .version file)
     local claude_files=(
         "CLAUDE.md"
         "01_PROJECT_DOCS/CLAUDE.md"
@@ -168,21 +173,37 @@ install_commands() {
                     log "Installing $cmd_name commands..."
                     mkdir -p ".claude/commands/$cmd_name"
                     
-                    if cp -r "$cmd_dir/"* ".claude/commands/$cmd_name/" 2>/dev/null; then
-                        success "$cmd_name commands installed"
+                    # Copy files excluding .version
+                    local files_copied=0
+                    for file in "$cmd_dir/"*; do
+                        if [[ -f "$file" && "$(basename "$file")" != ".version" ]]; then
+                            if cp "$file" ".claude/commands/$cmd_name/" 2>/dev/null; then
+                                ((files_copied++))
+                            fi
+                        elif [[ -d "$file" ]]; then
+                            # Copy subdirectories recursively, excluding .version files
+                            local subdir_name=$(basename "$file")
+                            mkdir -p ".claude/commands/$cmd_name/$subdir_name"
+                            find "$file" -type f ! -name ".version" -exec cp {} ".claude/commands/$cmd_name/$subdir_name/" \; 2>/dev/null
+                            ((files_copied++))
+                        fi
+                    done
+                    
+                    if [[ $files_copied -gt 0 ]]; then
+                        success "$cmd_name commands installed ($files_copied items)"
                         ((commands_copied++))
                     else
-                        # Try copying files individually if directory copy fails
-                        local files_copied=0
+                        # Fallback: try copying files individually if directory copy fails
+                        local fallback_files=0
                         for file in "$cmd_dir/"*; do
-                            if [[ -f "$file" ]]; then
+                            if [[ -f "$file" && "$(basename "$file")" != ".version" ]]; then
                                 if cp "$file" ".claude/commands/$cmd_name/" 2>/dev/null; then
-                                    ((files_copied++))
+                                    ((fallback_files++))
                                 fi
                             fi
                         done
-                        if [[ $files_copied -gt 0 ]]; then
-                            success "$cmd_name commands installed ($files_copied files)"
+                        if [[ $fallback_files -gt 0 ]]; then
+                            success "$cmd_name commands installed ($fallback_files files)"
                             ((commands_copied++))
                         else
                             warn "Failed to copy $cmd_name commands"
@@ -207,10 +228,10 @@ install_commands() {
             success "Claude commands folder created"
         fi
         
-        # Copy other .claude files
+        # Copy other .claude files (excluding .version)
         local claude_files=("CLAUDE.md")
         for file in "${claude_files[@]}"; do
-            if [[ -f "$source_dir/.claude/$file" ]]; then
+            if [[ -f "$source_dir/.claude/$file" && "$file" != ".version" ]]; then
                 cp "$source_dir/.claude/$file" ".claude/$file"
             fi
         done

@@ -27,7 +27,7 @@ Each milestone folder MUST contain:
 ### 1. Milestone Meta File (REQUIRED)
 - **Name**: `M##_milestone_meta.md`
 - **Purpose**: Contains milestone metadata and overview
-- **Location**: Root of milestone folder
+- **Location**: INSIDE the milestone folder (NOT in 02_REQUIREMENTS root)
 
 ### 2. Product Requirements Documents (PRD)
 - **Pattern**: `PRD_*.md`
@@ -69,6 +69,7 @@ Each milestone folder MUST contain:
 3. **Create the milestone meta file first** using the template from `99_TEMPLATES/milestone_meta_template.md`
 4. **Update the project manifest** (`00_PROJECT_MANIFEST.md`) when creating new milestones
 5. **Maintain sequential numbering** - don't skip milestone numbers
+6. **NEVER create M##_milestone_meta.md files in the 02_REQUIREMENTS root directory** - they MUST be inside their respective milestone folders
 
 ## Common Mistakes to Avoid
 - Creating milestones without the M## prefix
@@ -76,3 +77,4 @@ Each milestone folder MUST contain:
 - Forgetting the milestone meta file
 - Not updating the project manifest
 - Creating milestones in the wrong location (must be in 02_REQUIREMENTS)
+- **Creating duplicate milestone meta files** - only one M##_milestone_meta.md per milestone, inside the milestone folder

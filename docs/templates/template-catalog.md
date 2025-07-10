@@ -269,14 +269,14 @@ estimated_effort: "{EFFORT}"          # hours to fix
 
 **Example**:
 ```
-feat(auth): implement T01_S02 JWT token validation
+feat(auth): implement t01-s02 JWT token validation
 
 - Add middleware for token verification
 - Implement refresh token rotation
 - Add comprehensive error handling
 - Include rate limiting for auth endpoints
 
-Refs: TASK_01_S02_User_Authentication.md
+Refs: task-01-s02-user-authentication.md
 Closes: #123
 ```
 

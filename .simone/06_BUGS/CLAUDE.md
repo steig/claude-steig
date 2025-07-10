@@ -14,10 +14,10 @@ BUG###_<Bug_Title_Snake_Case>.md
 - `<Bug_Title_Snake_Case>` - Descriptive title using underscores for spaces
 
 ### Examples:
-- ✅ `BUG001_Login_Form_Validation_Error.md`
-- ✅ `BUG002_Dashboard_Loading_Performance.md`
-- ✅ `BUG003_API_Response_Timeout.md`
-- ❌ `BUG1_Login_Error.md` (missing leading zeros)
+- ✅ `bug001-login-form-validation-error.md`
+- ✅ `bug002-dashboard-loading-performance.md`
+- ✅ `bug003-api-response-timeout.md`
+- ❌ `bug1-login-error.md` (missing leading zeros)
 - ❌ `BUG001-Login-Error.md` (wrong separator)
 - ❌ `Login_Error.md` (missing BUG### prefix)
 
@@ -177,8 +177,8 @@ The project manifest (`00_PROJECT_MANIFEST.md`) includes:
 ```markdown
 ## 4. Open Bugs
 
-- [ ] BUG001: [Bug Title](06_BUGS/BUG001_Bug_Title.md) - Status: Open (Priority: high)
-- [ ] BUG002: [Bug Title](06_BUGS/BUG002_Bug_Title.md) - Status: in_progress (Priority: medium)
+- [ ] bug001: [Bug Title](06_BUGS/bug001-bug-title.md) - Status: Open (Priority: high)
+- [ ] bug002: [Bug Title](06_BUGS/bug002-bug-title.md) - Status: in_progress (Priority: medium)
 ```
 
 ### Bug Statistics

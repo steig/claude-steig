@@ -213,16 +213,16 @@ When MCP servers are available, leverage them for:
 ### Git Integration Best Practices
 ```bash
 # Branch naming pattern
-git checkout -b task/T##_S##_feature_name
+git checkout -b task/t##-s##-feature-name
 
 # Commit message format
-git commit -m "feat(T##): implement user authentication
+git commit -m "feat(t##): implement user authentication
 
 - Add JWT token validation
 - Update user model with roles
 - Add integration tests
 
-Refs: TASK_##_S##_User_Authentication.md"
+Refs: task-##-s##-user-authentication.md"
 ```
 
 ### CI/CD Integration
@@ -261,7 +261,7 @@ Refs: TASK_##_S##_User_Authentication.md"
 - ✅ Verify dependency chain integrity
 
 **"Branch naming conflicts"**
-- ✅ Use timestamp suffix: `task/T##_S##_name_20250110_1430`
+- ✅ Use timestamp suffix: `task/t##-s##-name-20250110-1430`
 - ✅ Check for stale branches from previous iterations
 - ✅ Coordinate with team on parallel work
 

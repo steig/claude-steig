@@ -102,11 +102,11 @@ This advanced command will:
 
 **Example tasks created:**
 ```
-✅ TASK_01_S01: Set up Express.js server with middleware
-✅ TASK_02_S01: Configure PostgreSQL database with Prisma ORM
-✅ TASK_03_S01: Implement user authentication with JWT
-✅ TASK_04_S01: Create RESTful API endpoints for user management
-✅ TASK_05_S01: Add comprehensive error handling and logging
+✅ task-01-s01: Set up Express.js server with middleware
+✅ task-02-s01: Configure PostgreSQL database with Prisma ORM
+✅ task-03-s01: Implement user authentication with JWT
+✅ task-04-s01: Create RESTful API endpoints for user management
+✅ task-05-s01: Add comprehensive error handling and logging
 ```
 
 ## Step 5: Execute Your First Task (5 minutes)
@@ -114,7 +114,7 @@ This advanced command will:
 Let Simone execute a task with full context:
 
 ```
-/project:simone:do_task TASK_01_S01
+/project:simone:do_task task-01-s01
 ```
 
 Watch Simone work:
@@ -127,7 +127,7 @@ Watch Simone work:
 
 **Example execution:**
 ```
-🎯 Executing TASK_01_S01: Set up Express.js server with middleware
+🎯 Executing task-01-s01: Set up Express.js server with middleware
 
 📋 Loading context...
    ✅ Project manifest loaded
@@ -135,7 +135,7 @@ Watch Simone work:
    ✅ Existing code patterns analyzed
    ✅ Sprint requirements understood
 
-🔄 Creating branch: task/T01_S01_express_setup
+🔄 Creating branch: task/t01-s01-express-setup
 
 🛠️  Implementing...
    ✅ Express server created with TypeScript

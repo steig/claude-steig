@@ -71,7 +71,7 @@ The `create_sprint_tasks` command performs:
 #### Task Refinement Process
 ```yaml
 # Example generated task metadata
-task_id: "TASK_01_S01"
+task_id: "task-01-s01"
 estimated_effort: "3.5"          # Auto-generated estimate
 complexity: "medium"             # Auto-assessed complexity
 business_value: "high"           # Based on milestone context
@@ -98,7 +98,7 @@ technical_value: "medium"        # Architecture impact assessment
 /project:simone:status
 
 # Review available tasks
-ls .simone/03_SPRINTS/S01_M01_*/TASK_*.md
+ls .simone/03_SPRINTS/S01_M01_*/task-*.md
 ```
 
 #### Task Execution Process
@@ -109,7 +109,7 @@ ls .simone/03_SPRINTS/S01_M01_*/TASK_*.md
 /project:simone:do_task
 
 # Or execute specific task
-/project:simone:do_task TASK_03_S01
+/project:simone:do_task task-03-s01
 ```
 
 ##### YOLO Mode Execution (Advanced)
@@ -148,10 +148,10 @@ sequenceDiagram
     participant Review as Code Review
     participant Tests as Test Suite
     
-    Dev->>Simone: /project:simone:do_task TASK_01_S01
+    Dev->>Simone: /project:simone:do_task task-01-s01
     Simone->>Simone: Load project context
     Simone->>Simone: Validate dependencies
-    Simone->>Git: Create branch task/T01_S01_feature
+    Simone->>Git: Create branch task/t01-s01-feature
     Simone->>Simone: Implement solution
     Simone->>Tests: Run test suite
     Simone->>Review: Integrated code review
@@ -188,23 +188,23 @@ Every task execution includes automatic:
 ⏱️  Velocity: 1.2 tasks/day (on track)
 
 ✅ Completed Today:
-- TASK_03_S01: Database schema implementation (3.2h)
-- TASK_04_S01: User authentication endpoints (4.1h)
+- task-03-s01: Database schema implementation (3.2h)
+- task-04-s01: User authentication endpoints (4.1h)
 
 🔄 In Progress:
-- TASK_05_S01: API rate limiting (2h remaining)
+- task-05-s01: API rate limiting (2h remaining)
 
 📋 Ready for Development:
-- TASK_06_S01: Error handling middleware
-- TASK_07_S01: Logging infrastructure
+- task-06-s01: Error handling middleware
+- task-07-s01: Logging infrastructure
 
 ⚠️  Blockers:
 - None currently
 
 🎯 Today's Focus:
-- Complete TASK_05_S01
-- Start TASK_06_S01
-- Code review for TASK_03_S01
+- Complete task-05-s01
+- Start task-06-s01
+- Code review for task-03-s01
 ```
 
 #### Team Coordination
