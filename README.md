@@ -8,6 +8,8 @@ Simone is a directory-based project management system designed to work better wi
 
 **⚠️ Complexity Warning**: Simone is a sophisticated system that requires time to understand properly. It's not a simple plug-and-play solution, but rather a framework that works best when you take the time to learn how it operates and adapt it to your workflow.
 
+**🚨 EXPERIMENTAL WARNING**: This is a rapidly evolving, experimental project. Things move fast here and stuff might break. Features change frequently, commands may be unstable, and documentation might lag behind reality. Use at your own risk and expect the unexpected. YOLO! 🎢
+
 ## 🚀 Key Features
 
 This fork includes specialized improvements for comprehensive project management:
