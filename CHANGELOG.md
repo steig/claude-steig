@@ -1,5 +1,40 @@
 # Changelog
 
+## 2025-07-11 - v2.0.9
+
+### 🛠️ Helper Commands & Infrastructure Improvements
+
+#### New Helper Commands (5 Commands Added)
+- **`troubleshoot`**: Comprehensive project diagnostic with 12-step systematic analysis
+- **`research`**: Codebase investigation and pattern analysis with 8-step methodology
+- **`plan`**: Strategic feature planning with automatic milestone creation (10 steps)
+- **`analyze`**: Deep code and system analysis with 9-step assessment process
+- **`investigate`**: Targeted bug investigation with 11-step root cause analysis
+
+#### Command Features
+- **MCP Integration**: Full Sequential Thinking, Work History, Context7, and Serena integration
+- **Cognitive Personas**: Domain expertise through architect, security, performance, QA personas
+- **Template Integration**: Automatic milestone and task generation using framework templates
+- **Cross-Command Workflows**: Integrated diagnostic, planning, and quality assurance workflows
+
+#### Infrastructure & Bug Fixes
+- **🚨 EXPERIMENTAL WARNING**: Added prominent experimental project warning to README
+- **Cache Directory Fix**: Resolved initialization error where hooks failed due to missing `.simone/.cache` directory
+- **Git Configuration**: Added `.simone/.gitignore` to exclude cache files from version control
+- **Install Enhancement**: Automatic `.gitignore` copy during framework installation
+
+#### Documentation Updates
+- **Command Reference**: Updated from 30 to 35 commands with comprehensive helper command documentation
+- **Workflow Integration**: Added helper command workflows to cross-command integration patterns
+- **Quick Start Guide**: Enhanced with helper command examples and usage scenarios
+- **Feature Highlights**: Updated documentation to reflect new planning and research capabilities
+
+#### Technical Improvements
+- **Hook Stability**: Fixed "No such file or directory" errors during project initialization
+- **Session Logging**: Ensured proper cache directory creation before logging operations
+- **Git Ignore**: Comprehensive ignore rules for session logs, performance data, and cache files
+- **Installation Reliability**: Enhanced install script with proper file copying and error handling
+
 ## 2025-07-10 - v2.0.8
 
 ### 🤖 AI-Powered Milestone Generation
