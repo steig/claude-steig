@@ -13,13 +13,16 @@ The Simone Framework uses a well-organized directory structure to manage all asp
 ```
 your-project/
 ├── .simone/                    # Simone framework directory
-│   ├── milestones/            # Project milestones
-│   ├── sprints/               # Sprint planning and tracking
-│   ├── tasks/                 # Individual task management
-│   ├── templates/             # Custom project templates
-│   ├── governance/            # Project governance and policies
-│   ├── metrics/               # Performance and quality metrics
-│   ├── teams/                 # Team structure and assignments
+│   ├── 00_PROJECT_MANIFEST.md  # Central project reference
+│   ├── 01_PROJECT_DOCS/        # Technical foundation documents
+│   ├── 02_REQUIREMENTS/        # Business requirements by milestone
+│   ├── 03_SPRINTS/            # Sprint organization and task definitions
+│   ├── 04_GENERAL_TASKS/      # Non-sprint specific tasks
+│   ├── 05_ARCHITECTURAL_DECISIONS/ # ADRs for key decisions
+│   ├── 06_BUGS/               # Bug tracking and resolution
+│   ├── 07_TECHNICAL_DEBT/     # Technical debt tracking and management
+│   ├── 10_STATE_OF_PROJECT/   # Project review history
+│   ├── 99_TEMPLATES/          # Standardized file templates
 │   └── config.yml             # Project configuration
 ├── .claude/                   # Claude Code configuration
 │   ├── CLAUDE.md             # Claude-specific instructions
@@ -36,9 +39,196 @@ your-project/
 
 ### `.simone/` - Framework Core
 
-The `.simone/` directory is the heart of the Simone Framework, containing all project management artifacts.
+The `.simone/` directory is the heart of the Simone Framework, containing all project management artifacts organized in a numbered structure for optimal sorting and navigation.
 
-#### `milestones/`
+#### Core Structure Overview
+
+```
+.simone/
+├── 00_PROJECT_MANIFEST.md          # Central project reference
+├── 01_PROJECT_DOCS/                # Technical foundation documents
+├── 02_REQUIREMENTS/                # Business requirements by milestone
+├── 03_SPRINTS/                     # Sprint organization and task definitions
+├── 04_GENERAL_TASKS/               # Non-sprint specific tasks
+├── 05_ARCHITECTURAL_DECISIONS/     # ADRs for key decisions
+├── 06_BUGS/                        # Bug tracking and resolution
+├── 07_TECHNICAL_DEBT/              # Technical debt tracking and management
+├── 10_STATE_OF_PROJECT/            # Project review history
+└── 99_TEMPLATES/                   # Standardized file templates
+```
+
+#### `00_PROJECT_MANIFEST.md` - Central Reference
+
+The project manifest is the single source of truth for project status:
+
+```yaml
+---
+project_name: "Example Project"
+project_description: "A sample project demonstrating Simone Framework"
+current_milestone: "M01_Core_Platform"
+current_sprint: "S01_M01_Foundation"
+project_status: "active"
+last_updated: "2025-01-10"
+---
+
+# Project Manifest
+
+## Current Focus
+- **Milestone**: M01 - Core Platform Development
+- **Sprint**: S01 - Foundation Setup
+- **Key Objectives**: User authentication, basic CRUD operations
+
+## Quick Links
+- [Current Sprint](03_SPRINTS/S01_M01_Foundation/)
+- [Architecture](01_PROJECT_DOCS/ARCHITECTURE.md)
+- [Requirements](02_REQUIREMENTS/M01_Core_Platform/)
+```
+
+#### `01_PROJECT_DOCS/` - Technical Foundation
+
+Essential technical documentation that guides development:
+
+```
+01_PROJECT_DOCS/
+├── ARCHITECTURE.md             # System architecture (REQUIRED)
+├── API_SPECIFICATION.md        # API documentation
+├── DATABASE_SCHEMA.md          # Database design
+├── INTEGRATION_GUIDES.md       # Third-party integrations
+└── SECURITY_REQUIREMENTS.md    # Security specifications
+```
+
+#### `02_REQUIREMENTS/` - Milestone-Based Requirements
+
+Organized by milestone with PRDs and technical specifications:
+
+```
+02_REQUIREMENTS/
+├── M01_Core_Platform/
+│   ├── M01_PRD.md              # Product Requirements Document
+│   ├── M01_SPECS.md            # Technical Specifications
+│   └── M01_milestone_meta.md   # Milestone metadata
+└── M02_User_Management/
+    ├── M02_PRD.md
+    ├── M02_SPECS.md
+    └── M02_milestone_meta.md
+```
+
+#### `03_SPRINTS/` - Sprint Execution
+
+Sprint planning and task organization:
+
+```
+03_SPRINTS/
+├── S01_M01_Foundation/
+│   ├── S01_M01_sprint_meta.md  # Sprint metadata and goals
+│   ├── TASK_001_Setup_Database.md
+│   └── TASK_002_Auth_Framework.md
+└── S02_M01_Core_Features/
+    ├── S02_M01_sprint_meta.md
+    └── TASK_003_User_CRUD.md
+```
+
+#### `04_GENERAL_TASKS/` - Non-Sprint Tasks
+
+Tasks that don't belong to specific sprints:
+
+```
+04_GENERAL_TASKS/
+├── TASK_15_Code_Refactoring.md
+├── TASK_16_Documentation_Update.md
+└── TASK_17_Performance_Optimization.md
+```
+
+#### `05_ARCHITECTURAL_DECISIONS/` - ADRs
+
+Architectural Decision Records for key technical choices:
+
+```
+05_ARCHITECTURAL_DECISIONS/
+├── ADR_001_Database_Choice.md
+├── ADR_002_Authentication_Strategy.md
+└── ADR_003_API_Design_Pattern.md
+```
+
+#### `06_BUGS/` - Bug Tracking
+
+Bug reports and resolution tracking:
+
+```
+06_BUGS/
+├── BUG_001_Login_Timeout.md
+├── BUG_002_Memory_Leak.md
+└── RESOLVED/
+    └── BUG_000_Initial_Setup.md
+```
+
+#### `07_TECHNICAL_DEBT/` - Debt Management
+
+**NEW**: Technical debt tracking and management system:
+
+```
+07_TECHNICAL_DEBT/
+├── CLAUDE.md                   # Usage instructions and guidelines
+├── DEBT_REGISTRY.md           # Master registry of all debt items
+├── ACTIVE/                    # Current debt items requiring attention
+│   ├── TD_001_duplicate_validation.md
+│   ├── TD_002_inefficient_queries.md
+│   └── TD_003_missing_error_handling.md
+└── RESOLVED/                  # Archive of resolved debt items
+    └── TD_000_setup_example.md
+```
+
+The technical debt system provides:
+
+- **Structured Categorization**: Code quality, architecture, security, performance, documentation, testing
+- **Severity Assessment**: Critical, high, medium, low priority levels
+- **Impact Analysis**: Quantified development velocity and maintenance cost impact
+- **Resolution Planning**: Effort estimation, dependency tracking, and strategic timing
+- **Workflow Integration**: Seamless integration with existing Simone commands and processes
+
+Each debt item includes comprehensive metadata for tracking:
+
+```yaml
+---
+debt_id: "TD_001"
+title: "Duplicate User Validation Logic"
+category: "code_quality"
+severity: "medium"
+created_date: "2025-01-10"
+status: "active"
+estimated_effort: "4"
+business_impact: "Increased maintenance burden"
+technical_impact: "Code duplication across 3 components"
+---
+```
+
+#### `10_STATE_OF_PROJECT/` - Project Reviews
+
+Timestamped project health snapshots:
+
+```
+10_STATE_OF_PROJECT/
+├── 2025-01-01_08-00_project_review.md
+├── 2025-01-15_14-30_milestone_review.md
+└── 2025-01-30_16-00_sprint_retrospective.md
+```
+
+#### `99_TEMPLATES/` - File Templates
+
+Standardized templates for consistent documentation:
+
+```
+99_TEMPLATES/
+├── task_template.md
+├── technical_debt_template.md     # NEW: Technical debt template
+├── milestone_meta_template.md
+├── sprint_meta_template.md
+├── bug_template.md
+├── adr_template.md
+└── project_review_template.md
+```
+
+#### Legacy Structure (`milestones/`)
 
 Stores milestone definitions and tracking:
 

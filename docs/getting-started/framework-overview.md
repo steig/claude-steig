@@ -57,6 +57,8 @@ Simone organizes projects hierarchically, reflecting natural project management 
 │   └── S##_M##_Sprint_Name/        # Tactical sprint containers
 ├── 04_GENERAL_TASKS/               # Non-sprint work items
 ├── 05_ARCHITECTURAL_DECISIONS/     # Technical decision records
+├── 06_BUGS/                        # Bug tracking and resolution
+├── 07_TECHNICAL_DEBT/              # Technical debt tracking and management
 ├── 10_STATE_OF_PROJECT/            # Project health snapshots
 └── 99_TEMPLATES/                   # Standardized templates
 ```
@@ -74,6 +76,7 @@ Simone uses consistent naming patterns that enable:
 - **Milestones**: `M##_Milestone_Name/` (e.g., `M01_Backend_Setup/`)
 - **Sprints**: `S##_M##_Sprint_Name/` (e.g., `S01_M01_Initial_API/`)
 - **Tasks**: `TASK_##_S##_Task_Name.md` or `TASK_###_Task_Name.md`
+- **Technical Debt**: `TD_###_brief_description.md` (e.g., `TD_001_duplicate_validation.md`)
 - **ADRs**: `ADR_###_Decision_Topic.md`
 
 ## Core Concepts
@@ -135,11 +138,30 @@ Quality is integrated at every level, not added as an afterthought:
 
 #### Automated Quality Assurance
 - **Code review integration** - Every task execution includes quality review
+- **Technical debt tracking** - Systematic identification and management of technical debt
 - **Testing requirements** - Comprehensive testing strategy in every task
 - **Architecture compliance** - ADR alignment verification
 - **Security validation** - Security considerations in all templates
 
-### 4. AI-Enhanced Development
+### 4. Technical Debt Management
+
+Proactive technical debt tracking prevents maintenance burden accumulation:
+
+#### Structured Debt Categorization
+- **Code Quality**: Duplication, complexity, naming, maintainability issues
+- **Architecture**: Design violations, coupling issues, missing abstractions
+- **Security**: Authentication gaps, validation flaws, data exposure risks
+- **Performance**: Inefficient algorithms, resource leaks, optimization opportunities
+- **Documentation**: Missing or outdated documentation, unclear implementations
+- **Testing**: Coverage gaps, flaky tests, missing test scenarios
+
+#### Impact-Driven Prioritization
+- **Risk scoring** (1-25 scale) based on likelihood and impact assessment
+- **Business impact** analysis including development velocity and maintenance cost
+- **Resolution planning** with effort estimation and strategic timing
+- **Integration** with sprint planning and milestone delivery
+
+### 5. AI-Enhanced Development
 
 Simone is specifically designed for AI-assisted development:
 
@@ -257,7 +279,7 @@ Simone includes **9 specialized AI personas** that provide domain-specific exper
 
 ### For Technical Leaders
 - 🏗️ **Architecture governance** - Structured ADR process and compliance tracking
-- 🔧 **Technical debt management** - Systematic identification and remediation
+- 🧹 **Technical debt management** - Systematic identification, tracking, and strategic resolution
 - 📊 **Quality oversight** - Comprehensive quality metrics and standards
 - 🎓 **Team development** - Consistent practices and knowledge sharing
 - 🔄 **Continuous improvement** - Data-driven process optimization with AI insights

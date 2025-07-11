@@ -7,7 +7,7 @@ Perform a comprehensive project-level review focusing on architecture, progress,
 - This is a high-level review of overall project state, not recent changes.
 - Unless clearly mentioned in project documents, there is no timeline and schedule is irrelevant
 
-## Create a TODO with EXACTLY these 9 Items
+## Create a TODO with EXACTLY these 10 Items
 
 1. Analyze review scope and timing
 2. Execute and assess test infrastructure health
@@ -16,8 +16,9 @@ Perform a comprehensive project-level review focusing on architecture, progress,
 5. Analyze codebase architecture and structure
 6. Audit file organization and workflow compliance
 7. Evaluate technical decisions and complexity
-8. Critique implementation quality (John Carmack perspective)
-9. Create comprehensive project review file with metadata
+8. Assess technical debt accumulation and management
+9. Critique implementation quality (John Carmack perspective)
+10. Create comprehensive project review file with metadata
 
 Follow step by step and adhere closely to the following instructions for each step.
 
@@ -156,7 +157,109 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 
 **IMPORTANT:** Think like an experienced developer. Are we solving the right problems the right way?
 
-### 8. Critique implementation quality (John Carmack perspective)
+### 8. Assess technical debt accumulation and management
+
+**COMPREHENSIVE TECHNICAL DEBT ANALYSIS:**
+
+**MCP INTEGRATION:** Leverage MCP servers for debt analysis:
+- **Sequential Thinking**: Structure debt assessment systematically
+- **Serena**: Enhance debt pattern recognition and impact analysis
+- **Work History**: Track debt accumulation trends over time
+
+#### 8.1 · Technical Debt Inventory
+
+**Analyze Current Debt Status:**
+
+1. **Review Debt Registry:**
+   - Read `.simone/07_TECHNICAL_DEBT/DEBT_REGISTRY.md` if exists
+   - Count active debt items by category and severity
+   - Assess debt resolution velocity vs. creation rate
+
+2. **Scan Active Debt Items:**
+   - Review all files in `.simone/07_TECHNICAL_DEBT/ACTIVE/`
+   - Categorize by type: code quality, architecture, security, performance, documentation, testing
+   - Assess severity distribution: critical, high, medium, low
+
+3. **Review Resolved Debt:**
+   - Check `.simone/07_TECHNICAL_DEBT/RESOLVED/` for resolution patterns
+   - Calculate average resolution time by category
+   - Identify most effective resolution strategies
+
+#### 8.2 · Debt Impact Assessment
+
+**Evaluate Business and Technical Impact:**
+
+1. **Development Velocity Impact:**
+   - Quantify how debt is affecting sprint completion rates
+   - Identify debt items blocking specific features or improvements
+   - Assess cumulative effect on team productivity
+
+2. **Maintenance Cost Analysis:**
+   - Calculate time overhead for working around debt items
+   - Identify areas requiring disproportionate maintenance effort
+   - Assess cognitive load impact on team members
+
+3. **Risk Assessment:**
+   - Identify critical debt items posing security or stability risks
+   - Assess probability of debt-related failures or incidents
+   - Evaluate technical risk exposure across system components
+
+#### 8.3 · Debt Trend Analysis
+
+**Track Debt Accumulation Patterns:**
+
+1. **Creation vs Resolution Rate:**
+   - Compare new debt items created vs. resolved over time
+   - Identify sprints or milestones with highest debt accumulation
+   - Track debt "interest" - compound effects of unaddressed debt
+
+2. **Category Distribution:**
+   - Analyze which debt categories are growing fastest
+   - Identify recurring debt patterns (architectural, security, etc.)
+   - Assess team strengths/weaknesses based on debt types
+
+3. **Sprint Integration:**
+   - Review how well debt resolution is integrated into sprint planning
+   - Assess balance between feature development and debt resolution
+   - Identify opportunities for preventive debt management
+
+#### 8.4 · Strategic Debt Management
+
+**Evaluate Debt Management Strategy:**
+
+1. **Prioritization Effectiveness:**
+   - Review criteria used for debt prioritization
+   - Assess alignment between debt severity and resolution order
+   - Identify high-impact, low-effort debt resolution opportunities
+
+2. **Team Awareness:**
+   - Evaluate team understanding of debt impact and cost
+   - Assess debt visibility in project planning and decision-making
+   - Review debt communication and documentation quality
+
+3. **Prevention Measures:**
+   - Identify root causes of debt creation
+   - Assess effectiveness of code review in preventing debt
+   - Evaluate tooling and processes for debt detection
+
+#### 8.5 · Debt Metrics and Scoring
+
+**Calculate Technical Debt Health Score (1-10):**
+
+- **10**: Minimal debt, excellent management, proactive prevention
+- **8-9**: Low debt load, good resolution velocity, minor issues
+- **6-7**: Moderate debt, balanced creation/resolution, manageable impact
+- **4-5**: High debt load, resolution lagging, noticeable impact
+- **1-3**: Critical debt accumulation, system health at risk
+
+**Key Metrics to Track:**
+- Active debt count by severity
+- Average age of debt items
+- Resolution velocity (items/sprint)
+- Debt-to-feature ratio in sprints
+- Team effort spent on debt vs. features
+
+### 9. Critique implementation quality (John Carmack perspective)
 
 Think as John Carmack would: focus on simplicity, performance, and maintainability, but keep the projects goal in mind. Especially long term vision as well. Don't over simplify.
 
@@ -169,7 +272,7 @@ Think as John Carmack would: focus on simplicity, performance, and maintainabili
 Be **brutally honest**. Carmack-level critique means no sugar-coating but still staying true to the project's reality.
 Be thorough and **go above and beyond** in your analysis - leave no stone unturned.
 
-### 9. Provide comprehensive assessment with recommendations
+### 10. Provide comprehensive assessment with recommendations
 
 **IMPORTANT:** Get current timestamp and create output file
 
@@ -230,7 +333,10 @@ Be thorough and **go above and beyond** in your analysis - leave no stone unturn
 ## Architecture & Technical Assessment
 
 - **Architecture Score:** 1-10 rating with explanation
-- **Technical Debt Level:** LOW | MEDIUM | HIGH with specific examples
+- **Technical Debt Health Score:** 1-10 rating with breakdown by category
+- **Technical Debt Level:** LOW | MEDIUM | HIGH | CRITICAL with specific examples
+- **Active Debt Items:** [count by severity: critical/high/medium/low]
+- **Debt Resolution Velocity:** [items resolved per sprint vs. created]
 - **Code Quality:** [overall assessment with examples]
 
 ## File Organization Audit
@@ -280,7 +386,10 @@ Based on your findings recommend Action items - chose whatever fits your finding
    - **sprint_id**: Current sprint if applicable
    - **project_health**: "healthy" | "warning" | "critical"
    - **overall_score**: 1-10 rating
+   - **technical_debt_health_score**: 1-10 rating
    - **technical_debt_level**: "low" | "medium" | "high" | "critical"
+   - **active_debt_count**: Total number of active debt items
+   - **debt_by_severity**: {"critical": 0, "high": 0, "medium": 0, "low": 0}
    - **risk_level**: "low" | "medium" | "high" | "critical"
    - **review_scope**: ["architecture", "progress", "quality", "infrastructure"]
    - **next_review_date**: Recommended next review date

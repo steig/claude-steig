@@ -74,6 +74,8 @@ Built-in review processes maintain standards:
 - `03_SPRINTS/` - Sprint organization and task definitions
 - `04_GENERAL_TASKS/` - Non-sprint specific tasks
 - `05_ARCHITECTURE_DECISIONS/` - ADRs for key decisions
+- `06_BUGS/` - Bug tracking and resolution
+- `07_TECHNICAL_DEBT/` - Technical debt tracking and management
 - `10_STATE_OF_PROJECT/` - Project review history
 - `99_TEMPLATES/` - Standardized file templates
 

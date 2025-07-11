@@ -138,11 +138,12 @@ Experience the enhanced workflow:
 4. **Implement with quality** - Code generation following your project's patterns
 5. **Quality review** - Pre-commit assessment and validation
 6. **Run integrated code review** - Quality checks and architectural compliance
-7. **NEW: Commit approval gate** - Review changes and approve commit with preview
-8. **NEW: Auto-commit** - Automatic commit execution with task reference
-9. **NEW: PR approval gate** - Review PR details and approve creation
-10. **NEW: Auto-PR creation** - Automatic PR with documentation and team assignment
-11. **NEW: Status sync** - Task status updated to "review" with full traceability
+7. **NEW: Technical debt assessment** - Automatic identification and logging of technical debt
+8. **NEW: Commit approval gate** - Review changes and approve commit with preview
+9. **NEW: Auto-commit** - Automatic commit execution with task reference
+10. **NEW: PR approval gate** - Review PR details and approve creation
+11. **NEW: Auto-PR creation** - Automatic PR with documentation and team assignment
+12. **NEW: Status sync** - Task status updated to "review" with full traceability
 
 **Approval Gate Benefits**:
 - 🛡️ **User Control**: Review and approve each step
@@ -175,6 +176,10 @@ Experience the enhanced workflow:
    ✅ Test coverage adequate (85%)
    ✅ Documentation complete
 
+🧹 Technical debt assessment:
+   ✅ No critical debt items identified
+   ℹ️  1 low-priority debt item logged (TD_001: Express middleware ordering)
+
 ✅ Task completed successfully!
 ```
 
@@ -186,6 +191,7 @@ In 15 minutes, you've:
 ✅ **Created strategic milestone planning** with clear business objectives  
 ✅ **Generated implementation-ready tasks** with detailed acceptance criteria  
 ✅ **Executed high-quality development** with automated code review  
+✅ **Implemented technical debt tracking** for proactive maintenance planning  
 ✅ **Established complete traceability** from requirements to implementation  
 
 ## Step 7: Experience Domain Expertise with Cognitive Personas (2 minutes)

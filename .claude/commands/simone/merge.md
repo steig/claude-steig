@@ -2,13 +2,15 @@
 
 Intelligently merges pull requests with task/bug status updates and branch cleanup.
 
+**CRITICAL FIX:** Task status updates and file renaming now occur BEFORE merge execution (step 4) and are staged to be included in the merge commit itself. This ensures all task metadata changes happen atomically with the code merge.
+
 ## Create a TODO with EXACTLY these 7 Items
 
 1. Parse arguments and locate PR/task context
 2. Validate PR readiness and approval status
 3. Perform pre-merge validations and tests
-4. Execute merge with appropriate strategy
-5. Update task/bug status and tracking
+4. Update task/bug status and prepare metadata changes
+5. Execute merge with staged task metadata changes
 6. Clean up branches and references
 7. Provide post-merge guidance and next steps
 
@@ -94,17 +96,70 @@ verify_build_artifacts
 - **File Changes**: Only expected files modified
 - **Breaking Changes**: Properly documented and approved
 
-### 4. Execute merge with appropriate strategy
+### 4. Update task/bug status and prepare metadata changes
+
+**CRITICAL:** All task status updates and file operations must be completed and staged BEFORE executing the merge. This ensures they are included in the merge commit.
+
+**Task Status Updates:**
+- Update task status from "review" to "completed"
+- Add PR information to task metadata (prepare merge_commit placeholder)
+- Update actual effort if not already recorded
+- Mark all acceptance criteria as completed
+- Log merge preparation in task Output Log
+
+**Bug Status Updates:**
+- Update bug status from "testing" to "closed"
+- Record resolution details in bug report
+- Update fix verification status
+- Log deployment readiness in bug tracking
+
+**Task File Operations:**
+- **Rename task file**: Add TX prefix (e.g., `t01-s02-feature.md` → `TXt01-s02-feature.md`)
+- **Update file content**: Apply all metadata changes
+- **Cross-reference updates**: Prepare YAML frontmatter updates
+
+**Staged Metadata Template:**
+```yaml
+# Task/Bug YAML frontmatter updates (staged before merge)
+pull_request: "{pr_url}"
+merge_commit: "PENDING_MERGE_SHA"  # Will be updated post-merge
+merged_date: "{current_timestamp}"
+deployment_status: "ready"
+status: "completed"  # or "closed" for bugs
+```
+
+**Project Tracking Updates:**
+- Update project manifest with completion status
+- Prepare milestone closure if all tasks complete
+- Update sprint velocity metrics
+- Record completion in project health tracking
+
+**Stage All Changes:**
+```bash
+# Stage all task metadata changes
+git add .simone/
+git add docs/ # if documentation updated
+# DO NOT COMMIT YET - these will be included in merge commit
+```
+
+### 5. Execute merge with staged task metadata changes
+
+**Pre-Merge Verification:**
+- Ensure all task metadata changes are staged
+- Verify task file has been renamed with TX prefix
+- Confirm all status updates are ready
+- Check that no uncommitted changes remain outside staging
 
 **Merge Strategy Selection:**
 
 **Squash and Merge (Recommended for Features):**
 - Combines all commits into single commit
+- Includes staged task metadata changes
 - Clean, linear history
-- Easier to revert if needed
-- Better for feature branches
+- Task status and file operations in same commit
 
 ```bash
+# Execute merge with staged task metadata included
 gh pr merge {pr_number} --squash --body "$(cat <<'EOF'
 {type}({scope}): {title} ({TASK_ID/BUG_ID})
 
@@ -113,58 +168,37 @@ gh pr merge {pr_number} --squash --body "$(cat <<'EOF'
 Completed acceptance criteria:
 {acceptance_criteria_list}
 
+Task status updated to completed and archived with TX prefix.
+
 Co-authored-by: {contributors}
 EOF
 )"
+
+# Update merge SHA in task metadata post-merge
+MERGE_SHA=$(git rev-parse HEAD)
+sed -i "s/PENDING_MERGE_SHA/$MERGE_SHA/g" .simone/03_SPRINTS/*/TX{TASK_ID}*.md
+sed -i "s/PENDING_MERGE_SHA/$MERGE_SHA/g" .simone/04_GENERAL_TASKS/TX{TASK_ID}*.md
+git add .simone/
+git commit --amend --no-edit
 ```
 
 **Merge Commit (For Complex Features):**
 - Preserves individual commit history
+- Includes staged metadata changes
 - Shows development progression
-- Better for collaborative features
-- Maintains commit context
+- Task operations tracked in merge commit
 
 **Rebase and Merge (For Clean History):**
 - Replays commits onto target branch
+- Includes staged task metadata
 - Linear history without merge commits
-- Individual commits preserved
-- Clean, sequential development story
+- Task status changes preserved in sequence
 
 **Strategy Selection Logic:**
-- **Single commit**: Use squash merge
-- **Logical commit sequence**: Use rebase merge
-- **Collaborative feature**: Use merge commit
-- **Hotfix**: Use squash merge for clean history
-
-### 5. Update task/bug status and tracking
-
-**Task Status Updates:**
-- Update task status from "review" to "completed"
-- Add PR merge information to task metadata
-- Update actual effort if not already recorded
-- Mark all acceptance criteria as completed
-- Log merge completion in task Output Log
-
-**Bug Status Updates:**
-- Update bug status from "testing" to "closed"
-- Record resolution details in bug report
-- Update fix verification status
-- Log deployment readiness in bug tracking
-
-**Cross-Reference Updates:**
-```yaml
-# Task/Bug YAML frontmatter updates
-pull_request: "{pr_url}"
-merge_commit: "{merge_sha}"
-merged_date: "{merge_timestamp}"
-deployment_status: "ready"
-```
-
-**Project Tracking:**
-- Update project manifest with completion
-- Close milestone if all tasks complete
-- Update sprint velocity metrics
-- Record completion in project health tracking
+- **Single commit**: Use squash merge with staged metadata
+- **Logical commit sequence**: Use rebase merge with staged metadata
+- **Collaborative feature**: Use merge commit with staged metadata
+- **Hotfix**: Use squash merge for clean history with metadata
 
 ### 6. Clean up branches and references
 
@@ -174,17 +208,17 @@ deployment_status: "ready"
 - Clean up any related temporary branches
 - Remove stale branch references
 
-**Reference Updates:**
-- Update task file with final status
-- Archive completed tasks (rename with TX prefix)
-- Update related documentation links
-- Clean up draft PRs or related issues
+**Verify Task Updates (Already Completed in Step 4):**
+- ✅ Task file already renamed with TX prefix
+- ✅ Task status already updated to completed/closed
+- ✅ Project manifest already updated
+- ✅ All metadata changes included in merge commit
 
-**Housekeeping:**
-- Update `.simone/00_PROJECT_MANIFEST.md`
-- Archive completed sprint items if sprint finished
-- Update project health metrics
-- Clean up temporary files or artifacts
+**Final Housekeeping:**
+- Clean up any temporary files or artifacts
+- Remove draft PRs or related issues
+- Update related documentation links if needed
+- Verify all tracking systems reflect completion
 
 ### 7. Provide post-merge guidance and next steps
 
@@ -205,15 +239,18 @@ deployment_status: "ready"
 - **Lines Removed**: -{lines_removed}
 - **Commits Included**: {commit_count}
 
-✅ **Task/Bug Updates**:
+✅ **Task/Bug Updates** (Included in Merge Commit):
 - **Status**: {old_status} → completed/closed
+- **File**: Renamed with TX prefix and archived
 - **Effort**: {actual_effort}h (estimated: {estimated_effort}h)
 - **Acceptance Criteria**: All completed ✓
+- **Metadata**: All changes committed with merge
 
 🧹 **Cleanup Completed**:
 - Feature branch deleted
-- Task status updated
+- Task status updated and archived (TX prefix)
 - Project tracking updated
+- All changes in single merge commit
 - Documentation current
 
 ⏭️ **Next Steps**:

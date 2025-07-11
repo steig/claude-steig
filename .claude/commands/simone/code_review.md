@@ -98,10 +98,11 @@ With the identified Scope use `git diff` (on default: `git diff HEAD~1`) to find
 - **Scalability**: Assess horizontal scaling, statelessness, bottleneck identification
 
 **📊 Analyzer Persona (if activated):**
-- **Code Metrics**: Complexity analysis, maintainability index, technical debt
-- **Quality Gates**: Test coverage, linting compliance, code duplication
+- **Code Metrics**: Complexity analysis, maintainability index, technical debt identification
+- **Quality Gates**: Test coverage, linting compliance, code duplication detection
 - **Performance Metrics**: Memory usage, execution time, resource consumption
 - **Maintainability**: Code readability, documentation quality, refactoring needs
+- **Technical Debt**: Identify and categorize debt items for future resolution
 
 **🎓 Mentor Persona (if activated):**
 - **Best Practices**: Industry standards, coding conventions, design patterns
@@ -154,6 +155,27 @@ With the identified Scope use `git diff` (on default: `git diff HEAD~1`) to find
   - Leave it on the user to decide if small changes are allowed.
 - Only **PASS** if no discrepancy appeared.
 
+#### TECHNICAL DEBT INTEGRATION
+
+**If Technical Debt Items Identified During Review:**
+
+1. **Document Debt Items:**
+   - Create debt items for significant technical debt discovered
+   - Use `technical_debt_template.md` from `.simone/99_TEMPLATES/`
+   - Place in `.simone/07_TECHNICAL_DEBT/ACTIVE/`
+   - Reference in code review findings
+
+2. **Categorize Debt Severity:**
+   - **Critical**: Security vulnerabilities, performance blockers
+   - **High**: Maintainability issues, design violations
+   - **Medium**: Code quality concerns, missing documentation
+   - **Low**: Style violations, minor improvements
+
+3. **Include in Review Results:**
+   - List identified debt items in review findings
+   - Reference TD_### IDs for trackability
+   - Include impact assessment and recommended timeline
+
 #### IMPORTANT: Output Format
 
 - Output the results of your review to the task's **## Output Log** section in the task file
@@ -165,6 +187,7 @@ With the identified Scope use `git diff` (on default: `git diff HEAD~1`) to find
   Result: **FAIL/PASS** Your final decision on if it's a PASS or a FAIL.
   **Scope:** Inform the user about the review scope.
   **Findings:** Detailed list with all Issues found and Severity Score.
+  **Technical Debt:** List any debt items identified (TD_### references).
   **Summary:** Short summary on what is wrong or not.
   **Recommendation:** Your personal recommendation on further steps.
   ```

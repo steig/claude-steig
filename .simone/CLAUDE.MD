@@ -37,6 +37,8 @@ The manifest is the central reference file that tracks:
 ├── 03_SPRINTS/                     # Sprint execution folders
 ├── 04_GENERAL_TASKS/               # Non-sprint tasks
 ├── 05_ARCHITECTURAL_DECISIONS/     # ADR documentation
+├── 06_BUGS/                        # Bug tracking and resolution
+├── 07_TECHNICAL_DEBT/              # Technical debt tracking and management
 ├── 10_STATE_OF_PROJECT/            # Project review snapshots
 └── 99_TEMPLATES/                   # Document templates
 ```

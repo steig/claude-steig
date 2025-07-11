@@ -48,6 +48,7 @@ quality_dimensions:
       - Code complexity
       - Test coverage
       - Documentation quality
+      - Technical debt level
       
   security:
     definition: "Software protects data and operations"
@@ -95,6 +96,7 @@ quality_planning:
       - Write test cases
       - Update test automation
       - Perform security review
+      - Assess technical debt
       - Update documentation
 ```
 
@@ -343,6 +345,353 @@ quality_gates:
       - Rollback plan ready
       
     approval: "Manual gate"
+```
+
+## Technical Debt Management
+
+### Understanding Technical Debt
+
+Technical debt represents shortcuts, compromises, or suboptimal solutions implemented to meet immediate needs that create future maintenance burden, reduce development velocity, or increase system risk. Effective technical debt management is crucial for long-term project health.
+
+```yaml
+technical_debt_framework:
+  definition: "Future cost of rework caused by choosing expedient solutions"
+  
+  categories:
+    code_quality:
+      examples:
+        - Duplicated code logic
+        - Complex functions exceeding thresholds
+        - Poor naming conventions
+        - Missing error handling
+      impact: "Increased maintenance burden, slower feature development"
+      
+    architecture:
+      examples:
+        - Design pattern violations
+        - Tight coupling between components
+        - Missing abstractions
+        - Scalability limitations
+      impact: "System rigidity, difficult feature additions"
+      
+    security:
+      examples:
+        - Input validation gaps
+        - Authentication weaknesses
+        - Authorization flaws
+        - Data exposure risks
+      impact: "Security vulnerabilities, compliance violations"
+      
+    performance:
+      examples:
+        - Inefficient algorithms
+        - Database query problems
+        - Resource leaks
+        - Missing caching
+      impact: "Poor user experience, increased infrastructure costs"
+      
+    documentation:
+      examples:
+        - Missing documentation
+        - Outdated documentation
+        - Unclear code comments
+        - Missing ADRs
+      impact: "Team confusion, slower onboarding"
+      
+    testing:
+      examples:
+        - Test coverage gaps
+        - Flaky tests
+        - Missing test scenarios
+        - Outdated test data
+      impact: "Reduced confidence, more bugs in production"
+```
+
+### Debt Assessment and Prioritization
+
+```yaml
+debt_assessment:
+  severity_levels:
+    critical:
+      definition: "Immediate action required"
+      examples:
+        - Security vulnerabilities
+        - Production blockers
+        - Data corruption risks
+      timeline: "Current sprint"
+      
+    high:
+      definition: "Plan for next sprint"
+      examples:
+        - Performance degradation
+        - Significant maintenance burden
+        - Risk accumulation
+      timeline: "Next 1-2 sprints"
+      
+    medium:
+      definition: "Include in milestone planning"
+      examples:
+        - Code maintainability issues
+        - Future scalability concerns
+        - Development workflow friction
+      timeline: "Current milestone"
+      
+    low:
+      definition: "Address during refactoring"
+      examples:
+        - Code clarity improvements
+        - Convention violations
+        - Optimization opportunities
+      timeline: "When convenient"
+      
+  risk_scoring:
+    methodology: "Likelihood × Impact (1-5 scale each)"
+    factors:
+      likelihood:
+        - Frequency of code changes in affected area
+        - Complexity of the system component
+        - Team familiarity with the technology
+        - Historical bug patterns
+        
+      impact:
+        - Business process disruption potential
+        - User experience degradation
+        - Development velocity reduction
+        - Maintenance cost increase
+        
+  business_impact:
+    development_velocity:
+      - Time overhead for working around debt
+      - Cognitive load on team members
+      - Feature development slowdown
+      
+    maintenance_cost:
+      - Additional testing requirements
+      - Increased support burden
+      - Higher operational complexity
+      
+    business_risk:
+      - Customer satisfaction impact
+      - Competitive disadvantage
+      - Compliance violations
+      - Security incident probability
+```
+
+### Debt Tracking and Documentation
+
+```yaml
+debt_tracking_process:
+  identification:
+    sources:
+      - Task execution discoveries
+      - Code review findings
+      - Performance analysis
+      - Security assessments
+      - Customer feedback
+      - Team retrospectives
+      
+    automatic_detection:
+      tools:
+        - SonarQube for code quality
+        - CodeClimate for maintainability
+        - Security scanners (SAST/DAST)
+        - Performance monitoring tools
+      
+    manual_identification:
+      when:
+        - During feature development
+        - Code review process
+        - Bug investigation
+        - Architecture planning
+        
+  documentation:
+    debt_item_creation:
+      command: "/project:simone:log_technical_debt"
+      template: "technical_debt_template.md"
+      location: ".simone/07_TECHNICAL_DEBT/ACTIVE/"
+      
+    required_information:
+      - Unique debt ID (TD_###)
+      - Category and severity
+      - Detailed problem description
+      - Business and technical impact
+      - Risk assessment and scoring
+      - Resolution approach and effort
+      - Dependencies and blockers
+      
+    metadata_tracking:
+      - Creation date and discoverer
+      - Source context (task, review, etc.)
+      - Affected components
+      - Related debt items
+      - Resolution timeline
+      
+  registry_management:
+    debt_registry:
+      file: ".simone/07_TECHNICAL_DEBT/DEBT_REGISTRY.md"
+      contents:
+        - Master list of all debt items
+        - Summary statistics by category/severity
+        - Resolution velocity metrics
+        - Impact distribution analysis
+        
+    lifecycle_management:
+      states:
+        - active: "Requires attention"
+        - planned: "Included in sprint/milestone"
+        - in_progress: "Currently being resolved"
+        - resolved: "Successfully addressed"
+        - wont_fix: "Decided not to address"
+        
+      transitions:
+        - active → planned: "Included in sprint planning"
+        - planned → in_progress: "Work started"
+        - in_progress → resolved: "Resolution complete"
+        - active → wont_fix: "Strategic decision not to fix"
+```
+
+### Integration with Development Workflow
+
+```yaml
+workflow_integration:
+  sprint_planning:
+    debt_considerations:
+      - Review high/critical debt items
+      - Allocate 15-20% of sprint capacity to debt resolution
+      - Balance feature work with debt management
+      - Consider debt blockers for new features
+      
+    planning_process:
+      - Start with debt registry review
+      - Identify sprint-blocking debt
+      - Create resolution tasks for critical items
+      - Update sprint capacity accordingly
+      
+  task_execution:
+    debt_discovery:
+      automatic: "Built into /project:simone:do_task command"
+      timing: "Step 7 of task execution workflow"
+      process:
+        - Scan implementation for debt patterns
+        - Assess impact and categorize severity
+        - Document findings using debt template
+        - Update project health metrics
+        
+    conscious_debt_creation:
+      when_acceptable:
+        - MVP timeline constraints
+        - Proof of concept development
+        - External dependency blockers
+        - Strategic technical decisions
+        
+      documentation_requirements:
+        - Explicit justification
+        - Business impact assessment
+        - Planned resolution timeline
+        - Risk mitigation strategy
+        
+  code_review:
+    debt_identification:
+      reviewer_responsibilities:
+        - Identify architectural violations
+        - Flag code quality issues
+        - Assess security implications
+        - Document performance concerns
+        
+      debt_logging:
+        process: "Use /project:simone:log_technical_debt"
+        timing: "During or immediately after review"
+        integration: "Reference debt items in review comments"
+        
+  project_reviews:
+    debt_assessment:
+      frequency: "Every sprint and milestone review"
+      metrics:
+        - Active debt count by severity
+        - Resolution velocity trends
+        - Debt creation vs. resolution rate
+        - Business impact assessment
+        
+    health_scoring:
+      debt_health_score: "1-10 scale"
+      factors:
+        - Total active debt load
+        - Severity distribution
+        - Resolution velocity
+        - Team debt awareness
+        - Prevention effectiveness
+```
+
+### Debt Resolution Strategies
+
+```yaml
+resolution_strategies:
+  strategic_approaches:
+    big_bang_refactoring:
+      when: "Major architectural debt affecting multiple areas"
+      pros:
+        - Comprehensive solution
+        - Eliminates root causes
+        - Improves overall architecture
+      cons:
+        - High risk and effort
+        - Potential for regression
+        - Blocks feature development
+        
+    incremental_improvement:
+      when: "Moderate debt spread across system"
+      pros:
+        - Lower risk per change
+        - Continuous progress
+        - Parallel feature development
+      cons:
+        - Slower overall progress
+        - Requires sustained discipline
+        - May not address root causes
+        
+    isolation_wrapping:
+      when: "Legacy code with limited change frequency"
+      pros:
+        - Minimal immediate effort
+        - Isolates problem areas
+        - Enables gradual migration
+      cons:
+        - Doesn't eliminate debt
+        - Adds complexity layer
+        - May obscure real problems
+        
+    documentation_strategy:
+      when: "Debt cannot be immediately resolved"
+      pros:
+        - Immediate team awareness
+        - Guides future decisions
+        - Minimal resource investment
+      cons:
+        - Doesn't reduce technical impact
+        - Requires maintenance
+        - May become outdated
+        
+  execution_planning:
+    effort_estimation:
+      factors:
+        - Scope of changes required
+        - Testing complexity
+        - Integration challenges
+        - Team skill alignment
+        
+    timeline_planning:
+      considerations:
+        - Business priority alignment
+        - Team capacity availability
+        - Dependency resolution order
+        - Risk tolerance levels
+        
+    success_criteria:
+      measurable_outcomes:
+        - Specific metrics improvement
+        - Risk reduction achievement
+        - Development velocity increase
+        - Maintenance burden decrease
 ```
 
 ## Quality Metrics and Monitoring

@@ -34,7 +34,7 @@
 4. Create and switch to task branch
 5. Set status to in_progress
 6. Execute task work
-7. Placeholder
+7. Technical debt assessment
 8. Execute Code review
 9. Finalize Task status
 
@@ -170,33 +170,162 @@ Read the task description. If anything is unclear, ask clarifying questions befo
   9. **Update progress percentage** based on completed subtasks vs total.
   10. Repeat until all subtasks are complete.
 
-## 7 · Implementation Quality Review
+## 7 · Technical Debt Assessment
 
-**Pre-Commit Quality Assessment:**
+**COMPREHENSIVE DEBT TRACKING:** Document any technical debt discovered or created during task implementation:
 
-1. **Analyze Implementation Results:**
-   - Review all files modified during task execution
-   - Verify all subtasks marked as completed
-   - Check implementation meets acceptance criteria
-   - Identify any potential issues or improvements
+**MCP INTEGRATION:** Use available MCP servers for enhanced debt analysis:
+- **Sequential Thinking**: Structure debt analysis systematically
+- **Serena**: Enhance debt pattern recognition and categorization
+- **Work History**: Track debt accumulation patterns and resolution outcomes
 
-2. **Quality Validation:**
-   - Run any applicable tests or validation scripts
-   - Check code style and formatting compliance
-   - Verify documentation is updated and accurate
-   - Ensure no debugging code or temporary changes remain
+### 7.1 · Debt Discovery Analysis
 
-3. **Implementation Summary:**
-   - Generate summary of changes made
-   - List files created/modified with purpose
-   - Confirm all acceptance criteria addressed
-   - Note any deviations from original plan
+**Scan Implementation for Debt Items:**
 
-4. **Prepare for User Review:**
-   - Compile comprehensive change overview
-   - Prepare commit proposal for user approval
-   - Ready PR creation plan for user review
-   - Set up approval gates for next steps
+1. **Code Quality Debt:**
+   - **Duplicated Logic**: Look for copy-paste code that should be abstracted
+   - **Complex Functions**: Functions exceeding reasonable complexity thresholds
+   - **Poor Naming**: Variables, functions, or classes with unclear names
+   - **Missing Error Handling**: Inadequate exception handling or validation
+   - **Code Smells**: Anti-patterns that reduce maintainability
+
+2. **Architecture Debt:**
+   - **Design Violations**: Code that breaks established architectural patterns
+   - **Tight Coupling**: Components with excessive interdependencies
+   - **Missing Abstractions**: Repeated patterns that should be generalized
+   - **Scalability Issues**: Designs that won't scale with growth
+
+3. **Security Debt:**
+   - **Input Validation**: Missing or insufficient input sanitization
+   - **Authentication Gaps**: Weak authentication mechanisms
+   - **Authorization Flaws**: Inadequate permission controls
+   - **Data Exposure**: Sensitive data handling issues
+
+4. **Performance Debt:**
+   - **Inefficient Algorithms**: Suboptimal algorithm choices
+   - **Database Issues**: Poor query performance or schema design
+   - **Resource Leaks**: Memory, connection, or file handle leaks
+   - **Missing Caching**: Areas where caching would be beneficial
+
+5. **Documentation Debt:**
+   - **Missing Documentation**: Undocumented code or systems
+   - **Outdated Documentation**: Documentation that doesn't match implementation
+   - **Missing Comments**: Complex logic without explanatory comments
+
+6. **Testing Debt:**
+   - **Test Coverage Gaps**: Missing unit, integration, or e2e tests
+   - **Flaky Tests**: Tests that pass/fail inconsistently
+   - **Missing Test Data**: Inadequate test scenarios or edge cases
+
+### 7.2 · Debt Categorization and Impact Analysis
+
+**For Each Identified Debt Item:**
+
+1. **Assess Severity:**
+   - **Critical**: Security vulnerabilities, production blockers, data corruption risks
+   - **High**: Performance degradation, significant maintenance burden
+   - **Medium**: Code maintainability issues, future scalability concerns
+   - **Low**: Code clarity improvements, minor convention violations
+
+2. **Evaluate Impact:**
+   - **Development Velocity**: How this debt affects current and future development speed
+   - **Maintenance Cost**: Additional time required for related changes
+   - **Business Risk**: Potential business consequences if unaddressed
+   - **Technical Risk**: Probability and impact of technical failures
+
+3. **Calculate Risk Score:** (Likelihood × Impact, scale 1-25)
+
+### 7.3 · Debt Logging Process
+
+**If Debt Items Discovered:**
+
+1. **Create Debt Items:**
+   - Use `technical_debt_template.md` from `.simone/99_TEMPLATES/`
+   - Generate unique TD_### ID (check existing items in `07_TECHNICAL_DEBT/ACTIVE/`)
+   - Place in `.simone/07_TECHNICAL_DEBT/ACTIVE/`
+   - Link to source task in debt metadata
+
+2. **Update Task Documentation:**
+   - Add technical debt assessment section to task Output Log
+   - Reference created debt items: "Technical debt logged: TD_001, TD_002"
+   - Include brief impact summary in task completion notes
+
+3. **Update Debt Registry:**
+   - Add new debt items to `.simone/07_TECHNICAL_DEBT/DEBT_REGISTRY.md`
+   - Include categorization and priority information
+   - Cross-reference with source task
+
+### 7.4 · Conscious Debt Creation
+
+**When Deliberately Creating Technical Debt:**
+
+1. **Document Justification:**
+   - Explain why the debt was created (time pressure, MVP scope, etc.)
+   - Estimate future cost of resolution
+   - Set target resolution timeframe
+
+2. **Create Debt Item:**
+   - Mark as "conscious debt" in metadata
+   - Include business justification
+   - Plan for future resolution
+
+3. **Stakeholder Communication:**
+   - Include debt creation in task summary
+   - Highlight in PR description
+   - Add to project risk tracking
+
+### 7.5 · Debt Resolution Tracking
+
+**If Task Addresses Existing Debt:**
+
+1. **Update Debt Status:**
+   - Change status from "active" to "resolved"
+   - Move file to `.simone/07_TECHNICAL_DEBT/RESOLVED/`
+   - Add resolution details to debt item
+
+2. **Record Resolution Effort:**
+   - Compare estimated vs actual resolution effort
+   - Document approach taken and effectiveness
+   - Note any follow-up work needed
+
+3. **Update Metrics:**
+   - Track debt resolution velocity
+   - Measure impact improvement
+   - Update project health indicators
+
+### 7.6 · Integration with Code Review
+
+**Prepare Debt Information for Review:**
+
+- **Debt Summary**: Brief overview of debt items discovered or resolved
+- **Impact Assessment**: Priority and business impact of new debt
+- **Resolution Plan**: Timeline and approach for addressing critical/high debt
+- **Review Focus**: Alert reviewers to debt-related changes or decisions
+
+**Example Debt Assessment Output:**
+```markdown
+## Technical Debt Assessment
+
+### Debt Discovered:
+- **TD_042** (Medium): Duplicate validation logic in user service - estimated 3h to resolve
+- **TD_043** (Low): Missing error handling in payment processor - estimated 1h to resolve
+
+### Conscious Debt Created:
+- **TD_044** (High): Simplified authentication for MVP - requires proper OAuth implementation (8h effort)
+  - **Justification**: MVP deadline requires basic auth, full OAuth planned for Sprint 3
+  - **Risk**: Limited user security, higher support overhead
+  - **Target Resolution**: Sprint 3 (2 weeks)
+
+### Debt Resolved:
+- **TD_028**: Removed duplicate database queries (was 4h effort, actual 3.5h)
+
+### Impact Summary:
+- New debt added: 2 items (12h total effort)
+- Debt resolved: 1 item (3.5h effort)
+- Net debt change: +8.5h effort
+- Critical/High items requiring immediate attention: 1 (TD_044)
+```
 
 ## 8 · Execute Code Review
 

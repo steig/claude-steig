@@ -22,6 +22,7 @@ The template system is located in `.simone/99_TEMPLATES/` and provides standardi
 
 ### 🎯 Task & Development Templates
 - [`task_template.md`](#task-template) - Individual task specification
+- [`technical_debt_template.md`](#technical-debt-template) - Technical debt tracking and resolution
 - [`bug_template.md`](#bug-template) - Unified bug handling (reporting, tracking, and resolution)
 - [`commit_template.md`](#commit-template) - Structured commit messages
 - [`pr_template.md`](#pr-template) - Pull request documentation
@@ -207,6 +208,48 @@ success_metrics:
 - **Risk Management**: Identified risks, mitigation strategies
 
 **Usage**: Created during milestone planning and tracked throughout execution.
+
+---
+
+### technical_debt_template.md
+
+**Purpose**: Comprehensive technical debt tracking and resolution planning.
+
+**Key Features**:
+- **Structured categorization** by type (code quality, architecture, security, performance, documentation, testing)
+- **Severity assessment** with business and technical impact analysis
+- **Risk evaluation** with likelihood and impact scoring
+- **Resolution planning** with effort estimation and timeline
+- **Integration hooks** with task management and sprint planning
+- **Progress tracking** through debt lifecycle
+
+**YAML Frontmatter**:
+```yaml
+debt_id: "TD_{DEBT_ID}"
+title: "{DEBT_TITLE}"
+category: "{CATEGORY}" # code_quality, architecture, security, performance, documentation, testing
+severity: "{SEVERITY}" # critical, high, medium, low
+created_date: "{CREATED_DATE}"
+status: "{STATUS}" # active, planned, in_progress, resolved, wont_fix
+estimated_effort: "{EFFORT_HOURS}"
+business_impact: "{BUSINESS_IMPACT_DESCRIPTION}"
+technical_impact: "{TECHNICAL_IMPACT_DESCRIPTION}"
+affected_components: ["{COMPONENT_1}", "{COMPONENT_2}"]
+related_debt: ["{RELATED_DEBT_ID}"]
+blocking_tasks: ["{BLOCKED_TASK_ID}"]
+risk_score: "{CALCULATED_RISK}" # 1-25 (likelihood × impact)
+```
+
+**Content Sections**:
+- **Problem Description**: Detailed issue analysis with code examples
+- **Impact Analysis**: Development velocity, maintenance cost, business impact
+- **Risk Assessment**: Specific risks with probability and mitigation strategies
+- **Resolution Planning**: Proposed solution with implementation phases
+- **Alternative Solutions**: Other approaches considered with trade-offs
+- **Dependencies and Blockers**: Prerequisites and blocking relationships
+- **Monitoring and Validation**: Detection methods and success criteria
+
+**Usage**: Created during code reviews, task execution, or dedicated debt assessment sessions. Integrated with task management for resolution planning.
 
 ---
 
@@ -485,6 +528,8 @@ related_docs: ["../01_PROJECT_DOCS/ARCHITECTURE.md"]
 | `create_pr` | `pr_template.md` | - |
 | `commit` | `commit_template.md` | - |
 | `project_review` | `project_review_template.md` | - |
+| `log_technical_debt` | `technical_debt_template.md` | - |
+| `do_task` | `task_template.md` | `technical_debt_template.md` (for debt logging) |
 
 ### Template Enhancement Features
 

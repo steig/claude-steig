@@ -18,10 +18,17 @@ Simone's task management system is the heart of the framework, providing enterpr
 
 ### General Tasks  
 **Format**: `task-###` (e.g., `task-001`, `task-002`)
-- **Purpose**: Work not tied to specific sprints (maintenance, research, debt)
+- **Purpose**: Work not tied to specific sprints (maintenance, research, technical debt resolution)
 - **Location**: `.simone/04_GENERAL_TASKS/`
 - **Lifecycle**: Same as sprint tasks
 - **Branch naming**: `task/t###-feature-name`
+
+### Technical Debt Resolution Tasks
+**Format**: `task-###-debt-td###` (e.g., `task-015-debt-td003`)
+- **Purpose**: Tasks specifically created to resolve technical debt items
+- **Location**: `.simone/04_GENERAL_TASKS/` or within relevant sprint
+- **Linking**: Must reference originating debt item (TD_###)
+- **Lifecycle**: Standard task workflow with debt item status updates
 
 ### Completed Tasks
 **Format**: `tx##-s##` or `tx###` (e.g., `tx01-s01`, `tx001`)
@@ -187,6 +194,7 @@ stateDiagram-v2
 - **Security Checklist**: Security best practices validation
 - **Documentation Requirements**: What needs to be documented
 - **Review Criteria**: Approval standards and reviewers
+- **Technical Debt Assessment**: Documentation of any debt discovered or created during implementation
 
 ## Advanced Task Features
 
@@ -266,6 +274,7 @@ test_coverage:
 9. **NEW**: PR approval gate with team assignment and documentation
 10. **NEW**: Auto-PR creation with proper linking and metadata
 11. **NEW**: Task status update to "review" with full traceability
+12. **NEW**: Technical debt logging - Documents any debt discovered or created during implementation
 
 **Approval Gate Benefits**:
 - **User Control**: Developer reviews each step before execution

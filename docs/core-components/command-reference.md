@@ -37,6 +37,7 @@ The Simone Framework provides 22 specialized commands for project management, de
 
 ### 🔍 Quality Assurance
 - [`code_review`](#code_review) - Perform detailed code reviews
+- [`log_technical_debt`](#log_technical_debt) - Document and track technical debt
 - [`discuss_review`](#discuss_review) - Facilitate review discussions
 - [`testing_review`](#testing_review) - Review testing coverage and quality
 
@@ -230,9 +231,10 @@ The Simone Framework provides 22 specialized commands for project management, de
 **Complete Workflow**:
 1. **Implementation**: Full task execution following requirements
 2. **Quality Review**: Pre-commit assessment and validation
-3. **Code Review**: Automated code quality and security checks
-4. **Approval Gates**: User-controlled commit and PR creation
-5. **Integration**: Automatic Git workflow with user approval
+3. **Technical Debt Assessment**: Automatic identification and logging of technical debt
+4. **Code Review**: Automated code quality and security checks
+5. **Approval Gates**: User-controlled commit and PR creation
+6. **Integration**: Automatic Git workflow with user approval
 
 **New Approval Gate Features**:
 - **Commit Approval**: Review changes and approve commit with custom message
@@ -244,16 +246,18 @@ The Simone Framework provides 22 specialized commands for project management, de
 1. Create and switch to task branch
 2. Execute task work with progress tracking
 3. Implementation quality review and validation
-4. Automated code review with parallel subagents
-5. **NEW**: Commit approval gate with change preview
-6. **NEW**: Auto-commit execution with task reference
-7. **NEW**: PR approval gate with team assignment
-8. **NEW**: Auto-PR creation with proper linking
-9. **NEW**: Task status update to "review" state
+4. **NEW**: Technical debt assessment and logging
+5. Automated code review with parallel subagents
+6. **NEW**: Commit approval gate with change preview
+7. **NEW**: Auto-commit execution with task reference
+8. **NEW**: PR approval gate with team assignment
+9. **NEW**: Auto-PR creation with proper linking
+10. **NEW**: Task status update to "review" state
 
 **Quality Features**:
 - Comprehensive acceptance criteria validation
 - Automated testing and code quality checks
+- Technical debt identification and tracking
 - Documentation updates and verification
 - Security and performance impact assessment
 - Full audit trail and progress tracking
@@ -488,6 +492,83 @@ The Simone Framework provides 22 specialized commands for project management, de
 
 ---
 
+### log_technical_debt
+
+**Purpose**: Document and track technical debt items with comprehensive impact analysis and resolution planning.
+
+**Usage**:
+```
+/project:simone:log_technical_debt [debt_description] [--persona-flags]
+```
+
+**Arguments**:
+- `debt_description` (optional) - Natural language description of the technical debt
+- `--persona-flags` - Domain expertise flags for enhanced analysis
+
+**Persona Integration**:
+```bash
+# Security-focused debt analysis
+/project:simone:log_technical_debt "weak input validation" --persona-security
+
+# Architecture debt with transparency
+/project:simone:log_technical_debt "tight coupling between services" --persona-architect --introspect
+
+# Code quality analysis with multiple domains
+/project:simone:log_technical_debt "duplicate validation logic" --persona-analyzer --persona-refactorer
+```
+
+**Available Personas**:
+- `--persona-architect`: Architecture debt analysis and system design impact
+- `--persona-security`: Security debt identification and risk assessment  
+- `--persona-frontend`: Frontend-specific debt categorization and UX impact
+- `--persona-backend`: Backend performance and API design debt analysis
+- `--persona-analyzer`: Code quality metrics and maintainability assessment
+- `--persona-performance`: Performance bottlenecks and optimization debt
+- `--persona-qa`: Testing debt and quality assurance gaps
+
+**Comprehensive Process**:
+1. **Parse debt description** and analyze context from current work
+2. **Categorize and assess severity** using domain expertise
+3. **Analyze business and technical impact** with quantified risk scoring
+4. **Generate unique debt ID** (TD_###) and create file structure
+5. **Create comprehensive documentation** using technical debt template
+6. **Update debt registry** and establish cross-references
+7. **Integrate with project tracking** and health metrics
+
+**Debt Categories**:
+- **Code Quality**: Duplication, complexity, naming, maintainability
+- **Architecture**: Design violations, coupling issues, missing abstractions
+- **Security**: Authentication gaps, validation flaws, data exposure
+- **Performance**: Inefficient algorithms, resource leaks, optimization opportunities
+- **Documentation**: Missing or outdated documentation, unclear implementations
+- **Testing**: Coverage gaps, flaky tests, missing scenarios
+
+**Severity Levels**:
+- **Critical**: Security vulnerabilities, production blockers, data corruption risks
+- **High**: Performance degradation, significant maintenance burden
+- **Medium**: Code maintainability issues, future scalability concerns  
+- **Low**: Code clarity improvements, minor convention violations
+
+**Risk Assessment**:
+- **Risk Scoring**: 1-25 scale (Likelihood × Impact)
+- **Business Impact**: Development velocity, maintenance cost, customer impact
+- **Technical Impact**: System reliability, performance, architecture integrity
+- **Resolution Planning**: Effort estimation, timeline, implementation approach
+
+**Generated Outputs**:
+- Technical debt item in `.simone/07_TECHNICAL_DEBT/ACTIVE/TD_###_description.md`
+- Updated debt registry in `.simone/07_TECHNICAL_DEBT/DEBT_REGISTRY.md`
+- Project health metrics updated in `.simone/00_PROJECT_MANIFEST.md`
+- Cross-references to source context (tasks, code reviews, etc.)
+
+**Integration Features**:
+- **Task Workflow**: Seamlessly integrates with task execution and code review
+- **Sprint Planning**: Debt metrics inform capacity and priority planning
+- **Project Reviews**: Debt health included in comprehensive project assessments
+- **Quality Gates**: Critical debt items can block milestone progression
+
+---
+
 ### code_review
 
 **Purpose**: Perform detailed code reviews with quality analysis.
@@ -506,6 +587,7 @@ The Simone Framework provides 22 specialized commands for project management, de
 - Architecture and design patterns
 - Security vulnerabilities
 - Performance implications
+- Technical debt identification
 - Maintainability assessment
 
 ---
@@ -525,6 +607,7 @@ The Simone Framework provides 22 specialized commands for project management, de
 
 **Review Areas**:
 - Project health and metrics
+- Technical debt accumulation and management
 - Goal achievement and progress
 - Risk assessment and mitigation
 - Team performance and capacity
@@ -721,6 +804,7 @@ Quality is built into every command:
 - Documentation requirements
 - Testing integration
 - Code quality analysis
+- Technical debt tracking
 - Architecture compliance
 
 ## Best Practices
