@@ -1,8 +1,9 @@
 # Site settings
 title: "Simone Framework"
 description: "Sophisticated directory-based project management framework for AI-assisted enterprise software development"
-baseurl: "/claude-simone"
+baseurl: "/claude-steig"
 url: "https://steig.github.io"
+repository: "steig/claude-steig"
 
 # Build settings
 markdown: kramdown
