@@ -168,6 +168,12 @@ That's the basic workflow to get started! You can also:
 - Create general tasks with `/project:simone:create_general_task`
 - Update task status and metadata with `/project:simone:update_task_status T01_S01 completed`
 - Use YOLO mode to run a full sprint autonomously
+- **Use helper commands** for planning and research:
+  - `/project:simone:troubleshoot` - Comprehensive project diagnostics
+  - `/project:simone:plan` - Strategic feature planning with automatic milestone creation
+  - `/project:simone:research` - Investigate codebase patterns and best practices
+  - `/project:simone:analyze` - Deep code quality and architecture analysis
+  - `/project:simone:investigate` - Targeted bug and issue investigation
 - Explore other commands in `.claude/commands/simone/`
 
 ### 7. Task Status Management

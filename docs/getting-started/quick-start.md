@@ -223,8 +223,14 @@ Simone includes **9 specialized AI personas** that automatically enhance your de
 ### Advanced Features to Explore
 1. **YOLO Mode** - `/project:simone:yolo` for autonomous sprint execution
 2. **Quality Reviews** - Built-in code review and architectural compliance
-3. **Release Management** - End-to-end delivery with semantic versioning
-4. **Team Collaboration** - Multi-developer workflows and governance
+3. **Helper Commands** - Planning and research tools:
+   - `/project:simone:troubleshoot` - Comprehensive project diagnostics
+   - `/project:simone:plan` - Strategic feature planning
+   - `/project:simone:research` - Codebase investigation and analysis
+   - `/project:simone:analyze` - Deep code quality assessment
+   - `/project:simone:investigate` - Bug and issue investigation
+4. **Release Management** - End-to-end delivery with semantic versioning
+5. **Team Collaboration** - Multi-developer workflows and governance
 
 > 📖 **Commands**: [Complete Command Reference](../core-components/command-reference.md)
 

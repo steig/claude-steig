@@ -86,6 +86,7 @@ Simone is a sophisticated, directory-based project management framework specific
 ✅ **AI-Enhanced Development** - Deep integration with Claude Code and MCP servers  
 ✅ **Template-Driven Consistency** - Standardized documentation and processes  
 ✅ **Intelligent Automation** - YOLO mode and context-aware task execution  
+✅ **Helper Commands** - 5 specialized commands for planning, research, and diagnostics  
 ✅ **Safety Features** - Comprehensive safety monitoring and rollback capabilities  
 ✅ **Emergency Controls** - Emergency stop and user intervention systems  
 ✅ **Scalable Architecture** - Supports projects from startup to enterprise scale  

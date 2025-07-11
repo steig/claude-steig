@@ -4,7 +4,7 @@ Complete reference for all Simone Framework commands available in Claude Code.
 
 ## Overview
 
-The Simone Framework provides 30 specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
+The Simone Framework provides 35 specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
 
 ## Command Categories
 
@@ -34,6 +34,13 @@ The Simone Framework provides 30 specialized commands for project management, de
 - [`review_pr`](#review_pr) - Conduct thorough pull request reviews
 - [`merge`](#merge) - Merge code with quality checks
 - [`test`](#test) - Execute comprehensive testing workflows
+
+### 🔍 Helper Commands
+- [`troubleshoot`](#troubleshoot) - Comprehensive project diagnostic and issue resolution
+- [`research`](#research) - Comprehensive codebase investigation and analysis
+- [`plan`](#plan) - Strategic feature and implementation planning
+- [`analyze`](#analyze) - Deep code and system analysis
+- [`investigate`](#investigate) - Targeted bug and issue investigation
 
 ### 🔍 Quality Assurance
 - [`code_review`](#code_review) - Perform detailed code reviews
@@ -804,6 +811,29 @@ Commands are designed to work together in common workflows:
 3. `status` - Monitor progress
 4. `project_review` - Retrospective analysis
 
+**Helper Commands Workflows**:
+
+**Diagnostic & Problem Resolution**:
+1. `troubleshoot` - Comprehensive project diagnostic
+2. `investigate` - Targeted issue investigation
+3. `analyze` - Deep code and system analysis
+4. `create_milestone` or `create_general_task` - Create remediation items
+5. `log_technical_debt` - Track identified technical debt
+
+**Feature Planning & Research**:
+1. `research` - Investigate existing patterns and best practices
+2. `plan` - Strategic feature and implementation planning
+3. `create_milestone` - Generate structured milestones (automatic)
+4. `create_sprints_from_milestone` - Break down into sprints
+5. `create_sprint_tasks` - Create specific implementation tasks
+
+**Quality Assurance & Improvement**:
+1. `analyze` - Comprehensive quality analysis
+2. `troubleshoot` - System health diagnostic
+3. `log_technical_debt` - Document improvement opportunities
+4. `plan` - Create improvement initiative plans
+5. `create_general_task` - Implement specific improvements
+
 **Safety & Emergency Response Workflow**:
 1. `safety_check` - Pre-operation validation
 2. `safety_monitor --start` - Begin monitoring
@@ -843,6 +873,264 @@ Quality is built into every command:
 - All actions are logged and tracked
 - Cross-references are maintained
 - Architecture compliance is validated
+
+## Helper Commands
+
+### troubleshoot
+
+**Purpose**: Comprehensive project diagnostic and issue resolution with systematic analysis and milestone integration.
+
+**Usage**: 
+```
+/project:simone:troubleshoot [scope_flags] [persona_flags] [advanced_flags]
+```
+
+**Scope Flags**:
+- `--scope-full` - Complete project health assessment (default)
+- `--scope-performance` - Focus on performance bottlenecks
+- `--scope-security` - Security vulnerabilities and compliance
+- `--scope-quality` - Code quality and technical debt
+- `--scope-infrastructure` - Environment and deployment issues
+- `--scope-workflow` - Development process bottlenecks
+
+**Available Personas**:
+- `--persona-architect` - System architecture diagnostics
+- `--persona-security` - Security vulnerability assessment
+- `--persona-analyzer` - Code quality metrics and performance analysis
+- `--persona-qa` - Testing infrastructure diagnostics
+- `--persona-devops` - Infrastructure and deployment diagnostics
+- `--persona-performance` - Performance bottlenecks analysis
+
+**Advanced Flags**:
+- `--introspect` - Show transparent diagnostic reasoning process
+- `--consensus` - Multi-model consensus on issue prioritization
+- `--think-deep` - Extended troubleshooting analysis
+- `--compressed` - Output concise diagnostic summary only
+
+**Process** (12 TODO Items):
+1. Parse troubleshooting scope and validate diagnostic requirements
+2. Execute comprehensive system health checks and safety validation
+3. Analyze project structure, organization, and architectural patterns
+4. Assess test infrastructure coverage and quality metrics
+5. Review technical debt accumulation and code quality issues
+6. Examine deployment pipeline and environment configuration
+7. Identify workflow bottlenecks and process inefficiencies
+8. Analyze performance metrics and optimization opportunities
+9. Conduct security assessment and vulnerability scanning
+10. Generate prioritized issue recommendations with severity levels
+11. Create actionable remediation plan with milestone integration
+12. Generate comprehensive diagnostic report and suggest next actions
+
+**MCP Integration**: Sequential Thinking, Work History, Context7, and Serena for enhanced diagnostic capabilities
+
+**Output**: 
+- Diagnostic report in `.simone/10_STATE_OF_PROJECT/diagnostic_report_[timestamp].md`
+- Suggested milestones for major improvement initiatives
+- Immediate action items in task format
+
+**Integration**: Works with `create_milestone`, `create_general_task`, `log_technical_debt`, and `safety_check`
+
+---
+
+### research
+
+**Purpose**: Comprehensive codebase investigation and analysis for understanding implementation patterns, dependencies, and best practices.
+
+**Usage**:
+```
+/project:simone:research [target_flags] [persona_flags] [advanced_flags]
+```
+
+**Research Target Flags**:
+- `--target-feature` - Research specific feature implementation
+- `--target-pattern` - Investigate code patterns and architectural decisions
+- `--target-dependency` - Analyze dependency usage and integration
+- `--target-technology` - Research technology adoption and implementation
+
+**Available Personas**:
+- `--persona-architect` - System architecture research and design patterns
+- `--persona-analyzer` - Code analysis and pattern recognition
+- `--persona-security` - Security research and vulnerability analysis
+- `--persona-performance` - Performance research and optimization strategies
+
+**Advanced Flags**:
+- `--introspect` - Show transparent research reasoning process
+- `--think-deep` - Extended investigation with comprehensive analysis
+- `--compressed` - Output concise research summary only
+
+**Process** (8 TODO Items):
+1. Parse research query and define investigation scope
+2. Execute comprehensive codebase scanning and pattern identification
+3. Analyze implementation approaches and architectural decisions
+4. Investigate dependencies, libraries, and technology stack
+5. Research best practices and industry standards comparison
+6. Identify knowledge gaps and learning opportunities
+7. Generate research findings and recommendations
+8. Create actionable research report with next steps
+
+**MCP Integration**: Sequential Thinking, Context7 for pattern recognition and industry knowledge integration
+
+**Output**: Research findings in `.simone/10_STATE_OF_PROJECT/research_[topic]_[timestamp].md`
+
+**Use Cases**: 
+- Understanding existing codebase patterns
+- Technology adoption research
+- Best practices comparison
+- Dependency analysis and optimization
+
+---
+
+### plan
+
+**Purpose**: Strategic feature and implementation planning with comprehensive architecture design and milestone breakdown.
+
+**Usage**:
+```
+/project:simone:plan [type_flags] [persona_flags] [advanced_flags]
+```
+
+**Planning Type Flags**:
+- `--type-feature` - Plan new feature implementation (default)
+- `--type-refactor` - Plan refactoring and improvement initiatives
+- `--type-migration` - Plan technology or architecture migration
+- `--type-integration` - Plan system integration or API development
+
+**Available Personas**:
+- `--persona-architect` - System architecture and design planning
+- `--persona-pm` - Project management and milestone planning
+- `--persona-qa` - Quality assurance and testing strategy planning
+- `--persona-security` - Security implementation planning
+- `--persona-performance` - Performance optimization planning
+
+**Advanced Flags**:
+- `--introspect` - Show transparent planning reasoning process
+- `--consensus` - Multi-model consensus on planning approach
+- `--think-deep` - Extended planning with comprehensive analysis
+
+**Process** (10 TODO Items):
+1. Parse planning requirements and define project scope
+2. Analyze existing codebase and architectural constraints
+3. Research technical requirements and implementation approaches
+4. Design high-level architecture and component structure
+5. Break down implementation into manageable milestones
+6. Identify dependencies, risks, and potential blockers
+7. Estimate effort and timeline for each milestone
+8. Create detailed task breakdown with acceptance criteria
+9. Generate comprehensive implementation plan
+10. Output structured milestones and tasks using templates
+
+**MCP Integration**: Sequential Thinking for systematic planning, Context7 for system understanding, Work History for estimation, Serena for synthesis
+
+**Output**: 
+- Implementation plan in `.simone/10_STATE_OF_PROJECT/implementation_plan_[feature]_[timestamp].md`
+- Generated milestones in `.simone/02_MILESTONES/`
+- Generated tasks in `.simone/04_TASKS/`
+
+**Integration**: Automatically creates milestones and tasks using `milestone_meta_template.md` and `task_template.md`
+
+---
+
+### analyze
+
+**Purpose**: Deep code and system analysis with comprehensive quality, security, performance, and architecture assessment.
+
+**Usage**:
+```
+/project:simone:analyze [type_flags] [persona_flags] [advanced_flags]
+```
+
+**Analysis Type Flags**:
+- `--type-code` - Analyze code quality, patterns, and structure (default)
+- `--type-performance` - Analyze performance bottlenecks and optimization opportunities
+- `--type-security` - Analyze security vulnerabilities and compliance
+- `--type-architecture` - Analyze system architecture and design patterns
+- `--type-dependencies` - Analyze dependency relationships and management
+
+**Available Personas**:
+- `--persona-analyzer` - Code analysis and metrics evaluation expertise
+- `--persona-architect` - System architecture analysis
+- `--persona-security` - Security analysis and vulnerability assessment
+- `--persona-performance` - Performance analysis and optimization
+- `--persona-qa` - Quality analysis and testing assessment
+
+**Advanced Flags**:
+- `--introspect` - Show transparent analysis reasoning process
+- `--consensus` - Multi-model consensus on analysis findings
+- `--think-deep` - Extended analysis with comprehensive investigation
+
+**Process** (9 TODO Items):
+1. Parse analysis target and define analysis scope
+2. Execute comprehensive code scanning and metric collection
+3. Analyze code quality, complexity, and maintainability
+4. Assess architectural patterns and design quality
+5. Evaluate performance characteristics and bottlenecks
+6. Conduct security analysis and vulnerability assessment
+7. Analyze dependency relationships and technical debt
+8. Generate analysis findings with actionable recommendations
+9. Create structured analysis report with improvement suggestions
+
+**MCP Integration**: Sequential Thinking for systematic analysis, Context7 for architectural understanding, Work History for pattern analysis, Serena for findings synthesis
+
+**Output**: 
+- Analysis report in `.simone/10_STATE_OF_PROJECT/analysis_report_[target]_[timestamp].md`
+- Improvement tasks in `.simone/04_TASKS/` for critical findings
+- Technical debt items using `technical_debt_template.md`
+
+**Integration**: Works with `log_technical_debt`, `create_general_task`, `plan`, and `troubleshoot`
+
+---
+
+### investigate
+
+**Purpose**: Targeted bug and issue investigation with systematic root cause analysis and remediation planning.
+
+**Usage**:
+```
+/project:simone:investigate [type_flags] [persona_flags] [advanced_flags]
+```
+
+**Investigation Type Flags**:
+- `--type-bug` - Investigate specific bug reports or issues (default)
+- `--type-performance` - Investigate performance degradation or bottlenecks
+- `--type-security` - Investigate security incidents or vulnerabilities
+- `--type-failure` - Investigate system failures or outages
+- `--type-anomaly` - Investigate unusual behavior or patterns
+
+**Available Personas**:
+- `--persona-analyzer` - Code analysis and debugging expertise
+- `--persona-qa` - Testing and quality assurance investigation
+- `--persona-security` - Security incident investigation
+- `--persona-performance` - Performance issue investigation
+- `--persona-devops` - Infrastructure and deployment investigation
+
+**Advanced Flags**:
+- `--introspect` - Show transparent investigation reasoning process
+- `--think-deep` - Extended investigation with comprehensive analysis
+- `--compressed` - Output concise investigation summary only
+
+**Process** (11 TODO Items):
+1. Parse investigation request and define investigation scope
+2. Gather initial evidence and reproduce issue if possible
+3. Analyze logs, error messages, and system state
+4. Trace code execution paths and identify potential causes
+5. Examine recent changes and deployment history
+6. Investigate environmental factors and dependencies
+7. Analyze similar historical issues and patterns
+8. Test hypotheses and validate root cause theories
+9. Determine impact scope and affected components
+10. Document findings and root cause analysis
+11. Suggest remediation plan and prevention strategies
+
+**MCP Integration**: Sequential Thinking for systematic investigation, Work History for pattern recognition and historical analysis, Context7 for code flow understanding, Serena for comprehensive documentation
+
+**Output**: 
+- Investigation report in `.simone/10_STATE_OF_PROJECT/investigation_[issue]_[timestamp].md`
+- Bug report using `bug_report_template.md` if needed
+- Remediation tasks in `.simone/04_TASKS/`
+
+**Integration**: Works with `create_bug`, `fix_bug`, `create_general_task`, and `safety_check`
+
+---
 
 ## Safety & Emergency Response Commands
 
