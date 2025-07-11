@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "./.simone/scripts/performance-cache.sh init 2>/dev/null && echo \"[$(date '+%H:%M:%S')] Template cache check for $TOOL_ARGS\" >> .simone/.cache/read_log.txt"
+            "command": "./.simone/scripts/performance-cache.sh init 2>/dev/null && mkdir -p .simone/.cache && echo \"[$(date '+%H:%M:%S')] Template cache check for $TOOL_ARGS\" >> .simone/.cache/read_log.txt"
           }
         ]
       },
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "./.simone/scripts/automation-hooks.sh init 2>/dev/null && echo \"[$(date '+%H:%M:%S')] Git operation queued: $TOOL_ARGS\" >> .simone/.cache/git_log.txt"
+            "command": "./.simone/scripts/automation-hooks.sh init 2>/dev/null && mkdir -p .simone/.cache && echo \"[$(date '+%H:%M:%S')] Git operation queued: $TOOL_ARGS\" >> .simone/.cache/git_log.txt"
           }
         ]
       },
@@ -119,7 +119,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[$(date '+%H:%M:%S')] Files staged, preparing for commit\" && git status --porcelain | wc -l | xargs echo \"Total staged files:\" >> .simone/.cache/git_stats.txt"
+            "command": "echo \"[$(date '+%H:%M:%S')] Files staged, preparing for commit\" && mkdir -p .simone/.cache && git status --porcelain | wc -l | xargs echo \"Total staged files:\" >> .simone/.cache/git_stats.txt"
           }
         ]
       },
@@ -162,7 +162,7 @@
           },
           {
             "type": "command",
-            "command": "echo \"[$(date '+%H:%M:%S')] === SESSION COMPLETED ===\" >> .simone/.cache/session_log.txt && echo \"Session logged\""
+            "command": "mkdir -p .simone/.cache && echo \"[$(date '+%H:%M:%S')] === SESSION COMPLETED ===\" >> .simone/.cache/session_log.txt && echo \"Session logged\""
           }
         ]
       }
@@ -177,7 +177,7 @@
           },
           {
             "type": "command",
-            "command": "echo \"[$(date '+%H:%M:%S')] Subagent task completed\" >> .simone/.cache/subagent_log.txt"
+            "command": "mkdir -p .simone/.cache && echo \"[$(date '+%H:%M:%S')] Subagent task completed\" >> .simone/.cache/subagent_log.txt"
           }
         ]
       }
