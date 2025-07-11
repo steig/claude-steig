@@ -1,0 +1,1 @@
+Sitemap: https://steig.github.io/claude-simone/sitemap.xml

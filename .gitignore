@@ -25,8 +25,7 @@ Thumbs.db
 !/.pre-commit-config.yaml
 !/.markdownlint.yaml
 !/examples
-!/doc-sites
-
+!/docs-site
 !/scripts
 
 !/.version
