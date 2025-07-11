@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Simone Framework Installer/Upgrader
+# Simone Framework Installer and Upgrade Tool
 # Intelligently installs or upgrades the Simone project management framework
 
 set -e  # Exit on any error
@@ -124,6 +124,14 @@ install_core_structure() {
         success "Templates installed"
     fi
     
+    # Copy performance scripts
+    if [[ -d "$source_dir/.simone/scripts" ]]; then
+        mkdir -p "$SIMONE_DIR/scripts"
+        cp -r "$source_dir/.simone/scripts/"* "$SIMONE_DIR/scripts/"
+        chmod +x "$SIMONE_DIR/scripts/"*.sh 2>/dev/null || true
+        success "Performance optimization scripts installed"
+    fi
+    
     # Copy CLAUDE.md instruction files (excluding .version file)
     local claude_files=(
         "CLAUDE.md"
@@ -235,6 +243,29 @@ install_commands() {
                 cp "$source_dir/.claude/$file" ".claude/$file"
             fi
         done
+        
+        # Copy performance settings templates (don't overwrite existing settings)
+        local settings_templates=("settings.optimized.json" "settings.performance.json")
+        for template in "${settings_templates[@]}"; do
+            if [[ -f "$source_dir/.claude/$template" ]]; then
+                if [[ ! -f ".claude/settings.json" ]]; then
+                    # No existing settings - copy optimized as default
+                    if [[ "$template" == "settings.optimized.json" ]]; then
+                        cp "$source_dir/.claude/$template" ".claude/settings.json"
+                        log "Performance-optimized settings installed as default"
+                    fi
+                fi
+                # Always copy as template for reference
+                cp "$source_dir/.claude/$template" ".claude/$template"
+            fi
+        done
+        
+        if [[ -f ".claude/settings.optimized.json" ]]; then
+            log "Performance settings templates installed:"
+            log "  - settings.optimized.json (production configuration)"
+            log "  - settings.performance.json (development configuration)"
+            log "  - Use: cp .claude/settings.optimized.json .claude/settings.json"
+        fi
     fi
 }
 
@@ -271,7 +302,7 @@ upgrade_installation() {
         local backup_requirements=""
         local backup_sprints=""
         local backup_tasks=""
-        local backup_adrs=""
+        local backup_architectural_decisions=""
         local backup_reviews=""
         
         # Backup user-created content
@@ -280,7 +311,7 @@ upgrade_installation() {
         [[ -d "$SIMONE_DIR/02_REQUIREMENTS" ]] && backup_requirements="$SIMONE_DIR/02_REQUIREMENTS"
         [[ -d "$SIMONE_DIR/03_SPRINTS" ]] && backup_sprints="$SIMONE_DIR/03_SPRINTS"
         [[ -d "$SIMONE_DIR/04_GENERAL_TASKS" ]] && backup_tasks="$SIMONE_DIR/04_GENERAL_TASKS"
-        [[ -d "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS" ]] && backup_adrs="$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
+        [[ -d "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS" ]] && backup_architectural_decisions="$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
         [[ -d "$SIMONE_DIR/10_STATE_OF_PROJECT" ]] && backup_reviews="$SIMONE_DIR/10_STATE_OF_PROJECT"
         
         # Install new version
@@ -296,9 +327,10 @@ upgrade_installation() {
         [[ -n "$backup_manifest" ]] && echo "$backup_manifest" > "$SIMONE_DIR/00_PROJECT_MANIFEST.md"
         
         # Restore directories, preserving CLAUDE.md files
-        for dir in "$backup_docs" "$backup_requirements" "$backup_sprints" "$backup_tasks" "$backup_adrs" "$backup_reviews"; do
+        for dir in "$backup_docs" "$backup_requirements" "$backup_sprints" "$backup_tasks" "$backup_architectural_decisions" "$backup_reviews"; do
             if [[ -d "$dir" ]]; then
-                local target_dir="$SIMONE_DIR/$(basename "$dir")"
+                local target_dir
+                target_dir="$SIMONE_DIR/$(basename "$dir")"
                 # Copy user files, skip CLAUDE.md files (use new versions)
                 # Use rsync to preserve directory structure, or fallback to cp -r with exclusions
                 if command -v rsync >/dev/null 2>&1; then
@@ -396,7 +428,7 @@ set_version() {
 
 # Main installation logic
 main() {
-    echo "🚀 Simone Framework Installer/Upgrader v$CURRENT_VERSION"
+    echo "🚀 Simone Framework Installer and Upgrade Tool v$CURRENT_VERSION"
     echo "=================================================="
     
     # Change to target directory first
@@ -459,7 +491,7 @@ fi
 # Handle script arguments
 case "${1:-}" in
     --help|-h)
-        echo "Simone Framework Installer/Upgrader"
+        echo "Simone Framework Installer and Upgrade Tool"
         echo
         echo "Usage: $0 [options] [target_directory]"
         echo
@@ -488,11 +520,12 @@ case "${1:-}" in
         exit 0
         ;;
     --force)
-        FORCE_INSTALL=true
         # Check if next argument is a directory
         if [[ -n "$2" && "$2" != --* ]]; then
             TARGET_DIR="$2"
         fi
+        # Force installation by skipping version checks
+        log "Force installation requested - will upgrade even if same version"
         ;;
     --remote)
         REMOTE_INSTALL=true

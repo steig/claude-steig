@@ -1,0 +1,264 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-monitor.sh start \"$TOOL_NAME\" 2>/dev/null || echo \"Monitor not available\""
+          }
+        ]
+      },
+      {
+        "matcher": "Read(**/*template*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-cache.sh init 2>/dev/null && echo \"[$(date '+%H:%M:%S')] Template cache check for $TOOL_ARGS\" >> .simone/.cache/read_log.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Glob(**/*.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p .simone/.cache && echo \"[$(date '+%H:%M:%S')] Pattern search: $TOOL_ARGS\" >> .simone/.cache/search_log.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh init 2>/dev/null && echo \"[$(date '+%H:%M:%S')] Git operation queued: $TOOL_ARGS\" >> .simone/.cache/git_log.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Task(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh parallel \"subagent_$(date +%s)\" start 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-monitor.sh end \"$TOOL_NAME\" success 2>/dev/null || echo \"Monitor end failed\""
+          }
+        ]
+      },
+      {
+        "matcher": "Write(**/*.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh quality-check \"$TOOL_FILE_PATH\" 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh batch-add \"$TOOL_FILE_PATH\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit(**/*.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh quality-check \"$TOOL_FILE_PATH\" 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh batch-add \"$TOOL_FILE_PATH\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "MultiEdit(**/*.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$TOOL_FILE_PATH\" | xargs -I {} ./.simone/scripts/automation-hooks.sh quality-check {} 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "command": "echo \"$TOOL_FILE_PATH\" | xargs -I {} ./.simone/scripts/automation-hooks.sh batch-add {} 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write(**/*template*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-cache.sh templates 2>/dev/null && echo \"Template cache refreshed\" || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit(**/00_PROJECT_MANIFEST.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-cache.sh context 2>/dev/null && echo \"Context cache refreshed\" || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git add *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%H:%M:%S')] Files staged, preparing for commit\" && git status --porcelain | wc -l | xargs echo \"Total staged files:\" >> .simone/.cache/git_stats.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh post-commit 2>/dev/null || echo \"Post-commit optimization failed\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-monitor.sh resources notification 2>/dev/null || echo \"Resource monitoring not available\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh execute-batch 2>/dev/null || echo \"Batch execution completed\""
+          },
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh cleanup 2>/dev/null || echo \"Cleanup completed\""
+          },
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-monitor.sh analyze 2>/dev/null | head -20 || echo \"Session performance analysis not available\""
+          },
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%H:%M:%S')] === SESSION COMPLETED ===\" >> .simone/.cache/session_log.txt && echo \"Session logged\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./.simone/scripts/automation-hooks.sh parallel \"subagent_completed\" end 2>/dev/null || echo \"Subagent coordination completed\""
+          },
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%H:%M:%S')] Subagent task completed\" >> .simone/.cache/subagent_log.txt"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%H:%M:%S')] Context compaction starting - preserving performance data\" && mkdir -p .simone/.cache/pre-compact"
+          },
+          {
+            "type": "command",
+            "command": "cp .simone/.cache/*.txt .simone/.cache/pre-compact/ 2>/dev/null || echo \"Performance data preserved\""
+          },
+          {
+            "type": "command",
+            "command": "./.simone/scripts/performance-cache.sh refresh 2>/dev/null || echo \"Cache refresh attempted before compaction\""
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(tree:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)",
+      "Bash(git:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(wc:*)",
+      "Bash(ps:*)",
+      "Bash(date:*)",
+      "Bash(bc:*)",
+      "Bash(awk:*)",
+      "Bash(sed:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(xargs:*)",
+      "Bash(markdownlint:*)",
+      "Bash(shfmt:*)",
+      "Bash(detect-secrets:*)",
+      "Bash(pre-commit:*)",
+      "Bash(./install-simone.sh:*)",
+      "Bash(./scripts/*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(claude mcp:*)",
+      "mcp__deepwiki__*",
+      "mcp__ide__*",
+      "mcp__serena__*"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(curl:*/etc/*)",
+      "Bash(wget:*/etc/*)"
+    ]
+  },
+  "parallelTasksCount": 3,
+  "maxTokens": 8192,
+  "temperature": 0.1,
+  "timeout": 300000,
+  "features": {
+    "performanceOptimization": true,
+    "smartCaching": true,
+    "batchGitOperations": true,
+    "qualityChecks": true,
+    "resourceMonitoring": true,
+    "parallelTaskCoordination": true
+  }
+}

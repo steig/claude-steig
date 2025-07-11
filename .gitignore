@@ -30,6 +30,8 @@ Thumbs.db
 
 !/.version
 !/.secrets.baseline
+!/CONTRIBUTING.md
+
 
 
 # Pre-commit
