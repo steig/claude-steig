@@ -6,6 +6,8 @@ Simone is a directory-based project management system designed to work better wi
 
 **🙏 Attribution**: This is a specialized fork of the original Simone framework created by [Helmi](https://github.com/helmi). The original work provided the foundational concepts and workflow design. This fork adds comprehensive metadata management and project tracking capabilities.
 
+**🎭 Inspiration**: Cognitive personas and command patterns inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude), which pioneered innovative approaches to AI-driven development workflows and specialized assistant capabilities.
+
 **⚠️ Complexity Warning**: Simone is a sophisticated system that requires time to understand properly. It's not a simple plug-and-play solution, but rather a framework that works best when you take the time to learn how it operates and adapt it to your workflow.
 
 **🚨 EXPERIMENTAL WARNING**: This is a rapidly evolving, experimental project. Things move fast here and stuff might break. Features change frequently, commands may be unstable, and documentation might lag behind reality. Use at your own risk and expect the unexpected. YOLO! 🎢
@@ -85,8 +87,16 @@ cd claude-steig
 - **Backup creation** before any changes (`.simone.backup.TIMESTAMP/`)
 - **Version tracking** to prevent unnecessary reinstalls
 - **Complete setup** including comprehensive templates and Claude Code commands
+- **Automatic MCP server installation** for enhanced AI capabilities
 
 The installer works with both new and existing projects, automatically preserving your manifests, milestones, sprints, tasks, and architectural decisions while updating the framework components.
+
+**MCP Integration**: The installer automatically sets up 5 essential MCP servers:
+- **Serena**: Enhanced IDE assistance and project management
+- **Context7**: Advanced context management and retrieval
+- **Playwright**: Browser automation and testing capabilities
+- **Work History**: Command tracking and output logging
+- **Sequential Thinking**: Enhanced reasoning and structured problem-solving
 
 ### 2. Initialize Your Project
 

@@ -2,6 +2,8 @@
 
 **COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise for intelligent commit analysis and organization.
 
+**Inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude)** persona patterns for specialized AI assistance.
+
 **AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
 - `--persona-architect`: Architecture-focused commit grouping and technical design changes
 - `--persona-security`: Security-aware commit analysis and sensitive change detection

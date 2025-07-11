@@ -6,6 +6,8 @@ Complete reference for all Simone Framework commands available in Claude Code.
 
 The Simone Framework provides 35 specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
 
+**🎭 Enhanced with Cognitive Personas**: Many commands support domain-specific expertise through cognitive personas, inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude)'s pioneering work in specialized AI assistance patterns.
+
 ## Command Categories
 
 ### 🚀 Project Management
