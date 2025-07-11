@@ -262,6 +262,17 @@ Simone organizes your project into:
 
 Each task gets full project context so Claude knows exactly what to build and how it fits into your architecture.
 
+## 📋 Completion Naming Convention
+
+Simone uses a consistent "X" prefix to mark completed work items, providing clear visual distinction between active and finished work:
+
+- **Tasks**: `T001` → `TX001` (completed)
+- **Sprints**: `S01_M01` → `SX01_M01` (completed)  
+- **Milestones**: `M01` → `MX01` (completed)
+- **Bugs**: `BUG001` → `BUGX001` (resolved)
+
+This convention makes it easy to filter active work, maintain project history, and track completion progress across all work item types. All completed items retain their full context and remain accessible for reference.
+
 ## Why I built this
 
 AI coding tools have become incredibly powerful, but they all face the same fundamental challenge: context management. The context window is limited in size, and we have little control over what stays in context and what doesn't.
@@ -289,11 +300,11 @@ Contains general project documentation including technical specifications, user 
 
 ### 02_REQUIREMENTS/
 
-Organized by milestones, this directory stores product requirements documents (PRDs) and their amendments, providing a clear view of what needs to be built. This helps Claude understand the project requirements. Milestone folders must follow the naming convention `M##_Milestone_Name/` (e.g., `M01_Backend_Setup/`).
+Organized by milestones, this directory stores product requirements documents (PRDs) and their amendments, providing a clear view of what needs to be built. This helps Claude understand the project requirements. Milestone folders follow the naming convention `M##_Milestone_Name/` (e.g., `M01_Backend_Setup/`). Completed milestones use `MX##_Milestone_Name/` for clear distinction.
 
 ### 03_SPRINTS/
 
-Contains sprint plans and task definitions organized by milestone and sprint sequence. Each sprint folder contains individual task files with detailed information for Claude to work on.
+Contains sprint plans and task definitions organized by milestone and sprint sequence. Each sprint folder contains individual task files with detailed information for Claude to work on. Sprint folders follow `S##_M##_Sprint_Name/` format, with completed sprints using `SX##_M##_Sprint_Name/`.
 
 ### 04_GENERAL_TASKS/
 
@@ -302,6 +313,10 @@ Stores task definitions for work not tied to a specific sprint. Completed tasks 
 ### 05_ARCHITECTURAL_DECISIONS/
 
 Captures significant architectural decisions as Architecture Decision Records (ADRs), documenting the context, options considered, and rationale. This provides critical context for Claude when making technical decisions. Uses a structured ADR template for consistency.
+
+### 06_BUGS/
+
+Bug tracking and resolution documentation. Bug reports follow the naming convention `BUG###_Bug_Description.md` (e.g., `BUG001_Login_Validation_Error.md`). Resolved bugs use `BUGX###_Bug_Description.md` for clear status distinction and historical tracking.
 
 ### 10_STATE_OF_PROJECT/
 

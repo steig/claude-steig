@@ -88,9 +88,10 @@ Follow these instructions from top to bottom.
 - Identify ALL files that were modified as part of this task's implementation
 - This includes: source code, tests, configuration, and the task documentation file itself
 
-**Bug ID Pattern** (e.g., BUG001, BUG002):
+**Bug ID Pattern** (e.g., BUG001, BUGX002):
 
 - Bug Reports: `BUG<NNN>` format (e.g., BUG001, BUG002)
+- Resolved Bug Reports: `BUGX<NNN>` format (e.g., BUGX001, BUGX002)
 - Search for this bug ID in:
   - `.simone/06_BUGS/` directory (for bug reports)
   - Bug metadata in files (look for `bug_id: BUG001` in frontmatter)
@@ -99,8 +100,10 @@ Follow these instructions from top to bottom.
 - Identify ALL files that were modified as part of this bug fix
 - This includes: source code, tests, bug report updates, and associated task files
 
-**Sprint ID Pattern** (e.g., S01, S02):
+**Sprint ID Pattern** (e.g., S01, SX02):
 
+- Active Sprints: `S<NN>` format (e.g., S01, S02)
+- Completed Sprints: `SX<NN>` format (e.g., SX01, SX02)
 - When only sprint ID is provided, commit all changes related to ANY task within that sprint
 - Search pattern: `T*-S<NN>` in the sprint directory
 - Example: "S02" would include changes for T01-S02, T02-S02, T03-S02, etc.
