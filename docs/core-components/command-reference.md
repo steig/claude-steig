@@ -4,7 +4,7 @@ Complete reference for all Simone Framework commands available in Claude Code.
 
 ## Overview
 
-The Simone Framework provides 22 specialized commands for project management, development workflow, and quality assurance. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
+The Simone Framework provides 30 specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
 
 ## Command Categories
 
@@ -40,6 +40,13 @@ The Simone Framework provides 22 specialized commands for project management, de
 - [`log_technical_debt`](#log_technical_debt) - Document and track technical debt
 - [`discuss_review`](#discuss_review) - Facilitate review discussions
 - [`testing_review`](#testing_review) - Review testing coverage and quality
+
+### 🛡️ Safety & Emergency Response
+- [`emergency_stop`](#emergency_stop) - Immediately halt all autonomous operations
+- [`rollback`](#rollback) - Safe rollback with backup and recovery
+- [`safety_check`](#safety_check) - Comprehensive safety validation
+- [`safety_monitor`](#safety_monitor) - Real-time monitoring with alerts
+- [`user_intervention`](#user_intervention) - Manual override and control
 
 ### ⚡ Utility Commands
 - [`prime`](#prime) - Initialize Claude context with project information
@@ -797,6 +804,14 @@ Commands are designed to work together in common workflows:
 3. `status` - Monitor progress
 4. `project_review` - Retrospective analysis
 
+**Safety & Emergency Response Workflow**:
+1. `safety_check` - Pre-operation validation
+2. `safety_monitor --start` - Begin monitoring
+3. Autonomous operations (`yolo`, `do_task`)
+4. `user_intervention` - Manual control when needed
+5. `emergency_stop` - Emergency halt if required
+6. `rollback` - Safe recovery if problems occur
+
 ### Quality Assurance Integration
 
 Quality is built into every command:
@@ -828,6 +843,162 @@ Quality is built into every command:
 - All actions are logged and tracked
 - Cross-references are maintained
 - Architecture compliance is validated
+
+## Safety & Emergency Response Commands
+
+### emergency_stop
+
+**Purpose**: Immediately halt all autonomous operations and secure the system in emergency situations.
+
+**Usage**:
+```
+/project:simone:emergency_stop [--all|--task <task_id>|--process <pid>|--reason <reason>]
+```
+
+**Arguments**:
+- `--all` - Stop all autonomous operations (default behavior)
+- `--task <task_id>` - Stop specific task execution
+- `--process <pid>` - Stop specific process by ID
+- `--reason <reason>` - Provide reason for emergency stop
+
+**Features**:
+- **Immediate Stop Actions**: Kills all autonomous processes (YOLO, do_task, autonomous execution)
+- **State Preservation**: Creates emergency branches and working directory snapshots
+- **Emergency Logging**: Comprehensive logging of stop reason, system state, and actions taken
+- **Recovery Options**: Offers immediate rollback, safe mode recovery, or manual recovery
+- **Integration**: Creates emergency stop signals that other commands can check
+
+**Use Cases**:
+- Runaway autonomous operations
+- Security concerns detected
+- System resource exhaustion
+- Manual intervention required immediately
+
+---
+
+### rollback
+
+**Purpose**: Safely rollback autonomous operations when things go wrong, with comprehensive backup and recovery options.
+
+**Usage**:
+```
+/project:simone:rollback [--task <task_id>|--branch <branch_name>|--emergency|--auto]
+```
+
+**Arguments**:
+- `--task <task_id>` - Rollback specific task changes
+- `--branch <branch_name>` - Rollback to specific branch state
+- `--emergency` - Emergency rollback mode (faster, less validation)
+- `--auto` - Automatic rollback without user confirmation
+
+**Features**:
+- **Scope Detection**: Auto-detects rollback scope or targets specific tasks/branches
+- **Pre-Rollback Safety**: Creates backup branches and assesses rollback impact
+- **User Confirmation**: Requires approval unless in auto mode
+- **Recovery Options**: Restore from backup or cherry-pick specific changes
+- **Integration**: Called automatically by safety systems
+
+**Process**:
+1. Analyze current state and rollback scope
+2. Create backup branches for recovery
+3. Present rollback plan for approval
+4. Execute rollback with state preservation
+5. Verify rollback success and cleanup
+
+---
+
+### safety_check
+
+**Purpose**: Perform comprehensive safety checks before and during autonomous operations to prevent dangerous or problematic actions.
+
+**Usage**:
+```
+/project:simone:safety_check [--safe|--balanced|--yolo]
+```
+
+**Arguments**:
+- `--safe` - Maximum safety mode with strict thresholds
+- `--balanced` - Balanced safety mode (default)
+- `--yolo` - Minimal safety checks for rapid development
+
+**Safety Checks**:
+- **Git Status**: Clean working directory, proper branch state
+- **Test Baseline**: All tests passing before autonomous operations
+- **System Resources**: CPU, memory, disk space availability
+- **Critical File Protection**: Prevents modification of protected files
+- **Security Validation**: Checks for obvious security vulnerabilities
+
+**Integration**:
+- Called automatically by `yolo`, `do_task`, `commit`, `merge`
+- Configurable thresholds based on safety mode
+- Emergency stop triggers for critical conditions
+
+---
+
+### safety_monitor
+
+**Purpose**: Real-time monitoring of autonomous operations with safety alerting and emergency response capabilities.
+
+**Usage**:
+```
+/project:simone:safety_monitor [--start|--stop|--status|--dashboard|--alerts]
+```
+
+**Arguments**:
+- `--start` - Start monitoring daemon
+- `--stop` - Stop monitoring daemon
+- `--status` - Show current monitoring status
+- `--dashboard` - Interactive monitoring dashboard
+- `--alerts` - Show recent alerts and warnings
+
+**Monitoring Capabilities**:
+- **Real-time Dashboard**: Interactive monitoring with system health metrics
+- **Continuous Monitoring**: System resources, process health, Git repository status
+- **Alert System**: Automatic alerting with severity levels (CRITICAL/WARNING/INFO)
+- **Emergency Response**: Automatic emergency stop triggers for critical conditions
+- **Performance Tracking**: Operation timing, success rates, resource usage
+
+**Alert Conditions**:
+- CPU/Memory usage above thresholds
+- Git repository in inconsistent state
+- Test failures during autonomous operations
+- Security vulnerabilities detected
+- File system errors or conflicts
+
+---
+
+### user_intervention
+
+**Purpose**: Provide manual override and intervention capabilities for autonomous operations with approval workflows and safety overrides.
+
+**Usage**:
+```
+/project:simone:user_intervention [--pause|--resume|--approve <task_id>|--reject <task_id>|--override <check>|--emergency]
+```
+
+**Arguments**:
+- `--pause` - Pause all autonomous operations
+- `--resume` - Resume paused operations
+- `--approve <task_id>` - Approve specific pending task
+- `--reject <task_id>` - Reject specific pending task
+- `--override <check>` - Override specific safety check
+- `--emergency` - Emergency intervention menu
+
+**Intervention Features**:
+- **Operation Control**: Pause/resume all autonomous operations
+- **Task Approval System**: Approve or reject pending tasks with detailed reasoning
+- **Safety Overrides**: Override specific safety checks with expiration timers
+- **Emergency Menu**: Interactive emergency intervention with multiple options
+- **Process Management**: Forcefully terminate autonomous processes if needed
+- **Health Monitoring**: Comprehensive system health checks with scoring
+
+**Safety Controls**:
+- All overrides are temporary with expiration
+- Comprehensive logging of all intervention actions
+- User authentication for sensitive operations
+- Automatic reversion to safe mode after intervention
+
+---
 
 ## Troubleshooting
 
