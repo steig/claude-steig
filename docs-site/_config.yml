@@ -52,6 +52,7 @@ exclude:
   - ../.cache/
   - ../node_modules/
   - ../vendor/
+  - vendor/
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/
