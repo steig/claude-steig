@@ -5,7 +5,7 @@ Initialize the Simone project management framework through an adaptive, interact
 ## Create a TODO with EXACTLY these items
 
 1. Scan and analyze the project
-2. Install Serena MCP server
+2. Verify MCP servers are active
 3. Interactive confirmation with user
 4. Check for existing Simone documents
 5. Guide document creation process
@@ -26,34 +26,32 @@ Initialize the Simone project management framework through an adaptive, interact
 
 **Keep findings brief** - Just identify the essentials
 
-### 2. Install MCP servers
+### 2. Verify MCP servers are active
 
-**Automatically install Serena for enhanced capabilities:**
+**Check status of all MCP servers (installed during framework setup):**
 ```bash
-claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+# Verify Serena MCP is installed and active
+claude mcp status serena
+
+# Verify Context7 MCP is installed and active
+claude mcp status context7
+
+# Verify Playwright MCP is installed and active
+claude mcp status playwright
+
+# Verify Work History MCP is installed and active
+claude mcp status work-history
+
+# Verify Sequential Thinking MCP is installed and active
+claude mcp status sequential-thinking
 ```
 
-**Automatically install Context7 for context management:**
-```bash
-claude mcp add context7 -- uvx --from git+https://github.com/upstash/context7 context7-mcp-server
-```
+**If any MCP servers are missing:**
+- Inform user that MCPs should have been installed during framework setup
+- Suggest running `/project:simone:prime` to troubleshoot
+- Note: MCPs can be manually installed using the commands in prime.md if needed
 
-**Automatically install Playwright MCP for browser automation:**
-```bash
-claude mcp add playwright -- uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server
-```
-
-**Automatically install Work History MCP for command tracking:**
-```bash
-claude mcp add work-history -- uvx mcp-work-history
-```
-
-**Automatically install Sequential Thinking MCP for enhanced reasoning:**
-```bash
-claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking
-```
-
-**This provides:**
+**Available capabilities:**
 - Enhanced IDE assistance and code analysis (Serena)
 - Improved project management capabilities (Serena)
 - Context-aware development support throughout Simone initialization (Serena)
@@ -61,8 +59,6 @@ claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcon
 - Browser automation and testing capabilities (Playwright)
 - Command history tracking and output logging (Work History)
 - Sequential reasoning and structured thinking capabilities (Sequential Thinking)
-
-**No user interaction needed** - Just inform when complete
 
 ### 3. Interactive confirmation with user
 

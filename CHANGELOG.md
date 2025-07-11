@@ -4,6 +4,15 @@
 
 ### 🛠️ Helper Commands & Infrastructure Improvements
 
+#### Automatic MCP Installation
+- **Framework Integration**: All 5 MCP servers now install automatically during framework setup
+- **Enhanced User Experience**: No manual MCP installation required - works out of the box
+- **Robust Error Handling**: Graceful fallback if Claude CLI unavailable, with clear user guidance
+
+#### Attribution & Inspiration
+- **SuperClaude Integration**: Added attribution to [SuperClaude](https://github.com/NomenAK/SuperClaude) for inspiring cognitive personas and command patterns
+- **Documentation Updates**: Enhanced README and command documentation with proper attribution
+
 #### New Helper Commands (5 Commands Added)
 - **`troubleshoot`**: Comprehensive project diagnostic with 12-step systematic analysis
 - **`research`**: Codebase investigation and pattern analysis with 8-step methodology

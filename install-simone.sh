@@ -331,6 +331,9 @@ upgrade_installation() {
         install_core_structure "$source_dir"
         install_commands "$source_dir"
         
+        # Install/update MCP servers
+        install_mcp_servers
+        
         # Clean up temp directory if used
         if [[ -n "$TEMP_DIR" && -d "$TEMP_DIR" ]]; then
             rm -rf "$TEMP_DIR"
@@ -388,6 +391,9 @@ fresh_installation() {
     install_core_structure "$source_dir"
     install_commands "$source_dir"
     
+    # Install MCP servers for enhanced capabilities
+    install_mcp_servers
+    
     # Create initial project manifest
     create_initial_manifest
     
@@ -431,6 +437,74 @@ create_initial_manifest() {
         
         success "Initial project manifest created"
     fi
+}
+
+# Install MCP servers for enhanced Simone capabilities
+install_mcp_servers() {
+    log "Installing MCP servers for enhanced Simone capabilities..."
+    
+    # Check if claude mcp command is available
+    if ! command -v claude >/dev/null 2>&1; then
+        warn "Claude CLI not found - skipping MCP server installation"
+        warn "Install Claude CLI first, then run: claude mcp status to verify"
+        return 0
+    fi
+    
+    # Check if claude mcp command works
+    if ! claude mcp --help >/dev/null 2>&1; then
+        warn "Claude MCP command not available - skipping MCP server installation"
+        warn "Update Claude CLI, then manually run the initialize command"
+        return 0
+    fi
+    
+    local mcp_servers_installed=0
+    local mcp_servers_failed=0
+    
+    # Array of MCP servers to install
+    declare -a mcp_servers=(
+        "serena:uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)"
+        "context7:uvx --from git+https://github.com/upstash/context7 context7-mcp-server"
+        "playwright:uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server"
+        "work-history:uvx mcp-work-history"
+        "sequential-thinking:uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking"
+    )
+    
+    for server_spec in "${mcp_servers[@]}"; do
+        local server_name="${server_spec%%:*}"
+        local server_cmd="${server_spec#*:}"
+        
+        log "Installing MCP server: $server_name"
+        
+        # Check if already installed
+        if claude mcp status "$server_name" >/dev/null 2>&1; then
+            log "MCP server $server_name already installed"
+            ((mcp_servers_installed++))
+            continue
+        fi
+        
+        # Install the MCP server
+        if claude mcp add "$server_name" -- $server_cmd >/dev/null 2>&1; then
+            success "MCP server $server_name installed successfully"
+            ((mcp_servers_installed++))
+        else
+            warn "Failed to install MCP server: $server_name"
+            ((mcp_servers_failed++))
+        fi
+    done
+    
+    # Summary
+    if [[ $mcp_servers_installed -gt 0 ]]; then
+        success "MCP servers installed: $mcp_servers_installed/5"
+        if [[ $mcp_servers_failed -gt 0 ]]; then
+            warn "MCP servers failed: $mcp_servers_failed/5"
+            warn "Use /project:simone:prime to check status and troubleshoot"
+        fi
+    else
+        warn "No MCP servers were installed"
+        warn "Manual installation required - use /project:simone:initialize"
+    fi
+    
+    log "MCP installation complete"
 }
 
 # Set version
@@ -484,8 +558,9 @@ main() {
     echo
     echo "Next steps:"
     echo "1. Review: $SIMONE_DIR/00_PROJECT_MANIFEST.md"
-    echo "2. Initialize: Run 'claude code' and use /project:simone:initialize"
-    echo "3. Documentation: Check $SIMONE_DIR/CLAUDE.md for guidance"
+    echo "2. Prime knowledge: Run 'claude code' and use /project:simone:prime"
+    echo "3. Initialize project: Use /project:simone:initialize for setup"
+    echo "4. Documentation: Check $SIMONE_DIR/CLAUDE.md for guidance"
     echo
     echo "For help: https://github.com/steig/claude-steig"
     

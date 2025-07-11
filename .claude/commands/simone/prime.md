@@ -3,9 +3,9 @@
 Prime yourself with basic information about this project.
 Make sure you are aware of the environment.
 
-## FIRST: Initialize MCP Servers
+## FIRST: Verify MCP Servers
 
-**Activate the existing MCP servers:**
+**Verify the MCP servers (installed during framework setup):**
 ```bash
 # Verify Serena MCP is installed and active
 claude mcp status serena
@@ -28,7 +28,7 @@ claude mcp status sequential-thinking
 /mcp__serena__initial_instructions
 ```
 
-This ensures all MCP servers (installed during initialization) are ready and Claude is properly configured to use:
+This ensures all MCP servers (installed during framework setup) are ready and Claude is properly configured to use:
 - **Serena's tools** for enhanced IDE assistance and project management capabilities
 - **Context7's tools** for advanced context management and retrieval
 - **Playwright's tools** for browser automation and testing
