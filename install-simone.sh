@@ -110,6 +110,10 @@ install_core_structure() {
     mkdir -p "$SIMONE_DIR/03_SPRINTS"
     mkdir -p "$SIMONE_DIR/04_GENERAL_TASKS"
     mkdir -p "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
+    mkdir -p "$SIMONE_DIR/06_BUGS"
+    mkdir -p "$SIMONE_DIR/07_TECHNICAL_DEBT"
+    mkdir -p "$SIMONE_DIR/07_TECHNICAL_DEBT/ACTIVE"
+    mkdir -p "$SIMONE_DIR/07_TECHNICAL_DEBT/RESOLVED"
     mkdir -p "$SIMONE_DIR/10_STATE_OF_PROJECT"
     mkdir -p "$SIMONE_DIR/99_TEMPLATES"
     
@@ -140,6 +144,8 @@ install_core_structure() {
         "03_SPRINTS/CLAUDE.MD"
         "04_GENERAL_TASKS/CLAUDE.MD"
         "05_ARCHITECTURAL_DECISIONS/CLAUDE.md"
+        "06_BUGS/CLAUDE.md"
+        "07_TECHNICAL_DEBT/CLAUDE.md"
         "10_STATE_OF_PROJECT/CLAUDE.md"
     )
     
