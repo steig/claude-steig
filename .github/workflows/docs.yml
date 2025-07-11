@@ -1,0 +1,122 @@
+name: Build and Deploy Documentation
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths: 
+      - 'docs/**'
+      - 'docs-site/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches: [ "main", "master" ]
+    paths: 
+      - 'docs/**'
+      - 'docs-site/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+          working-directory: ./docs-site
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Copy docs to Jekyll source
+        run: |
+          # Create docs collection directory
+          mkdir -p docs-site/_docs
+          
+          # Copy all documentation files
+          cp -r docs/* docs-site/_docs/
+          
+          # Create index page that redirects to docs
+          cat > docs-site/index.md << 'EOF'
+          ---
+          layout: default
+          title: "Simone Framework"
+          ---
+          
+          # Simone Framework
+          
+          **Sophisticated directory-based project management framework for AI-assisted enterprise software development**
+          
+          Simone provides comprehensive metadata management, architectural decision tracking, and integrated quality control processes that bridge traditional project management disciplines with modern AI-driven development workflows.
+          
+          ## 🚀 Quick Start
+          
+          Get started with Simone in minutes:
+          
+          ```bash
+          # Install directly from GitHub
+          curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
+          
+          # Initialize your project
+          /project:simone:initialize
+          ```
+          
+          [📖 View Full Documentation](docs/)
+          
+          ## ✨ Key Features
+          
+          - **📋 Comprehensive Task Management** - 21+ metadata fields with complete lifecycle tracking
+          - **🎯 Quality-First Approach** - Built-in quality gates and review processes  
+          - **🏢 Enterprise Governance** - Risk management, compliance, and audit trails
+          - **🤖 AI-Enhanced Development** - Deep integration with Claude Code and MCP servers
+          - **📝 Template-Driven Consistency** - Standardized documentation and processes
+          - **⚡ Intelligent Automation** - YOLO mode and context-aware task execution
+          
+          ## 🏢 Enterprise Ready
+          
+          Simone is designed for enterprise software development with comprehensive governance, scalable architecture, quality gates, risk management, and complete audit trails.
+          
+          ## 🤝 Contributing
+          
+          We welcome contributions! See our [Contributing Guide](https://github.com/steig/claude-steig/blob/main/CONTRIBUTING.md) for details.
+          
+          ---
+          
+          **Framework Attribution**: Built upon the foundational work of [Helmi](https://github.com/helmi), enhanced for enterprise use.
+          EOF
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        working-directory: ./docs-site
+        env:
+          JEKYLL_ENV: production
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs-site/_site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
