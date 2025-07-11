@@ -25,6 +25,7 @@ Thumbs.db
 !/.pre-commit-config.yaml
 !/.markdownlint.yaml
 !/examples
+!/doc-sites
 
 !/scripts
 
@@ -70,3 +71,5 @@ yarn-error.log*
 mixed_notes
 
 .claude/settings.local.json
+# Cache directories
+.simone/.cache/
