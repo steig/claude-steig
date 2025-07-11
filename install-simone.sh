@@ -159,6 +159,13 @@ install_core_structure() {
         fi
     done
     
+    # Copy .gitignore file for cache directory
+    local gitignore_file="$source_dir/.simone/.gitignore"
+    if [[ -f "$gitignore_file" ]]; then
+        cp "$gitignore_file" "$SIMONE_DIR/.gitignore"
+        log ".gitignore installed for cache directory"
+    fi
+    
     success "Core structure installed"
 }
 
