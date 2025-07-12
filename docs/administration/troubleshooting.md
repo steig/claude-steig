@@ -452,7 +452,7 @@ cp -r .simone.backup.YYYYMMDD_HHMMSS .simone
 **Issue Title**: Clear, descriptive title
 
 **Environment**:
-- Framework Version: 2.0.5
+- Framework Version: 2.1.0
 - Operating System: Ubuntu 20.04
 - Claude Code Version: 1.2.3
 

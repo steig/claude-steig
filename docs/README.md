@@ -1,7 +1,7 @@
 # Simone Framework Documentation
 
-**Version**: 2.0.7
-**Updated**: 2025-07-10
+**Version**: 2.1.0
+**Updated**: 2025-07-12
 **Audience**: Development Teams, Technical Leaders, Project Managers
 
 ## What is Simone?

@@ -1,7 +1,7 @@
 # DevOps Templates
 
 **Last Updated**: 2025-07-10  
-**Version**: 2.0.3  
+**Version**: 2.1.0  
 **Framework**: Simone Framework
 
 ## Overview
