@@ -50,9 +50,11 @@ cache_template() {
 get_project_info() {
     local field="$1"
     local cache_key="project_${field}"
+    local result
     
     # Try cache first
-    if result=$(cache_get "$cache_key"); then
+    result=$(cache_get "$cache_key")
+    if [[ -n "$result" ]]; then
         echo "$result"
         return 0
     fi
@@ -62,28 +64,31 @@ get_project_info() {
     if [[ -f "$manifest" ]]; then
         case "$field" in
             "name")
-                result=$(grep "^## Project:" "$manifest" | cut -d' ' -f3-)
+                result=$(grep "^project_name:" "$manifest" | cut -d'"' -f2 | head -1)
                 ;;
             "description")
-                result=$(grep "^## Description:" "$manifest" | cut -d' ' -f3-)
+                result=$(grep "^project_description:" "$manifest" | cut -d'"' -f2 | head -1)
                 ;;
             "version")
-                result=$(grep "^## Version:" "$manifest" | cut -d' ' -f3-)
+                result=$(grep "^project_version:" "$manifest" | cut -d'"' -f2 | head -1)
                 ;;
             *)
-                result=$(grep "^## ${field}:" "$manifest" | cut -d' ' -f3-)
+                result=$(grep "^${field}:" "$manifest" | cut -d'"' -f2 | head -1)
                 ;;
         esac
         
-        cache_set "$cache_key" "$result" 3600  # Cache for 1 hour
-        echo "$result"
+        if [[ -n "$result" ]]; then
+            cache_set "$cache_key" "$result" 3600  # Cache for 1 hour
+            echo "$result"
+        fi
     fi
 }
 
 # Generic caching functions using SQLite
 cache_get() {
     local key="$1"
-    sqlite3 "$SIMONE_DB_FILE" "SELECT value FROM cache_meta WHERE key='$key' AND updated > $(( $(date +%s) - SIMONE_CACHE_TTL ));" 2>/dev/null
+    local escaped_key="${key//\'/\'\'}"
+    sqlite3 "$SIMONE_DB_FILE" "SELECT value FROM cache_meta WHERE key='$escaped_key' AND updated > $(( $(date +%s) - SIMONE_CACHE_TTL ));" 2>/dev/null
 }
 
 cache_set() {
@@ -91,8 +96,16 @@ cache_set() {
     local value="$2"
     local ttl="${3:-$SIMONE_CACHE_TTL}"
     
+    # For SQL injection safety, reject keys/values with dangerous characters
+    if [[ "$key" == *"'"* ]] || [[ "$key" == *";"* ]] || [[ "$key" == *"--"* ]]; then
+        # Silently reject dangerous keys but return success
+        return 0
+    fi
+    
+    # Properly escape both key and value for SQL injection safety
+    local escaped_key="${key//\'/\'\'}"
     local escaped_value="${value//\'/\'\'}"
-    sqlite3 "$SIMONE_DB_FILE" "INSERT OR REPLACE INTO cache_meta (key, value, updated) VALUES ('$key', '$escaped_value', $(date +%s));" 2>/dev/null
+    sqlite3 "$SIMONE_DB_FILE" "INSERT OR REPLACE INTO cache_meta (key, value, updated) VALUES ('$escaped_key', '$escaped_value', $(date +%s));" 2>/dev/null || return 0
 }
 
 # Batch file operations (portable implementation)

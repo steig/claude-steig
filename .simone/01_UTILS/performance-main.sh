@@ -116,6 +116,20 @@ perf_command() {
             esac
             ;;
             
+        # System management
+        "disable")
+            echo "🛑 Disabling Simone Performance System..."
+            if [[ -f "$SIMONE_DB_FILE" ]]; then
+                rm -f "$SIMONE_DB_FILE"
+                echo "✅ Database file removed"
+            fi
+            if [[ -d ".simone/.cache" ]]; then
+                rm -rf ".simone/.cache"
+                echo "✅ Cache directory removed"
+            fi
+            echo "✅ Performance system disabled"
+            ;;
+            
         "help"|*)
             echo "Simone Performance System"
             echo "========================"
@@ -131,6 +145,7 @@ perf_command() {
             echo "  diagnose   - Diagnose performance issues"
             echo "  git        - Git automation tools"
             echo "  hooks      - Hook management and registration"
+            echo "  disable    - Disable performance system and remove data"
             echo
             echo "Examples:"
             echo "  ./simone perf cache stats"
