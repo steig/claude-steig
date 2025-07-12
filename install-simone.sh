@@ -276,28 +276,8 @@ install_commands() {
             fi
         done
         
-        # Copy performance settings templates (don't overwrite existing settings)
-        local settings_templates=("settings.optimized.json" "settings.performance.json")
-        for template in "${settings_templates[@]}"; do
-            if [[ -f "$source_dir/.claude/$template" ]]; then
-                if [[ ! -f ".claude/settings.json" ]]; then
-                    # No existing settings - copy optimized as default
-                    if [[ "$template" == "settings.optimized.json" ]]; then
-                        cp "$source_dir/.claude/$template" ".claude/settings.json"
-                        log "Performance-optimized settings installed as default"
-                    fi
-                fi
-                # Always copy as template for reference
-                cp "$source_dir/.claude/$template" ".claude/$template"
-            fi
-        done
-        
-        if [[ -f ".claude/settings.optimized.json" ]]; then
-            log "Performance settings templates installed:"
-            log "  - settings.optimized.json (production configuration)"
-            log "  - settings.performance.json (development configuration)"
-            log "  - Use: cp .claude/settings.optimized.json .claude/settings.json"
-        fi
+        # Note: Users should configure their own Claude Code settings
+        log "Claude Code commands installed. Configure your own settings.json as needed."
     fi
 }
 
