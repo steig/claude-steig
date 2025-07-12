@@ -27,6 +27,7 @@ Thumbs.db
 !/examples
 !/docs-site
 !/scripts
+!/simone
 
 !/.version
 !/.secrets.baseline

@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# Simone Framework - Performance-Optimized Edition
+# Main command interface with automatic performance optimization
+
+set -euo pipefail
+
+# Check if we're in a Simone project
+if [[ ! -d ".simone" ]]; then
+    echo "❌ Not in a Simone project directory"
+    echo "Run 'simone init' to initialize a new project"
+    exit 1
+fi
+
+# Source performance modules if available
+if [[ -f ".simone/01_UTILS/performance-main.sh" ]]; then
+    source ".simone/01_UTILS/performance-main.sh"
+    PERF_ENABLED=true
+else
+    PERF_ENABLED=false
+fi
+
+# Main command routing
+case "${1:-help}" in
+    "init"|"initialize")
+        # Initialize new Simone project
+        echo "🚀 Initializing Simone project..."
+        
+        # Create directory structure
+        mkdir -p .simone/{00_PROJECT_MANIFEST,01_UTILS,02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,05_ARCHITECTURAL_DECISIONS,99_TEMPLATES,.cache}
+        
+        # Copy performance modules if available
+        if [[ -d "$(dirname "$0")/.simone/01_UTILS" ]]; then
+            cp -r "$(dirname "$0")/.simone/01_UTILS"/* .simone/01_UTILS/ 2>/dev/null || true
+        fi
+        
+        # Create project manifest
+        cat > .simone/00_PROJECT_MANIFEST.md << EOF
+# Project Manifest
+
+## Project: ${PWD##*/}
+## Version: 0.1.0
+## Created: $(date +%Y-%m-%d)
+## Framework: Simone Optimized
+
+### Description
+[Project description here]
+
+### Performance Features
+- SQLite task indexing: enabled
+- Template caching: enabled
+- Command optimization: enabled
+EOF
+        
+        # Initialize performance if available
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            init_simone_performance
+        fi
+        
+        echo "✅ Simone project initialized"
+        ;;
+        
+    "status")
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            fast_status
+        else
+            echo "📊 Project Status"
+            find .simone -name "*.md" -type f | wc -l | xargs echo "Total files:"
+        fi
+        ;;
+        
+    "search")
+        shift
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            fast_search "$@"
+        else
+            grep -r "$@" .simone --include="*.md"
+        fi
+        ;;
+        
+    "task"|"tasks")
+        shift
+        case "${1:-list}" in
+            "create"|"new")
+                if [[ "$PERF_ENABLED" == "true" ]]; then
+                    fast_create_task "general" "${2:-New Task}" "${3:-medium}" "${4:-unassigned}"
+                else
+                    echo "Creating task..."
+                    # Basic task creation
+                fi
+                ;;
+            "list")
+                if [[ "$PERF_ENABLED" == "true" ]]; then
+                    query_tasks "SELECT id, title, status, priority FROM tasks ORDER BY updated DESC LIMIT 20;"
+                else
+                    find .simone -name "*.md" -type f | head -20
+                fi
+                ;;
+        esac
+        ;;
+        
+    "sprint")
+        shift
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            fast_sprint_status "$@"
+        else
+            echo "Sprint management requires performance modules"
+        fi
+        ;;
+        
+    "perf"|"performance")
+        shift
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            perf_command "$@"
+        else
+            echo "❌ Performance modules not installed"
+            echo "Copy .simone/01_UTILS from the Simone repository"
+        fi
+        ;;
+        
+    "upgrade")
+        if [[ -f ".simone/01_UTILS/upgrade-manager.sh" ]]; then
+            .simone/01_UTILS/upgrade-manager.sh "$@"
+        else
+            echo "❌ Upgrade manager not found"
+            echo "This appears to be an older Simone installation"
+            echo "Please download the latest Simone framework to upgrade"
+        fi
+        ;;
+        
+    "help"|*)
+        echo "Simone Framework - Performance-Optimized Edition"
+        echo
+        echo "Commands:"
+        echo "  init              Initialize new project"
+        echo "  upgrade           Upgrade existing project to performance system"
+        echo "  status            Show project status"
+        echo "  search <query>    Search tasks"
+        echo "  task create       Create new task"
+        echo "  task list         List tasks"
+        echo "  sprint [status]   Sprint management"
+        
+        if [[ "$PERF_ENABLED" == "true" ]]; then
+            echo
+            echo "Performance Commands:"
+            echo "  perf cache        Cache management"
+            echo "  perf db           Database management"
+            echo "  perf benchmark    Run performance benchmark"
+            echo "  perf diagnose     Diagnose performance issues"
+        fi
+        ;;
+esac
