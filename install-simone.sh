@@ -17,7 +17,7 @@ SIMONE_REPO="https://github.com/steig/claude-steig"
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="2.0.9"
+CURRENT_VERSION="2.1.0"
 TARGET_DIR=""
 REMOTE_INSTALL=false
 TEMP_DIR=""
@@ -105,6 +105,7 @@ install_core_structure() {
     
     # Create main directories
     mkdir -p "$SIMONE_DIR"
+    mkdir -p "$SIMONE_DIR/01_UTILS"
     mkdir -p "$SIMONE_DIR/01_PROJECT_DOCS"
     mkdir -p "$SIMONE_DIR/02_REQUIREMENTS"
     mkdir -p "$SIMONE_DIR/03_SPRINTS"
@@ -128,12 +129,17 @@ install_core_structure() {
         success "Templates installed"
     fi
     
-    # Copy performance scripts
-    if [[ -d "$source_dir/.simone/scripts" ]]; then
-        mkdir -p "$SIMONE_DIR/scripts"
-        cp -r "$source_dir/.simone/scripts/"* "$SIMONE_DIR/scripts/"
-        chmod +x "$SIMONE_DIR/scripts/"*.sh 2>/dev/null || true
-        success "Performance optimization scripts installed"
+    # Copy utilities (performance, git automation, hooks)
+    if [[ -d "$source_dir/.simone/01_UTILS" ]]; then
+        # Copy all utility scripts
+        for item in "$source_dir/.simone/01_UTILS/"*; do
+            if [[ -e "$item" && "$(basename "$item")" != ".version" ]]; then
+                cp -r "$item" "$SIMONE_DIR/01_UTILS/"
+            fi
+        done
+        # Make all shell scripts executable
+        chmod +x "$SIMONE_DIR/01_UTILS/"*.sh 2>/dev/null || true
+        success "Performance optimization and utility scripts installed"
     fi
     
     # Copy CLAUDE.md instruction files (excluding .version file)
@@ -164,6 +170,14 @@ install_core_structure() {
     if [[ -f "$gitignore_file" ]]; then
         cp "$gitignore_file" "$SIMONE_DIR/.gitignore"
         log ".gitignore installed for cache directory"
+    fi
+    
+    # Copy main simone wrapper script if available
+    if [[ -f "$source_dir/simone" ]]; then
+        cp "$source_dir/simone" ./simone
+        chmod +x ./simone
+        success "Simone command interface installed"
+        log "You can now use './simone' for optimized commands"
     fi
     
     success "Core structure installed"
@@ -205,7 +219,12 @@ install_commands() {
                             # Copy subdirectories recursively, excluding .version files
                             local subdir_name=$(basename "$file")
                             mkdir -p ".claude/commands/$cmd_name/$subdir_name"
-                            find "$file" -type f ! -name ".version" -exec cp {} ".claude/commands/$cmd_name/$subdir_name/" \; 2>/dev/null
+                            if command -v rsync >/dev/null 2>&1; then
+                                rsync -av --exclude=".version" "$file/" ".claude/commands/$cmd_name/$subdir_name/" >/dev/null 2>&1
+                            else
+                                # Use cp with proper directory traversal
+                                (cd "$file" && find . -type f ! -name ".version" -exec cp --parents {} "../../../.claude/commands/$cmd_name/$subdir_name/" \; 2>/dev/null) || true
+                            fi
                             ((files_copied++))
                         fi
                     done
@@ -551,16 +570,23 @@ main() {
     set_version
     
     echo
-    echo "🎉 Simone Framework Setup Complete!"
+    echo "🎉 Simone Framework v$CURRENT_VERSION Setup Complete!"
     echo "======================================"
     echo
     echo "Installation location: $(pwd)"
     echo
+    if [[ -f "./simone" ]]; then
+        echo "⚡ Performance optimizations enabled! Use './simone' for 60-80% faster commands"
+        echo
+    fi
     echo "Next steps:"
     echo "1. Review: $SIMONE_DIR/00_PROJECT_MANIFEST.md"
     echo "2. Prime knowledge: Run 'claude code' and use /project:simone:prime"
     echo "3. Initialize project: Use /project:simone:initialize for setup"
     echo "4. Documentation: Check $SIMONE_DIR/CLAUDE.md for guidance"
+    if [[ -f "./simone" ]]; then
+        echo "5. Try optimized commands: ./simone status, ./simone perf benchmark"
+    fi
     echo
     echo "For help: https://github.com/steig/claude-steig"
     

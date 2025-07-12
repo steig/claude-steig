@@ -450,5 +450,5 @@ After milestone creation, consider these follow-up commands:
 ---
 
 **Command Version**: 1.0.0  
-**Framework Version**: Simone 2.0.7  
+**Framework Version**: Simone 2.1.0  
 **AI Features**: Advanced prompt analysis, domain-specific intelligence, automated sprint planning

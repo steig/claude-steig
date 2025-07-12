@@ -70,5 +70,21 @@ yarn-error.log*
 mixed_notes
 
 .claude/settings.local.json
-# Cache directories
+
+# Simone cache and performance files
 .simone/.cache/
+.simone/.backups/
+.simone/.metrics/
+*.db
+*.db-journal
+*.db-wal
+hit_stats.log
+.warmed
+
+# Temporary optimization scripts (now in 01_UTILS)
+/simone-fast.sh
+/install-simone-optimized.sh
+/benchmark-simone.sh
+
+# Old scripts directory (migrated to 01_UTILS)
+.simone/scripts/
