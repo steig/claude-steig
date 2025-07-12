@@ -61,7 +61,7 @@ git clone https://github.com/steig/claude-steig.git
 cd your-project
 
 # Initialize Simone for your project
-claude-code "/project:simone:init"
+claude-code "/project:simone:initialize"
 
 # Set up team configuration
 claude-code "/project:simone:configure_teams"

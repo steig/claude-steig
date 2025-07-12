@@ -677,7 +677,7 @@ Never commit:
 
 2. **Create Simone Directories**
    ```bash
-   claude-code "/project:simone:init --preserve-existing"
+   claude-code "/project:simone:initialize --preserve-existing"
    ```
 
 3. **Gradually Migrate**
