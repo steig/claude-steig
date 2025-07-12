@@ -408,34 +408,30 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - os: ubuntu-latest
-            shell: bash
-            install_deps: |
-              sudo apt-get update
-              sudo apt-get install -y sqlite3 bc
-          - os: macos-latest  
-            shell: bash
-            install_deps: |
-              brew install sqlite3 bc
-          - os: windows-latest
-            shell: bash
-            install_deps: |
-              # SQLite should be available on Windows runners
-              # bc might not be available, tests should handle gracefully
-              echo "Using Windows default tools"
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install dependencies
-      if: matrix.os != 'windows-latest'
-      shell: ${{ matrix.shell }}
-      run: ${{ matrix.install_deps }}
+    - name: Install dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sqlite3 bc
+
+    - name: Install dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install sqlite3 bc
+
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # SQLite should be available on Windows runners
+        # bc might not be available, tests should handle gracefully
+        echo "Using Windows default tools"
 
     - name: Test performance system on ${{ matrix.os }}
-      shell: ${{ matrix.shell }}
       run: |
         # Test basic performance system functionality
         mkdir -p test-cross-platform

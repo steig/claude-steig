@@ -282,11 +282,16 @@ EOF
     mkdir -p ".simone"
     cat > ".simone/00_PROJECT_MANIFEST.md" << 'EOF'
 ---
-id: test-project
+project_name: "Test Project Name"
+project_version: "1.0.0"
+project_description: "A test project for performance testing"
 ---
 
-## Project: Test Project Name
-## Description: A test project for performance testing
+# Test Project Name - Project Manifest
+
+## Description
+A test project for performance testing
+
 ## Version: 1.0.0
 EOF
     
@@ -393,13 +398,18 @@ EOF
 
 # Performance System Disable Tests
 @test "performance system can be disabled" {
-    export SIMONE_PERF_ENABLED="false"
+    init_performance
     
-    run init_performance
-    [ "$status" -eq 0 ]
+    # Verify database exists
+    [ -f "$SIMONE_DB_FILE" ]
     
-    # Database should not be created when disabled
+    # Disable performance system  
+    source .simone/01_UTILS/performance-main.sh
+    perf_command "disable"
+    
+    # Database should be removed after disable
     [ ! -f "$SIMONE_DB_FILE" ]
+    [ ! -d ".simone/.cache" ]
 }
 
 # Error Handling Tests
