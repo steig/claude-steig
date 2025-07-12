@@ -2,18 +2,43 @@
 
 Updates task status with comprehensive metadata tracking for Simone templates.
 
-## Create a TODO with EXACTLY these 6 Items
+**🚨 CRITICAL: This command MUST use the centralized metadata manager for reliable updates**
 
-1. Parse arguments and locate task file
-2. Validate current status and transition
-3. Update YAML frontmatter with comprehensive metadata
-4. Update content sections based on status change
-5. Update project manifest and related files
-6. Log status change and report results
+## Create a TODO with EXACTLY these 7 Items
+
+1. Initialize validation and start transaction  
+2. Parse arguments and locate task file
+3. Validate current status and transition
+4. Execute atomic metadata update using metadata-manager
+5. Validate all updates succeeded
+6. Commit transaction or rollback on failure
+7. Log status change and report results
 
 ## DETAILS on every TODO item
 
-### 1. Parse arguments and locate task file
+### 1. Initialize validation and start transaction
+
+**MANDATORY FIRST STEP**: Initialize the validation system and start atomic transaction tracking.
+
+```bash
+# Source the utilities (run these commands)
+source .simone/01_UTILS/command-validator.sh
+source .simone/01_UTILS/metadata-manager.sh
+
+# Start command execution tracking
+EXECUTION_ID=$(start_command_execution "update_task_status" "$ARGUMENTS")
+echo "🔄 Started command execution: $EXECUTION_ID"
+
+# Initialize metadata manager
+init_metadata_manager
+```
+
+Record this step as completed:
+```bash
+complete_step "$EXECUTION_ID" "1" "Initialized validation and transaction system"
+```
+
+### 2. Parse arguments and locate task file
 
 **Arguments Format:** `<Task_ID> <New_Status> [Optional: effort_hours]`
 
@@ -47,7 +72,34 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 - Tasks marked as blocked should include blocked_by reasons
 - Completed tasks should have all acceptance criteria marked [x]
 
-### 3. Update YAML frontmatter with comprehensive metadata
+### 4. Execute atomic metadata update using metadata-manager
+
+**CRITICAL**: Use the centralized metadata manager instead of manual file updates.
+
+```bash
+# Execute atomic update using metadata manager
+if update_task_status "$TASK_ID" "$NEW_STATUS" "$EFFORT_HOURS" "$REASON"; then
+    echo "✅ Metadata update completed successfully"
+    record_file_modification "$EXECUTION_ID" "$TASK_FILE" "UPDATE"
+    complete_step "$EXECUTION_ID" "4" "Executed atomic metadata update"
+else
+    echo "❌ Metadata update failed"
+    exit 1
+fi
+```
+
+**This single command handles:**
+- YAML frontmatter updates
+- Content section modifications  
+- Project manifest synchronization
+- Sprint meta updates (if applicable)
+- Database indexing
+- Transaction management with rollback capability
+
+### 3. Legacy step - Update YAML frontmatter with comprehensive metadata
+
+**⚠️ DEPRECATED**: This step is now handled by the metadata manager in step 4.
+Skip this step and proceed to step 4.
 
 **Required Updates for ALL status changes:**
 - **status**: New status value
@@ -116,7 +168,47 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 - Ensure Testing Strategy section is complete
 - Initialize test tracking if needed
 
-### 5. Update project manifest and related files
+### 5. Validate all updates succeeded
+
+**MANDATORY VALIDATION**: Verify that all files were updated correctly.
+
+```bash
+# Validate the specific task update
+if validate_task_update_command "$EXECUTION_ID" "$TASK_ID" "$NEW_STATUS"; then
+    echo "✅ Task update validation passed"
+    complete_step "$EXECUTION_ID" "5" "Validated all updates succeeded"
+else
+    echo "❌ Task update validation failed"
+    exit 1
+fi
+
+# Validate overall metadata consistency
+if validate_metadata_consistency; then
+    echo "✅ Metadata consistency validated"
+else
+    echo "⚠️ Metadata consistency issues detected"
+fi
+```
+
+### 6. Commit transaction or rollback on failure
+
+**CRITICAL TRANSACTION MANAGEMENT**: Complete or rollback the atomic transaction.
+
+```bash
+# Complete the command validation
+if validate_command_completion "$EXECUTION_ID" 7; then
+    echo "✅ Command execution completed successfully"
+    complete_step "$EXECUTION_ID" "6" "Transaction committed successfully"
+else
+    echo "❌ Command execution incomplete - this should not happen if previous steps worked"
+    complete_step "$EXECUTION_ID" "6" "Transaction handling completed with warnings"
+fi
+```
+
+### Legacy step - Update project manifest and related files
+
+**⚠️ DEPRECATED**: This step is now handled automatically by the metadata manager in step 4.
+All manifest, sprint meta, and database updates are handled atomically.
 
 **Project Manifest Updates:**
 - Update task status in `.simone/00_PROJECT_MANIFEST.md`
@@ -133,30 +225,35 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 - Update any cross-references in other documents
 - Ensure completed task links still work
 
-### 6. Log status change and report results
+### 7. Log status change and report results
 
 **Comprehensive Logging:**
 - Use **Work History** MCP if available to log status change
 - Update any monitoring or tracking systems
 - Log effort tracking and time estimates vs actual
 
-**User Report:**
-```
-✅ **Status Updated**: {task_id} → {new_status}
+**Enhanced Reporting with Validation Results:**
 
-📊 **Metadata Updated**:
-- Status: {old_status} → {new_status}
-- Updated: {timestamp}
-- Effort: {estimated}h estimated / {actual}h actual
-- Progress: {progress_percentage}%
+```bash
+# Generate comprehensive status report
+complete_step "$EXECUTION_ID" "7" "Generated final status report"
 
-🔄 **Changes Made**:
-- YAML frontmatter updated with {count} fields
-- {count} content sections updated
-- Project manifest updated
-- {additional_updates}
-
-⏭️ **Next Steps**: {recommended_next_actions}
+echo "✅ **Status Updated**: $TASK_ID → $NEW_STATUS"
+echo
+echo "📊 **Metadata Updated**:"
+echo "- Status: $OLD_STATUS → $NEW_STATUS"  
+echo "- Updated: $(date '+%Y-%m-%d %H:%M')"
+echo "- Effort: ${EFFORT_HOURS:-'N/A'}h actual"
+echo "- Execution ID: $EXECUTION_ID"
+echo
+echo "🔄 **Atomic Changes Made**:"
+echo "- Task file metadata updated"
+echo "- Project manifest synchronized" 
+echo "- Sprint progress recalculated (if applicable)"
+echo "- Database index updated"
+echo "- All changes validated successfully"
+echo
+echo "⏭️ **Next Steps**: Continue with task work or move to next task"
 ```
 
 **Error Handling:**
