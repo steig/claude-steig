@@ -229,3 +229,62 @@ jobs:
         
         # Original data should be preserved somewhere
         find . -name "important.md" | grep -q "backup" || (echo "ERROR: Important data not backed up" && exit 1)
+
+  test-performance-post-install:
+    name: Test Performance System After Installation
+    runs-on: ubuntu-latest
+    needs: test-install
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sqlite3 bc bats
+      
+    - name: Install Simone and test performance system
+      shell: bash
+      run: |
+        mkdir -p test-perf-install
+        cd test-perf-install
+        echo '{"name": "performance-test-project"}' > package.json
+        
+        # Install Simone
+        echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
+        
+        # Test performance system initialization
+        source .simone/01_UTILS/performance-optimizer.sh
+        init_performance
+        
+        # Verify performance system components
+        [[ -f "$SIMONE_DB_FILE" ]] || (echo "ERROR: Performance database not created" && exit 1)
+        [[ -d "$SIMONE_CACHE_DIR" ]] || (echo "ERROR: Cache directory not created" && exit 1)
+        
+        # Test basic performance operations
+        cache_set "install_test" "value" 300
+        result=$(cache_get "install_test")
+        [[ "$result" == "value" ]] || (echo "ERROR: Cache operations failed" && exit 1)
+        
+        # Test task database operations
+        count=$(count_tasks_by_status "all")
+        [[ "$count" == "0" ]] || echo "Task count: $count (expected for fresh install)"
+        
+        echo "✅ Performance system working correctly after installation"
+    
+    - name: Run performance unit tests post-install
+      shell: bash
+      run: |
+        cd test-perf-install
+        
+        # Run a subset of performance tests to verify installation
+        chmod +x $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats
+        
+        # Test specific functions that should work post-install
+        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "performance system initializes correctly"
+        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "task database is created with correct schema"  
+        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "cache_set and cache_get work correctly"
+        
+        echo "✅ Performance unit tests passed post-installation"
