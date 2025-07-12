@@ -225,7 +225,10 @@ jobs:
         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
         # Should have backup
-        [[ -d .simone.backup.* ]] || (echo "ERROR: No backup created" && exit 1)
+        ls -la
+        BACKUP_DIRS=($(find . -maxdepth 1 -type d -name ".simone.backup.*" 2>/dev/null))
+        [[ ${#BACKUP_DIRS[@]} -gt 0 ]] || (echo "ERROR: No backup created" && exit 1)
+        echo "✅ Backup found: ${BACKUP_DIRS[0]}"
         
         # Original data should be preserved somewhere
         find . -name "important.md" | grep -q "backup" || (echo "ERROR: Important data not backed up" && exit 1)
