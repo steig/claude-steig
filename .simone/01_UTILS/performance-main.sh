@@ -1,52 +1,132 @@
 #!/usr/bin/env bash
 # Main performance module for Simone
-# This is the entry point that loads all performance optimizations
+# Simplified to rely on Serena MCP for IO operations
 
 # Determine script directory
 UTILS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source all performance modules
-source "$UTILS_DIR/performance-optimizer.sh"
-source "$UTILS_DIR/cache-manager.sh"
-source "$UTILS_DIR/database-manager.sh"
-source "$UTILS_DIR/fast-commands.sh"
-source "$UTILS_DIR/git-automation.sh"
-source "$UTILS_DIR/hooks-integration.sh"
+# Source remaining modules (no SQLite dependencies)
+if [[ -f "$UTILS_DIR/fast-commands.sh" ]]; then
+    source "$UTILS_DIR/fast-commands.sh" || echo "⚠️ Failed to load fast-commands.sh"
+fi
+if [[ -f "$UTILS_DIR/git-automation.sh" ]]; then
+    source "$UTILS_DIR/git-automation.sh" || echo "⚠️ Failed to load git-automation.sh"
+fi
+if [[ -f "$UTILS_DIR/hooks-integration.sh" ]]; then
+    source "$UTILS_DIR/hooks-integration.sh" || echo "⚠️ Failed to load hooks-integration.sh"
+fi
 
-# Performance configuration
+# Performance configuration (simplified)
 export SIMONE_PERFORMANCE_ENABLED="${SIMONE_PERFORMANCE_ENABLED:-true}"
-export SIMONE_AUTO_INDEX="${SIMONE_AUTO_INDEX:-false}"
-export SIMONE_CACHE_WARMUP="${SIMONE_CACHE_WARMUP:-false}"
 
-# Initialize performance subsystems
+# Initialize performance subsystems (simplified)
 init_simone_performance() {
     if [[ "$SIMONE_PERFORMANCE_ENABLED" != "true" ]]; then
         return 0
     fi
     
-    echo "⚡ Initializing Simone Performance System..."
+    echo "⚡ Initializing Simone (relying on Serena MCP for IO)..."
     
-    # Initialize core components
-    init_performance  # From performance-optimizer.sh
-    init_cache       # From cache-manager.sh
-    init_database    # From database-manager.sh
+    # No complex initialization needed - Serena handles IO efficiently
+    echo "✅ Performance system ready"
+}
+
+# Simple built-in functions (no SQLite dependencies)
+simple_status() {
+    echo "=== Simone Status ==="
+    echo
     
-    # Warm up cache if enabled
-    if [[ "$SIMONE_CACHE_WARMUP" == "true" ]] && [[ ! -f "$SIMONE_CACHE_DIR/.warmed" ]]; then
-        warmup_cache
-        touch "$SIMONE_CACHE_DIR/.warmed"
-    fi
-    
-    # Auto-index if database is empty
-    if [[ "$SIMONE_AUTO_INDEX" == "true" ]]; then
-        local task_count=$(sqlite3 "$SIMONE_DB_FILE" "SELECT COUNT(*) FROM tasks;" 2>/dev/null || echo "0")
-        if [[ "$task_count" -eq 0 ]]; then
-            echo "📊 Building initial task index..."
-            rebuild_database
+    # Basic project info
+    if [[ -f ".simone/00_PROJECT_MANIFEST.md" ]]; then
+        local project_name=$(grep "^project_name:" ".simone/00_PROJECT_MANIFEST.md" | cut -d'"' -f2 2>/dev/null)
+        if [[ -n "$project_name" ]]; then
+            echo "📁 Project: $project_name"
+            echo
         fi
     fi
     
-    echo "✅ Performance system ready"
+    # Simple task counts from files
+    echo "📊 Task Summary:"
+    local total_files=$(find .simone -path "*/0[34]_*" -name "*.md" -type f 2>/dev/null | wc -l)
+    local pending_files=0
+    local progress_files=0  
+    local completed_files=0
+    
+    if [[ $total_files -gt 0 ]]; then
+        pending_files=$(find .simone -path "*/0[34]_*" -name "*.md" -type f -exec grep -l "^status: pending" {} \; 2>/dev/null | wc -l)
+        progress_files=$(find .simone -path "*/0[34]_*" -name "*.md" -type f -exec grep -l "^status: in_progress" {} \; 2>/dev/null | wc -l)
+        completed_files=$(find .simone -path "*/0[34]_*" -name "*.md" -type f -exec grep -l "^status: completed" {} \; 2>/dev/null | wc -l)
+    fi
+    
+    echo "  Total Tasks:  $total_files"
+    echo "  Pending:      $pending_files"
+    echo "  In Progress:  $progress_files"
+    echo "  Completed:    $completed_files"
+    
+    if [[ $total_files -gt 0 ]]; then
+        local completion_rate=$(( (completed_files * 100) / total_files ))
+        echo "  Completion:   ${completion_rate}%"
+    fi
+}
+
+simple_search() {
+    local query="$1"
+    
+    if [[ -z "$query" ]]; then
+        echo "Usage: search <query>"
+        return 1
+    fi
+    
+    echo "🔍 Searching for: $query"
+    echo
+    
+    # Simple grep search
+    echo "Found in task files:"
+    grep -r "$query" .simone/0[34]_* --include="*.md" 2>/dev/null | head -10
+}
+
+simple_dashboard() {
+    echo "# Project Dashboard"
+    echo "*Last Updated: $(date)*"
+    echo
+    simple_status
+}
+
+simple_sprint_status() {
+    local sprint_name="${1}"
+    
+    if [[ -z "$sprint_name" ]]; then
+        echo "Active sprints:"
+        find .simone/03_SPRINTS -type d -name "S*" 2>/dev/null | sort
+        return 0
+    fi
+    
+    echo "🏃 Sprint: $sprint_name"
+    echo
+    
+    # Find sprint directory
+    local sprint_dir=$(find .simone/03_SPRINTS -type d -name "*$sprint_name*" | head -1)
+    if [[ -z "$sprint_dir" ]]; then
+        echo "❌ Sprint not found: $sprint_name"
+        return 1
+    fi
+    
+    # Count tasks in sprint
+    local total=$(find "$sprint_dir" -name "*.md" -not -name "*meta*" -type f 2>/dev/null | wc -l)
+    local completed=$(grep -l "^status: completed" "$sprint_dir"/*.md 2>/dev/null | wc -l)
+    local in_progress=$(grep -l "^status: in_progress" "$sprint_dir"/*.md 2>/dev/null | wc -l)
+    local pending=$(grep -l "^status: pending" "$sprint_dir"/*.md 2>/dev/null | wc -l)
+    
+    echo "📊 Sprint Statistics:"
+    echo "  Total Tasks:  $total"
+    echo "  Completed:    $completed"
+    echo "  In Progress:  $in_progress"
+    echo "  Pending:      $pending"
+    
+    if [[ $total -gt 0 ]]; then
+        local progress=$(( (completed * 100) / total ))
+        echo "  Progress:     ${progress}%"
+    fi
 }
 
 # Performance command wrapper
@@ -55,37 +135,21 @@ perf_command() {
     [[ $# -gt 0 ]] && shift
     
     case "$cmd" in
-        # Cache management
-        "cache")
-            case "${1:-status}" in
-                "stats") cache_stats ;;
-                "clear") clear_cache_type "${2:-all}" ;;
-                "warmup") warmup_cache ;;
-                "export") export_cache "$2" ;;
-                "import") import_cache "$2" ;;
-                "monitor") monitor_cache "$2" ;;
-                *) cache_stats ;;
-            esac
-            ;;
+        # Removed cache and database management - Serena handles this
             
-        # Database management
-        "db"|"database")
-            case "${1:-status}" in
-                "rebuild") rebuild_database ;;
-                "analyze") analyze_database ;;
-                "optimize") optimize_database ;;
-                "backup") backup_database ;;
-                "export") export_database_json "$2" ;;
-                "query") query_tasks "$2" ;;
-                *) analyze_database ;;
-            esac
+        # Fast commands - embedded simple versions
+        "status") 
+            simple_status
             ;;
-            
-        # Fast commands
-        "status") fast_status ;;
-        "search") fast_search "$@" ;;
-        "dashboard") fast_dashboard ;;
-        "sprint") fast_sprint_status "$@" ;;
+        "search") 
+            simple_search "$@"
+            ;;
+        "dashboard") 
+            simple_dashboard
+            ;;
+        "sprint") 
+            simple_sprint_status "$@"
+            ;;
         
         # Performance diagnostics
         "benchmark")
@@ -119,15 +183,7 @@ perf_command() {
         # System management
         "disable")
             echo "🛑 Disabling Simone Performance System..."
-            if [[ -f "$SIMONE_DB_FILE" ]]; then
-                rm -f "$SIMONE_DB_FILE"
-                echo "✅ Database file removed"
-            fi
-            if [[ -d ".simone/.cache" ]]; then
-                rm -rf ".simone/.cache"
-                echo "✅ Cache directory removed"
-            fi
-            echo "✅ Performance system disabled"
+            echo "✅ Performance system disabled (Serena handles core functionality)"
             ;;
             
         "help"|*)
@@ -135,22 +191,17 @@ perf_command() {
             echo "========================"
             echo
             echo "Available commands:"
-            echo "  cache      - Cache management (stats, clear, warmup)"
-            echo "  db         - Database management (rebuild, analyze, optimize)"
             echo "  status     - Fast project status"
             echo "  search     - Fast task search"
             echo "  dashboard  - Generate performance dashboard"
             echo "  sprint     - Sprint status and management"
-            echo "  benchmark  - Run performance benchmarks"
-            echo "  diagnose   - Diagnose performance issues"
             echo "  git        - Git automation tools"
             echo "  hooks      - Hook management and registration"
-            echo "  disable    - Disable performance system and remove data"
+            echo "  disable    - Disable performance system"
             echo
             echo "Examples:"
-            echo "  ./simone perf cache stats"
-            echo "  ./simone perf diagnose"
-            echo "  ./simone perf db rebuild"
+            echo "  ./simone perf status"
+            echo "  ./simone perf search task"
             if [[ "$cmd" != "help" ]]; then
                 echo
                 echo "Unknown command: $cmd"
@@ -190,14 +241,8 @@ benchmark_simone() {
     time_operation "Dashboard generation" fast_dashboard
     
     echo
-    echo "💾 Cache Operations:"
-    time_operation "Template lookup" cache_template "task.md"
-    time_operation "Cache stats" cache_stats
-    
-    echo
-    echo "🗄️ Database Operations:"
-    time_operation "Task count" count_tasks_by_status "all"
-    time_operation "Task query" list_tasks_by_status "pending" 10
+    echo "📁 File Operations (handled by Serena):"
+    time_operation "File listing" find .simone -name "*.md" -type f
     
     echo
     echo "✅ Benchmark complete"
@@ -212,34 +257,16 @@ diagnose_performance() {
     # Check if performance is enabled
     echo "⚙️ Configuration:"
     echo "  Performance Enabled: $SIMONE_PERFORMANCE_ENABLED"
-    echo "  Auto Index: $SIMONE_AUTO_INDEX"
-    echo "  Cache Warmup: $SIMONE_CACHE_WARMUP"
     echo
     
-    # Check cache health
-    echo "💾 Cache Health:"
-    if [[ -d "$SIMONE_CACHE_DIR" ]]; then
-        echo "  ✅ Cache directory exists"
-        echo "  📊 Size: $(du -sh "$SIMONE_CACHE_DIR" 2>/dev/null | cut -f1)"
-        echo "  📝 Items: $(find "$SIMONE_CACHE_DIR" -type f ! -name "*.ttl" | wc -l)"
+    # Check Simone structure
+    echo "📁 Simone Structure:"
+    if [[ -d ".simone" ]]; then
+        echo "  ✅ Simone directory exists"
+        echo "  📊 Total files: $(find .simone -name "*.md" -type f | wc -l)"
+        echo "  📝 Task files: $(find .simone -path "*/0[34]_*" -name "*.md" -type f | wc -l)"
     else
-        echo "  ❌ Cache directory missing"
-    fi
-    echo
-    
-    # Check database health
-    echo "🗄️ Database Health:"
-    if [[ -f "$SIMONE_DB_FILE" ]]; then
-        echo "  ✅ Database exists"
-        echo "  📊 Size: $(du -h "$SIMONE_DB_FILE" 2>/dev/null | cut -f1)"
-        local task_count=$(sqlite3 "$SIMONE_DB_FILE" "SELECT COUNT(*) FROM tasks;" 2>/dev/null || echo "0")
-        echo "  📝 Tasks: $task_count"
-        
-        # Check indexes
-        local index_count=$(sqlite3 "$SIMONE_DB_FILE" "SELECT COUNT(*) FROM sqlite_master WHERE type='index';" 2>/dev/null || echo "0")
-        echo "  🔍 Indexes: $index_count"
-    else
-        echo "  ❌ Database missing"
+        echo "  ❌ Simone directory missing"
     fi
     echo
     
@@ -249,29 +276,19 @@ diagnose_performance() {
     # Large number of files
     local file_count=$(find .simone -name "*.md" -type f 2>/dev/null | wc -l)
     if [[ $file_count -gt 1000 ]]; then
-        echo "  ⚠️ Large number of files ($file_count) - indexing recommended"
+        echo "  ⚠️ Large number of files ($file_count) - Serena will handle efficiently"
     fi
     
-    # Missing SQLite
-    if ! command -v sqlite3 >/dev/null 2>&1; then
-        echo "  ❌ SQLite not installed - database features disabled"
-    fi
-    
-    # Old cache
-    if [[ -f "$SIMONE_CACHE_DIR/.warmed" ]]; then
-        local cache_age=$(( ($(date +%s) - $(stat -f %m "$SIMONE_CACHE_DIR/.warmed" 2>/dev/null || stat -c %Y "$SIMONE_CACHE_DIR/.warmed" 2>/dev/null)) / 86400 ))
-        if [[ $cache_age -gt 7 ]]; then
-            echo "  ⚠️ Cache is $cache_age days old - consider rebuilding"
-        fi
+    # Check if Serena MCP is available
+    if ! command -v claude >/dev/null 2>&1; then
+        echo "  ⚠️ Claude CLI not found - Serena MCP may not be available"
     fi
     
     echo
     echo "💡 Recommendations:"
-    if [[ "$task_count" -eq 0 ]] && [[ $file_count -gt 0 ]]; then
-        echo "  • Run 'perf_command db rebuild' to index tasks"
-    fi
-    if [[ ! -d "$SIMONE_CACHE_DIR" ]]; then
-        echo "  • Run 'init_simone_performance' to initialize performance"
+    if [[ $file_count -gt 100 ]]; then
+        echo "  • Use Serena MCP for efficient file operations"
+        echo "  • Consider project organization review"
     fi
 }
 

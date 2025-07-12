@@ -24,7 +24,7 @@ Thumbs.db
 !/.github
 !/.pre-commit-config.yaml
 !/.markdownlint.yaml
-!/examples
+# !/examples
 !/docs-site
 !/scripts
 !/simone

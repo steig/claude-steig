@@ -4,9 +4,7 @@
 
 set -euo pipefail
 
-# Source dependencies
-source "$(dirname "${BASH_SOURCE[0]}")/database-manager.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/performance-optimizer.sh"
+# Simplified metadata manager - no SQLite dependencies
 
 # Configuration
 SIMONE_ROOT="${SIMONE_ROOT:-.simone}"
@@ -17,7 +15,7 @@ BACKUP_DIR="$SIMONE_ROOT/.backups/metadata"
 # Initialize metadata manager
 init_metadata_manager() {
     mkdir -p "$TEMP_DIR" "$BACKUP_DIR"
-    init_database
+    # No database initialization needed - Serena handles this
 }
 
 # Atomic update transaction
@@ -127,8 +125,7 @@ update_task_status() {
         fi
     fi
     
-    # Update database index
-    index_task_file_advanced "$task_file" "$(basename "$(dirname "$task_file")")"
+    # Note: Task indexing now handled by Serena MCP
     
     # Commit transaction
     commit_transaction "$transaction_id"
