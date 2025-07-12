@@ -52,3 +52,14 @@ This project follows a milestone-based development approach.
 - **Current Sprint:** [S01 Sprint Folder](./03_SPRINTS/S01_M01_[Sprint_Name]/)
 - **Active Tasks:** Check sprint folder for T##_S01_*.md files
 - **Project Reviews:** [Latest Review](./10_STATE_OF_PROJECT/)
+
+### Performance Features (Added 2025-07-11)
+- ✅ SQLite task indexing
+- ✅ Template caching  
+- ✅ Command optimization
+- ✅ Git automation
+- ✅ Hooks integration
+
+### Upgrade Information
+- Upgraded on: 2025-07-11
+- Backup location: .simone/.upgrade-backup-20250711-215421

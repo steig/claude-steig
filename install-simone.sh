@@ -428,9 +428,16 @@ create_initial_manifest() {
         if [[ -f "$template_file" ]]; then
             cp "$template_file" "$manifest_file"
             # Replace placeholders
+            local current_date=$(date '+%Y-%m-%d')
+            local current_datetime=$(date '+%Y-%m-%d %H:%M:%S')
             sed -i.bak "s/{PROJECT_NAME}/$project_name/g" "$manifest_file" 2>/dev/null || true
-            sed -i.bak "s/{CREATED_DATE}/$(date '+%Y-%m-%d')/g" "$manifest_file" 2>/dev/null || true
-            sed -i.bak "s/{UPDATED_DATE}/$(date '+%Y-%m-%d %H:%M:%S')/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{PROJECT_VERSION}/1.0.0/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{CREATED_DATE}/$current_date/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{UPDATED_DATE}/$current_datetime/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{LAST_UPDATED}/$current_datetime/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{PROJECT_STATUS}/active/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{CURRENT_MILESTONE}/M01_Initial_Setup/g" "$manifest_file" 2>/dev/null || true
+            sed -i.bak "s/{CURRENT_SPRINT}/S01_M01_Project_Foundation/g" "$manifest_file" 2>/dev/null || true
             rm -f "$manifest_file.bak" 2>/dev/null || true
         fi
         
