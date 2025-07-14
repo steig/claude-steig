@@ -1,5 +1,9 @@
 # Testing Review - Execute top to bottom
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-testing` instead for comprehensive testing review. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-testing --persona-qa --persona-analyzer` instead.
+
 Analyzes test implementation against the project's testing strategy to ensure tests remain balanced, purposeful, and aligned with development goals.
 
 ## Prerequisites Check

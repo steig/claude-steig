@@ -1,5 +1,9 @@
 # Quality Review - Comprehensive Code Quality and Technical Health Assessment
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-quality` instead for comprehensive quality assessment. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-quality --persona-architect --persona-security --persona-performance` instead.
+
 Performs comprehensive analysis of code quality, technical debt, testing coverage, security posture, and overall technical health to ensure project maintainability and reliability.
 
 ## Create a TODO with EXACTLY these 8 Items

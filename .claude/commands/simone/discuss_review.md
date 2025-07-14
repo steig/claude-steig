@@ -1,5 +1,9 @@
 # Discuss Review Findings
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-discussion` instead for facilitated review discussions. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-discussion --persona-mentor --consensus` instead.
+
 Engage in technical discussion about recent review findings based on discussion starter.
 
 Discussion Starter: <$ARGUMENTS>

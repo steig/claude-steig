@@ -1,5 +1,9 @@
 # Start Task - Create Branch and Set Up Task Environment
 
+> ⚠️ **DEPRECATED**: This command functionality has been merged into `do_task` and `do_task_auto`. Branch creation and environment setup are now handled automatically during task execution. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:do_task <task_id>` or `/project:simone:do_task_auto <task_id>` instead.
+
 Creates a Git branch for a task and sets up the development environment without executing the task implementation.
 
 ## Create a TODO with EXACTLY these 6 Items

@@ -1,5 +1,9 @@
 # Code Review - Execute top to bottom
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-code` instead for comprehensive code review capabilities. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-code --persona-security --persona-analyzer` instead.
+
 **COGNITIVE PERSONAS INTEGRATION:** This command supports multi-domain code review through persona flags.
 
 **AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
