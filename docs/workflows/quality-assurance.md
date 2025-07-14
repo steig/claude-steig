@@ -76,7 +76,7 @@ acceptance_criteria:
 
 1. **Requirement Review**:
    ```
-   /project:simone:discuss_review requirements "Review requirements for completeness"
+   /project:simone:review --type-discussion requirements "Review requirements for completeness"
    ```
    
    Checklist:
@@ -145,7 +145,7 @@ acceptance_criteria:
 
 3. **Real-Time Quality Monitoring**:
    ```
-   /project:simone:code_review current_changes "Check code quality standards"
+   /project:simone:review --type-code current_changes "Check code quality standards"
    ```
 
 ### Code Review Process
@@ -326,7 +326,7 @@ test_metrics:
 ### Documentation Review
 
 ```
-/project:simone:testing_review documentation
+/project:simone:review --type-testing documentation
 ```
 
 Checks for:
@@ -694,6 +694,165 @@ Track improvement initiatives:
 4. **Success Stories**: Share quality wins
 5. **Incident Learning**: Post-mortems for quality failures
 
+## Completion Validation Quality Gates
+
+**NEW in v3.0.0**: The Simone framework now enforces quality gates at task completion to ensure work meets all requirements before being marked as complete.
+
+### Completion Requirements Validation
+
+**Before any task can be marked as "completed"**, the system validates:
+
+#### 1. Acceptance Criteria Completion
+```bash
+# Automatic validation checks
+🔍 Validating completion requirements for: TASK_001_user_auth.md
+✅ All acceptance criteria completed (5/5 checked)
+❌ 2 acceptance criteria not completed
+   Please complete all acceptance criteria before marking as completed
+```
+
+**All acceptance criteria must be checked**:
+```markdown
+## Acceptance Criteria
+- [x] User can register with email and password
+- [x] Email validation is enforced
+- [ ] Password strength requirements implemented  # ❌ BLOCKS COMPLETION
+- [x] User session management working
+- [ ] Password reset functionality complete      # ❌ BLOCKS COMPLETION
+```
+
+#### 2. Quality Gate Validation
+```yaml
+# Task metadata quality gates
+quality_gates:
+  code_review: passed
+  security_scan: passed
+  performance_test: passed
+  integration_test: failed  # ❌ BLOCKS COMPLETION
+```
+
+**Failed quality gates prevent completion**:
+```bash
+❌ 1 quality gates failed
+   integration_test: failed
+   Please resolve quality gate failures before marking as completed
+```
+
+#### 3. Output Documentation Check
+```bash
+⚠️ No output section - consider adding completion details
+```
+
+**Recommended output section**:
+```markdown
+## Output
+
+### Implementation Summary
+- Authentication system implemented with JWT tokens
+- User registration and login endpoints created
+- Password hashing with bcrypt
+- Session management with Redis
+
+### Files Modified
+- `src/auth/auth.service.ts` - Core authentication logic
+- `src/auth/auth.controller.ts` - API endpoints
+- `src/auth/auth.module.ts` - Module configuration
+- `tests/auth/auth.service.test.ts` - Unit tests
+
+### Testing Results
+- Unit tests: 25/25 passing
+- Integration tests: 8/8 passing
+- Security scan: No vulnerabilities found
+```
+
+### Hierarchical Quality Validation
+
+**When tasks complete**, quality validation cascades up the hierarchy:
+
+#### Sprint Quality Validation
+```bash
+🔍 Checking sprint completion: S01_M01_Authentication_Sprint
+📊 Sprint progress: 5/5 tasks completed
+✅ All tasks passed completion validation
+🎉 Sprint marked complete - all quality gates passed
+```
+
+#### Milestone Quality Validation
+```bash
+🔗 Checking milestone completion for: M01_User_Management
+📊 Milestone progress: 4/4 sprints completed
+✅ All sprints passed quality validation
+🎉 Milestone marked complete - ready for stakeholder review
+```
+
+#### Project Quality Validation
+```bash
+🔍 Checking overall project completion
+📊 Project progress: 4/4 milestones completed
+✅ All milestones passed quality validation
+🎉 PROJECT COMPLETE - all quality gates passed!
+📄 Generating project completion report...
+```
+
+### Quality Metrics Integration
+
+**The completion validation system tracks**:
+
+- **Completion Accuracy**: Percentage of tasks that pass validation on first attempt
+- **Quality Gate Compliance**: Rate of quality gate failures at completion
+- **Rework Rate**: Tasks that need rework after completion validation
+- **Sprint Quality Score**: Aggregate quality metrics for sprint completion
+
+### Commands for Quality Validation
+
+#### Manual Validation
+```bash
+# Validate specific task completion requirements
+.simone/01_UTILS/metadata-manager.sh validate_completion TASK_001
+
+# Validate all completed tasks in project
+/project:simone:sync_metadata --validate-only
+```
+
+#### Comprehensive Quality Sync
+```bash
+# Full quality validation and sync
+/project:simone:sync_metadata
+
+# Quality-focused sync with repairs
+/project:simone:sync_metadata --fix-inconsistencies
+```
+
+### Benefits of Completion Validation
+
+✅ **Prevents Incomplete Work**: Tasks cannot be marked complete without meeting all criteria  
+✅ **Enforces Quality Standards**: Quality gates must pass before completion  
+✅ **Improves Accuracy**: Reduces false positives in completion tracking  
+✅ **Enhances Visibility**: Clear understanding of what "done" means  
+✅ **Supports Compliance**: Auditable completion requirements  
+
+### Integration with CI/CD
+
+**Quality validation integrates with automated pipelines**:
+
+```yaml
+# GitHub Actions integration
+name: Quality Validation
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  validate-completion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Task Completion
+        run: |
+          .simone/01_UTILS/metadata-manager.sh validate
+          /project:simone:sync_metadata --validate-only
+```
+
 ---
 
-Quality assurance in the Simone Framework is comprehensive, continuous, and integrated into every aspect of development. By following these workflows and maintaining high standards, teams can deliver reliable, secure, and performant software consistently.
+Quality assurance in the Simone Framework is comprehensive, continuous, and integrated into every aspect of development. With the new completion validation system, teams can ensure that "done" truly means done, with all quality requirements met and validated at every level of the project hierarchy.

@@ -7,7 +7,7 @@ The Simone project features a comprehensive cognitive persona system that enhanc
 ## Integration Status
 
 ### ✅ Fully Integrated Commands
-- **`code_review`** - Multi-domain code review with persona-driven analysis
+- **`review --type-code`** - Multi-domain code review with persona-driven analysis
 - **`do_task`** - Task execution with domain expertise activation
 - **`create_milestone`** - Milestone planning with specialized domain guidance
 - **`commit`** - Intelligent commit organization with persona-driven grouping
@@ -49,7 +49,7 @@ The Simone project features a comprehensive cognitive persona system that enhanc
 ### Single Persona Activation
 ```bash
 # Security-focused code review
-/project:simone:code_review --persona-security
+/project:simone:review --type-code --persona-security
 
 # Architecture-driven task execution
 /project:simone:do_task T001 --persona-architect
@@ -61,7 +61,7 @@ The Simone project features a comprehensive cognitive persona system that enhanc
 ### Multi-Persona Combinations
 ```bash
 # Comprehensive security review
-/project:simone:code_review --persona-security --persona-analyzer
+/project:simone:review --type-code --persona-security --persona-analyzer
 
 # Full-stack task execution
 /project:simone:do_task T001 --persona-frontend --persona-backend
@@ -76,7 +76,7 @@ The Simone project features a comprehensive cognitive persona system that enhanc
 /project:simone:create_milestone "Payment Gateway" --persona-architect --introspect
 
 # Multi-model consensus for critical changes
-/project:simone:code_review --persona-security --consensus --think-deep
+/project:simone:review --type-code --persona-security --consensus --think-deep
 
 # Optimized token usage for large projects
 /project:simone:do_task T001 --persona-refactorer --uc
@@ -101,7 +101,7 @@ The system intelligently activates relevant personas based on content analysis:
 
 ## Persona-Driven Behaviors
 
-### Code Review (`code_review.md`)
+### Code Review (`review --type-code`)
 Each persona applies specialized review criteria:
 - **Security**: OWASP Top 10 compliance, input validation, access control
 - **Architecture**: Design patterns, scalability, technical debt identification

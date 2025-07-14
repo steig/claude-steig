@@ -84,8 +84,9 @@ Built-in review processes maintain standards:
 Simone commands (`/project:simone:command`) automate the workflow:
 
 - Planning: `plan_milestone`, `create_sprint`
-- Execution: `create_task`, `do_task`, `code_review`
-- Maintenance: `commit`, `project_review`, `discuss_review`
+- Execution: `create_task`, `do_task`, `do_task_auto`
+- Review: `review` (unified system with --type flags)
+- Maintenance: `commit`, `project_review`
 - Utilities: `initialize`
 
 ## Key Principles

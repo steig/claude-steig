@@ -1,6 +1,193 @@
 # Changelog
 
-## 2025-07-12 - v2.1.0
+## [3.0.0] - 2025-01-14
+
+### Major Release: Hierarchical Completion Tracking & Enhanced Metadata Management
+
+This major release significantly improves how task, sprint, milestone, and project completion is tracked and managed. The addition of automatic hierarchical status propagation and comprehensive validation provides accurate project progress visibility at all levels.
+
+### ✨ Added
+
+#### **Hierarchical Completion Tracking System**
+- **Automatic Status Propagation**: Tasks → Sprints → Milestones → Project completion detection
+- **Real-time Progress Percentages**: Live calculation at all hierarchy levels
+- **Completion Dashboard**: Comprehensive progress visualization with `/project:simone:sync_metadata --dashboard`
+- **Project Completion Detection**: Automatic project completion when all milestones finished
+- **Completion Reports**: Auto-generated completion reports for milestones and projects
+
+#### **Completion Validation Gates**
+- **Acceptance Criteria Validation**: Prevents task completion without all criteria checked
+- **Quality Gate Enforcement**: Blocks completion if quality gates failed
+- **Output Documentation Checking**: Encourages proper completion documentation
+- **Dependency Validation**: Ensures prerequisites are met before completion
+
+#### **Enhanced Metadata Management**
+- **`sync_metadata` Command**: Comprehensive metadata synchronization across hierarchy
+- **Atomic Transactions**: Safe metadata updates with rollback capability
+- **Cross-Reference Synchronization**: Maintains consistency across all tracking files
+- **Inconsistency Detection**: Automatic detection and repair of metadata problems
+- **Metadata Validation**: Comprehensive validation pipeline for all metadata
+
+#### **New Commands**
+- **`sync_metadata`**: Synchronize completion status across project hierarchy
+  - `--dashboard`: Show completion status dashboard
+  - `--validate-only`: Validate without making changes  
+  - `--fix-inconsistencies`: Automatically repair detected issues
+- **Enhanced `update_task_status`**: Now includes hierarchical completion checking (8-step process)
+- **Enhanced `do_task_auto`**: Integrated completion validation and status propagation
+
+#### **Unified Review System**
+- **`review` Command**: Single command replacing 4 separate review commands
+  - `--type-code`: Code review functionality (replaces `code_review`)
+  - `--type-quality`: Quality review functionality (replaces `quality_review`)
+  - `--type-testing`: Testing review functionality (replaces `testing_review`)
+  - `--type-discussion`: Discussion review functionality (replaces `discuss_review`)
+- **Cross-type Analysis**: Unified review with comprehensive analysis across all review types
+- **Enhanced Metadata Tracking**: Better review history and metadata integration
+
+#### **Advanced Automation Enhancements**
+- **`do_task_auto` Command**: Comprehensive automation with significant time reduction
+- **`create_pr_auto` Command**: Automated PR creation with approval gates
+- **Persona Integration**: Domain-specific expertise through cognitive personas
+- **Automation Confidence Scoring**: Risk-based automation decision making
+- **Technical Debt Integration**: Automated assessment and logging
+
+#### **Quality Assurance Enhancements**
+- **Built-in Quality Validation**: Integrated into automated workflows
+- **GitHub Actions Integration**: Automated CI/CD quality validation pipeline
+- **Quality Dashboard**: Real-time quality metrics and validation status
+- **Completion Quality Gates**: Ensures quality standards before task completion
+- **Comprehensive Validation Pipeline**: Multi-level quality checking
+
+#### **Documentation and Templates**
+- **Unified Bug Template**: Consolidated comprehensive bug reporting template
+- **Enhanced Architecture Template**: Integrated initialization checklist
+- **Migration Guide**: Comprehensive guide for deprecated features
+- **Troubleshooting Guide**: Detailed solutions for metadata tracking issues
+- **Metadata Manager Documentation**: Complete guide to new metadata system
+- **Updated Command Reference**: Complete documentation of all new features
+
+### 🔄 Changed
+
+#### **Enhanced Existing Commands**
+- **`update_task_status`**: Now 8-step process including hierarchical completion checking
+- **`do_task`**: Enhanced with completion validation and status propagation
+- **`create_pr`**: Enhanced with better automation and approval gates
+- **`status`**: Now shows hierarchical completion status and metadata consistency
+
+#### **Improved Workflow Integration**
+- **Task Completion Workflow**: Now includes automatic sprint/milestone/project checking
+- **Quality Assurance Process**: Integrated completion validation throughout workflow
+- **Sprint Management**: Automatic completion detection and status updates
+- **Milestone Tracking**: Real-time progress and automatic completion detection
+
+#### **Enhanced Metadata Structure**
+- **Task Metadata**: Added completion validation fields and quality gates
+- **Sprint Metadata**: Enhanced with progress percentages and completion tracking
+- **Milestone Metadata**: Added automatic completion detection and progress tracking
+- **Project Metadata**: Comprehensive project-level completion tracking
+
+### 📦 Deprecated
+
+#### **Superseded Commands**
+- **`start_task`**: ⚠️ **DEPRECATED** - Functionality merged into `do_task` and `do_task_auto`
+- **`code_review`**: ⚠️ **DEPRECATED** - Replaced by `review --type-code`
+- **`quality_review`**: ⚠️ **DEPRECATED** - Replaced by `review --type-quality`
+- **`testing_review`**: ⚠️ **DEPRECATED** - Replaced by `review --type-testing`
+- **`discuss_review`**: ⚠️ **DEPRECATED** - Replaced by `review --type-discussion`
+
+#### **Consolidated Templates**
+- **`architecture_initialization_checklist.md`**: ⚠️ **DEPRECATED** - Merged into `architecture_template.md`
+- **Multiple bug templates**: Consolidated into single unified bug template
+- **Legacy review templates**: Replaced by unified review system
+
+#### **Deprecated Utilities**
+- **`quality-gate-validator.sh`**: ⚠️ **DEPRECATED** - Functionality integrated into automated workflows
+- **`command-validator.sh`**: ⚠️ **DEPRECATED** - Validation now built into framework
+
+### 🔧 Fixed
+
+#### **Metadata Tracking Issues Resolved**
+- **Task Completion Propagation**: Tasks now properly update sprint status when completed
+- **Sprint Completion Propagation**: Sprints now properly update milestone status when completed
+- **Milestone Completion Propagation**: Milestones now properly update project status when completed
+- **Progress Percentage Accuracy**: All progress percentages now calculated correctly and in real-time
+- **Cross-Reference Consistency**: All task/sprint/milestone references stay synchronized
+- **Completion Validation**: Tasks cannot be marked complete without meeting all requirements
+
+#### **Quality Assurance Fixes**
+- **Completion Requirements**: Enforced acceptance criteria completion before task closure
+- **Quality Gate Enforcement**: Failed quality gates now block task completion
+- **Review Process Consistency**: Unified review system ensures consistent quality checking
+- **Documentation Standards**: Enhanced completion documentation requirements
+
+#### **Workflow Consistency**
+- **Command Integration**: All commands now properly integrate with metadata system
+- **Status Synchronization**: Consistent status updates across all tracking systems
+- **Transaction Safety**: All metadata updates now use atomic transactions
+- **Error Recovery**: Comprehensive rollback and recovery mechanisms
+
+### 🗑️ Removed
+
+#### **Redundant Components**
+- **Duplicate bug templates**: Multiple competing templates consolidated
+- **Separate review commands**: 4 commands replaced by single unified command
+- **Standalone validation scripts**: Functionality integrated into framework
+- **Legacy utility scripts**: Replaced by enhanced metadata manager
+
+#### **Obsolete Workflows**
+- **Manual milestone management**: Now automated through hierarchical completion
+- **Manual progress calculation**: Now automated and real-time
+- **Separate validation steps**: Now integrated into completion workflow
+- **Manual cross-reference updates**: Now automatically synchronized
+
+### 🚀 Performance
+
+#### **Metadata System Optimization**
+- **Efficient Scanning**: Optimized file discovery and processing algorithms
+- **Batch Operations**: Reduced API calls through intelligent batching
+- **Caching Strategy**: Smart caching of progress calculations and metadata
+- **Parallel Processing**: Concurrent processing of independent operations
+
+### 🎯 Developer Experience
+
+#### **Enhanced Usability**
+- **Comprehensive Documentation**: Complete documentation for all new features
+- **Visual Dashboards**: Rich completion status visualization
+- **Error Messages**: Clear, actionable error messages and guidance
+- **Troubleshooting Guides**: Detailed problem-solving resources
+
+#### **Integration Improvements**
+- **Claude Code Integration**: Enhanced integration with Claude Code workflows
+- **GitHub Actions**: Automated CI/CD integration for quality validation
+- **External Tools**: Better integration with external project management tools
+- **API Consistency**: Consistent command interfaces and patterns
+
+### 🔒 Security
+
+#### **Enhanced Validation**
+- **Input Validation**: Comprehensive validation of all task IDs and status values
+- **Transaction Security**: Atomic updates with backup and rollback capabilities
+- **Access Control**: Permission checking for all metadata operations
+- **Audit Trail**: Complete logging of all metadata changes
+
+### Impact Summary
+
+#### **Problem Resolution**
+- **Complete Fix**: All reported metadata tracking issues resolved
+- **Accuracy**: Progress percentages now calculated correctly
+- **Automation**: Completion status fully automated
+- **Visibility**: Project progress visible at all levels
+
+#### **Developer Productivity**
+- **Time Reduction**: Automated task execution workflows
+- **Real-time Dashboards**: Instant project progress visibility
+- **Automatic Sync**: Zero manual metadata management
+- **Quality Gates**: Prevents incomplete work from being marked done
+
+---
+
+## [2.1.0] - 2025-07-12
 
 ### 🚀 Major Performance Optimization Release
 

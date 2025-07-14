@@ -4,9 +4,49 @@ Complete reference for all Simone Framework commands available in Claude Code.
 
 ## Overview
 
-The Simone Framework provides 35 specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
+The Simone Framework provides a comprehensive suite of specialized commands for project management, development workflow, quality assurance, and safety management. Each command is designed to work seamlessly with the `.simone/` directory structure and project documentation.
+
+**Framework Evolution**: As of v3.0.0, the framework has been streamlined with:
+- **Unified command interfaces** reducing cognitive overhead
+- **Integrated automation workflows** minimizing manual steps
+- **Consolidated templates** eliminating duplication
+- **Built-in quality validation** replacing standalone scripts
 
 **🎭 Enhanced with Cognitive Personas**: Many commands support domain-specific expertise through cognitive personas, inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude)'s pioneering work in specialized AI assistance patterns.
+
+## Streamlined Command Structure
+
+**Recommended Command Flow for v3.0.0+**:
+
+```mermaid
+flowchart TD
+    A[Project Setup] --> B[initialize]
+    B --> C[create_milestone]
+    C --> D[create_sprint_tasks]
+    D --> E[do_task_auto]
+    E --> F{Quality Gates}
+    F -->|Pass| G[Hierarchical Completion Check]
+    F -->|Fail| H[Technical Debt Logging]
+    H --> E
+    G --> I[create_pr_auto]
+    I --> J[Unified Review]
+    J --> K[merge]
+    
+    L[Weekly Maintenance] --> M[sync_metadata]
+    M --> N[Completion Dashboard]
+    
+    K[Emergency Situations] --> L[emergency_stop]
+    K --> M[rollback]
+    K --> N[user_intervention]
+```
+
+**Key Simplifications**:
+- **Unified Review System**: Single `review` command with type flags replaces 4 separate commands
+- **Automated Task Execution**: `do_task_auto` handles complete workflow from start to PR
+- **Integrated Quality Gates**: Built-in validation eliminates need for separate validation scripts
+- **Streamlined PR Creation**: `create_pr_auto` provides comprehensive automation with approval gates
+- **Hierarchical Completion Tracking**: Automatic status propagation from tasks → sprints → milestones → project
+- **Metadata Synchronization**: `sync_metadata` ensures consistency across all tracking levels
 
 ## Command Categories
 
@@ -20,22 +60,30 @@ The Simone Framework provides 35 specialized commands for project management, de
 - [`create_general_task`](#create_general_task) - Create new general tasks
 - [`create_sprint_tasks`](#create_sprint_tasks) - Create sprint-specific tasks
 - [`create_bug`](#create_bug) - Create bug reports with GitHub integration
-- [`start_task`](#start_task) - Set up task development environment
-- [`do_task`](#do_task) - Execute task implementation
-- [`update_task_status`](#update_task_status) - Update task progress
+- [`start_task`](#start_task) - ⚠️ **DEPRECATED** Functionality merged into `do_task` and `do_task_auto`
+- [`do_task`](#do_task) - Execute task implementation with guided workflow
+- [`do_task_auto`](#do_task_auto) - **NEW** Automated task execution with minimal human intervention
+- [`update_task_status`](#update_task_status) - Update task progress with hierarchical completion checking
+- [`sync_metadata`](#sync_metadata) - **NEW** Synchronize completion status across project hierarchy
 - [`fix_bug`](#fix_bug) - Implement bug fixes
+
+### 🔧 Development Workflow
+- [`commit`](#commit) - Create structured commits with task references
+- [`create_pr`](#create_pr) - ⚠️ **BASIC VERSION** Use `create_pr_auto` for enhanced automation
+- [`create_pr_auto`](#create_pr_auto) - **RECOMMENDED** Automated PR creation with comprehensive context
+- [`review_pr`](#review_pr) - Conduct thorough pull request reviews
+- [`merge`](#merge) - Merge code with quality checks
+- [`test`](#test) - Execute comprehensive testing workflows
 
 ### 🎯 Sprint & Milestone Management
 - [`create_milestone`](#create_milestone) - AI-powered milestone generation from natural language
 - [`create_sprints_from_milestone`](#create_sprints_from_milestone) - Generate sprints from milestones
 - [`sync`](#sync) - Synchronize project state and dependencies
 
-### 🔧 Development Workflow
-- [`commit`](#commit) - Create structured commits with task references
-- [`create_pr`](#create_pr) - Create pull requests with proper documentation
-- [`review_pr`](#review_pr) - Conduct thorough pull request reviews
-- [`merge`](#merge) - Merge code with quality checks
-- [`test`](#test) - Execute comprehensive testing workflows
+### 🤖 Automation & Quality Gates
+- **Built-in Quality Validation** - Integrated into `do_task_auto` and automated workflows
+- **GitHub Actions Integration** - Automated CI/CD quality validation pipeline
+- **Unified Validation System** - Replaces standalone validation scripts
 
 ### 🔍 Helper Commands
 - [`troubleshoot`](#troubleshoot) - Comprehensive project diagnostic and issue resolution
@@ -45,10 +93,12 @@ The Simone Framework provides 35 specialized commands for project management, de
 - [`investigate`](#investigate) - Targeted bug and issue investigation
 
 ### 🔍 Quality Assurance
-- [`code_review`](#code_review) - Perform detailed code reviews
+- [`review`](#review) - **NEW** Unified review system for code, quality, testing, and discussions
+- [`code_review`](#code_review) - ⚠️ **DEPRECATED** Use `review --type-code` instead
+- [`quality_review`](#quality_review) - ⚠️ **DEPRECATED** Use `review --type-quality` instead  
+- [`testing_review`](#testing_review) - ⚠️ **DEPRECATED** Use `review --type-testing` instead
+- [`discuss_review`](#discuss_review) - ⚠️ **DEPRECATED** Use `review --type-discussion` instead
 - [`log_technical_debt`](#log_technical_debt) - Document and track technical debt
-- [`discuss_review`](#discuss_review) - Facilitate review discussions
-- [`testing_review`](#testing_review) - Review testing coverage and quality
 
 ### 🛡️ Safety & Emergency Response
 - [`emergency_stop`](#emergency_stop) - Immediately halt all autonomous operations
@@ -60,6 +110,7 @@ The Simone Framework provides 35 specialized commands for project management, de
 ### ⚡ Utility Commands
 - [`prime`](#prime) - Initialize Claude context with project information
 - [`yolo`](#yolo) - Quick development actions (use with caution)
+- [`command-validator`](#command-validator) - ⚠️ **DEPRECATED** Command validation now integrated into framework
 
 ---
 
@@ -207,6 +258,10 @@ The Simone Framework provides 35 specialized commands for project management, de
 
 ### start_task
 
+> ⚠️ **DEPRECATED**: This command has been superseded by `do_task` and `do_task_auto` which provide complete task execution workflows. This functionality is maintained for backward compatibility but will be removed in v3.0.0.
+>
+> **Migration**: Use `do_task` for guided task execution or `do_task_auto` for automated workflows.
+
 **Purpose**: Creates a Git branch for a task and sets up the development environment.
 
 **Usage**:
@@ -286,24 +341,167 @@ The Simone Framework provides 35 specialized commands for project management, de
 
 ---
 
-### update_task_status
+### do_task_auto
 
-**Purpose**: Update the status and progress of tasks.
+**Purpose**: Execute complete task implementation with comprehensive automation, minimal human intervention, and intelligent quality validation.
 
 **Usage**:
 ```
-/project:simone:update_task_status <task_id> <new_status>
+/project:simone:do_task_auto <task_id> [persona_flags] [automation_flags]
+```
+
+**Arguments**:
+- `task_id` - Task identifier to implement (e.g., T01-S02, T003, BUG001)
+
+**Persona Flags** (reference: `.claude/commands/shared/persona-flags.yml`):
+- `--persona-architect` - System design and architecture expertise
+- `--persona-security` - Security analysis and OWASP compliance  
+- `--persona-frontend` - Frontend development and UX optimization
+- `--persona-backend` - Backend systems and API development
+- `--persona-analyzer` - Code analysis and metrics evaluation
+- `--persona-mentor` - Guidance and best practices coaching
+- `--persona-refactorer` - Code optimization and maintainability
+- `--persona-performance` - Performance optimization and scalability
+- `--persona-qa` - Quality assurance and testing strategies
+
+**Automation Flags**:
+- `--introspect` - Show transparent AI reasoning with 🤔 Thinking and 🎯 Decision indicators
+- `--uc` - Use UltraCompressed mode for 70% token reduction
+- `--consensus` - Multi-model consensus gathering for critical decisions
+- `--think-deep` - Extended reasoning for complex problems
+- `--bypass-approval` - Skip human approval gates for routine tasks
+- `--quality-strict` - Enforce strictest quality standards
+
+**Comprehensive Automated Workflow (12 Steps)**:
+1. **Automation Readiness Assessment** - Evaluate task complexity, risk level, and automation confidence
+2. **Task Validation** - Comprehensive dependency and requirement validation
+3. **Persona-Driven Analysis** - Multi-domain expert analysis with automatic persona activation
+4. **Architectural Compliance** - Validate dependencies and design alignment
+5. **Automated Branch Management** - Intelligent branch creation with validation
+6. **Progress Tracking Setup** - Real-time automation metadata and progress tracking
+7. **Continuous Implementation** - Automated implementation with real-time quality monitoring
+8. **Technical Debt Management** - Automated debt assessment, categorization, and resolution
+9. **Comprehensive Code Review** - Multi-persona automated code review with issue resolution
+10. **Auto-Issue Resolution** - Intelligent resolution of routine issues with validation
+11. **Validated Commit** - Automated commit with comprehensive quality validation
+12. **PR Preparation** - Complete preparation for automated PR creation
+
+**Automation Confidence Scoring**:
+```
+Score = (Test Coverage + Domain Familiarity) - (Task Complexity + Risk Level)
+• Score ≥10: Full automation with bypass approval
+• Score 5-9: Standard automation with quality gates  
+• Score 0-4: Cautious automation with checkpoints
+• Score <0: Manual execution recommended
+```
+
+**Quality Gate Pipeline**:
+- **Code Quality**: Linting, complexity analysis, maintainability assessment
+- **Security Validation**: Vulnerability scanning, OWASP compliance, secret detection
+- **Performance Testing**: Benchmark validation, regression analysis, optimization
+- **Test Coverage**: Comprehensive test execution with coverage validation
+- **Documentation**: Automatic documentation updates and validation
+
+**Key Features**:
+- **Intelligent Persona Activation**: Automatically activates relevant domain expertise
+- **Continuous Quality Validation**: Real-time monitoring with automated issue resolution
+- **Technical Debt Integration**: Automatic identification, logging, and resolution
+- **MCP Enhanced**: Sequential Thinking, Serena, Context7, and Work History integration
+- **Risk Assessment**: Comprehensive risk analysis with mitigation strategies
+- **Human Handoff**: Seamless transition to human review with complete context
+
+**Benefits**:
+- **80-90% time reduction** in task completion
+- **100% quality gate compliance** through automation
+- **Consistent quality standards** across all implementations
+- **Comprehensive validation** impossible to miss manually
+- **Human focus** on strategic decisions rather than routine validation
+
+**Integration with Standard Workflow**:
+- Maintains full backward compatibility with `do_task`
+- Seamlessly integrates with existing Simone project structure
+- Automatically updates all project tracking and documentation
+- Prepares for automated PR creation with `create_pr_auto`
+
+---
+
+### update_task_status
+
+**Purpose**: Update the status and progress of tasks with comprehensive hierarchical completion tracking.
+
+**Usage**:
+```
+/project:simone:update_task_status <task_id> <new_status> [effort_hours] [reason]
 ```
 
 **Arguments**:
 - `task_id` - Task identifier
 - `new_status` - pending | in_progress | completed | blocked | cancelled
+- `effort_hours` (optional) - Actual effort spent on task
+- `reason` (optional) - Reason for status change
 
-**Features**:
-- Updates task metadata and timestamps
-- Synchronizes project manifest
-- Maintains audit trail
-- Updates sprint and milestone progress
+**Enhanced Features** (NEW in v3.0.0):
+- **Completion Validation**: Prevents marking as completed without meeting acceptance criteria
+- **Hierarchical Checking**: Automatically checks sprint/milestone/project completion
+- **Atomic Updates**: Transaction-safe metadata updates with rollback capability
+- **Progress Propagation**: Updates sprint and milestone progress percentages
+- **Cross-Reference Sync**: Maintains consistency across all tracking systems
+
+**Workflow**:
+1. Validates completion requirements (if marking as completed)
+2. Updates task file metadata with atomic transaction
+3. Synchronizes project manifest
+4. Updates sprint meta files
+5. Checks for sprint completion (if task completed)
+6. Checks for milestone completion (if sprint completed)
+7. Checks for project completion (if milestone completed)
+8. Generates hierarchical completion report
+
+---
+
+### sync_metadata
+
+**Purpose**: Synchronize completion status across the entire project hierarchy and fix metadata inconsistencies.
+
+**Usage**:
+```
+/project:simone:sync_metadata [--dashboard] [--fix-inconsistencies] [--validate-only]
+```
+
+**Arguments**:
+- `--dashboard` - Show completion status dashboard after sync
+- `--fix-inconsistencies` - Automatically fix detected inconsistencies
+- `--validate-only` - Only validate without making changes
+
+**Core Functionality**:
+- **Hierarchical Validation**: Ensures completion status is consistent across task → sprint → milestone → project levels
+- **Completion Requirements**: Validates that completed tasks meet all acceptance criteria
+- **Progress Synchronization**: Updates progress percentages at all hierarchy levels
+- **Inconsistency Detection**: Identifies and optionally repairs metadata inconsistencies
+- **Status Propagation**: Automatically marks sprints/milestones/project as completed when appropriate
+
+**When to Use**:
+- **Weekly maintenance**: Recommended weekly sync to ensure consistency
+- **After bulk updates**: When multiple tasks have been updated outside normal workflow
+- **Project health checks**: Before important milestones or reviews
+- **Inconsistency resolution**: When status appears incorrect across hierarchy
+- **Progress reporting**: For accurate project completion dashboards
+
+**Output Examples**:
+```
+📊 Project progress: 75% (3/4 milestones completed)
+🏃 Sprint progress: 85% (17/20 sprints completed)
+📋 Task progress: 89% (156/175 tasks completed)
+
+🎉 Milestone M03 completed - all sprints finished!
+🔍 Checking project completion...
+```
+
+**Integration**:
+- Called automatically by `do_task_auto` on task completion
+- Used by `update_task_status` for hierarchical checking
+- Referenced by `status` command for consistency reporting
+- Supports project completion detection and reporting
 
 ---
 
@@ -440,6 +638,94 @@ The Simone Framework provides 35 specialized commands for project management, de
 - Documentation and change summaries
 - Review assignment
 - Integration with task completion
+
+---
+
+### create_pr_auto
+
+**Purpose**: Create comprehensive pull requests with AI-generated content, intelligent reviewer assignment, and automated quality context.
+
+**Usage**:
+```
+/project:simone:create_pr_auto <task_id> [persona_flags] [automation_flags]
+```
+
+**Arguments**:
+- `task_id` - Task identifier for the PR
+
+**Persona Flags**:
+- `--persona-architect` - Architecture and design review focus
+- `--persona-security` - Security implications and compliance review
+- `--persona-frontend` - UI/UX and frontend impact analysis
+- `--persona-backend` - API and backend system review
+- `--persona-analyzer` - Code quality and metrics analysis
+- `--persona-mentor` - Best practices and educational review
+- `--persona-refactorer` - Code optimization and maintainability
+- `--persona-performance` - Performance impact and optimization
+- `--persona-qa` - Quality assurance and testing review
+
+**Automation Flags**:
+- `--introspect` - Show transparent reasoning with 🤔 Thinking and 🎯 Decision indicators
+- `--auto-assign` - Automatically assign reviewers based on code ownership and expertise
+- `--comprehensive` - Generate maximum detail for complex changes
+- `--ready-to-merge` - Mark PR as ready for immediate merge (use with caution)
+- `--draft` - Create as draft PR for early feedback
+
+**Comprehensive Automated Workflow (10 Steps)**:
+1. **PR Prerequisites Validation** - Git state, CI/CD status, automation readiness assessment
+2. **Change Analysis** - Comprehensive commit history analysis and impact assessment
+3. **AI-Powered Content Generation** - Intelligent PR title and description generation
+4. **Reviewer Assignment** - Code ownership analysis and expertise-based assignment
+5. **Automated Labeling** - Dynamic label assignment based on change analysis
+6. **Quality Summary** - Comprehensive QA results and validation summaries
+7. **Risk Assessment** - Multi-dimensional risk analysis and review focus recommendations
+8. **Testing Strategy** - Comprehensive testing and deployment guidance generation
+9. **Automated PR Creation** - Full automation context integration and execution
+10. **Stakeholder Notification** - Comprehensive tracking updates and notifications
+
+**AI-Generated PR Content**:
+- **Smart Title Generation**: Conventional Commits format with task reference
+- **Comprehensive Description**: Multi-section PR description with automation context
+- **Change Analysis**: Detailed file changes, impact assessment, and categorization
+- **Quality Metrics**: Test coverage, security scores, performance impact
+- **Risk Assessment**: Multi-dimensional risk analysis with mitigation strategies
+- **Review Guidance**: Specific focus areas and recommendations for reviewers
+
+**Intelligent Reviewer Assignment**:
+- **Code Ownership Analysis**: Automatic detection of primary and secondary owners
+- **Expertise Mapping**: Domain expert identification based on change type
+- **Load Balancing**: Review workload distribution and availability consideration
+- **Compliance Requirements**: Automatic assignment for security/compliance sensitive changes
+
+**Automated Quality Context**:
+```markdown
+## 🤖 Automated Quality Context
+### Quality Gate Results: ✅ All Passed
+### Automation Confidence: 8.5/10
+### Risk Assessment: Low
+### Review Focus: Business logic validation, UX considerations
+### Testing Strategy: Manual UX testing recommended
+### Deployment: Standard deployment process approved
+```
+
+**Project Management Integration**:
+- **GitHub Projects**: Automatic project board updates and status changes
+- **Milestone Assignment**: Links to appropriate milestones and progress tracking
+- **Issue Linking**: Automatic cross-referencing with related issues and tasks
+- **Sprint Tracking**: Integration with sprint progress and completion metrics
+
+**Benefits**:
+- **Comprehensive Context**: Rich PR descriptions with all necessary information
+- **Intelligent Assignment**: Optimal reviewer selection based on expertise and availability
+- **Quality Transparency**: Complete quality validation results and automation context
+- **Review Efficiency**: Clear focus areas allow reviewers to concentrate on strategic decisions
+- **Process Integration**: Seamless integration with project management and tracking systems
+
+**Human Review Optimization**:
+- **Strategic Focus**: Reviewers focus on business logic and architectural decisions
+- **Clear Guidance**: Specific recommendations for what requires human judgment
+- **Risk Transparency**: Complete risk assessment with mitigation strategies
+- **Quality Assurance**: All technical quality concerns pre-validated and documented
 
 ---
 
@@ -798,7 +1084,7 @@ Many commands integrate with Model Context Protocol servers for enhanced functio
 
 Commands are designed to work together in common workflows:
 
-**Task Creation → Development → Review → Merge**:
+**Standard Task Workflow (Manual)**:
 1. `create_general_task` - Create task
 2. `start_task` - Set up development environment  
 3. `do_task` - Implement solution
@@ -806,6 +1092,27 @@ Commands are designed to work together in common workflows:
 5. `create_pr` - Create pull request
 6. `review_pr` - Conduct review
 7. `merge` - Merge to main branch
+
+**🤖 Automated Task Workflow (NEW)**:
+1. `create_general_task` - Create task (manual)
+2. `do_task_auto` - **Automated implementation with comprehensive validation**
+   - Automatic branch creation and management
+   - Continuous quality validation during implementation
+   - Automated technical debt assessment and resolution
+   - Comprehensive code review with auto-issue resolution
+   - Validated automated commit
+3. `create_pr_auto` - **Automated PR creation with rich context**
+   - AI-generated comprehensive PR descriptions
+   - Intelligent reviewer assignment
+   - Automated labeling and project integration
+   - Quality metrics and risk assessment
+4. **Human Review** - Focus on business logic and strategic decisions
+5. `merge` - Merge to main branch
+
+**Quality Gate Integration**:
+- `quality_gate_validator` - Comprehensive validation pipeline (automated)
+- **CI/CD Pipeline** - Automated quality validation in GitHub Actions
+- **Continuous Monitoring** - Real-time quality and performance tracking
 
 **Sprint Planning → Execution → Review**:
 1. `create_sprints_from_milestone` - Plan sprint
@@ -1134,6 +1441,73 @@ Quality is built into every command:
 
 ---
 
+### quality_gate_validator
+
+**Purpose**: Comprehensive validation pipeline for automated task execution with configurable quality thresholds and detailed reporting.
+
+**Usage**:
+```bash
+./quality-gate-validator.sh [--task-id TASK_ID] [--strict] [--bypass-non-critical]
+```
+
+**Arguments**:
+- `--task-id TASK_ID` - Associate validation with specific task
+- `--strict` - Enable strict quality gates with highest standards
+- `--bypass-non-critical` - Skip non-critical validations for speed
+
+**Comprehensive Validation Pipeline**:
+1. **Git State Validation** - Repository cleanliness and branch status
+2. **Dependency Health** - Security audits and package currency
+3. **Code Quality** - Linting, complexity, and maintainability analysis
+4. **Security Assessment** - Vulnerability scanning and secret detection
+5. **Test Execution** - Comprehensive test suite with coverage analysis
+6. **Performance Validation** - Benchmark testing and regression analysis
+7. **Documentation Review** - Documentation completeness and currency
+
+**Quality Thresholds** (Configurable):
+```yaml
+quality_gates:
+  test_coverage_minimum: 80%
+  security_score_minimum: "A"
+  performance_regression_max: "10%"
+  complexity_score_max: 10
+  technical_debt_max: "5 days"
+```
+
+**Security Scanning Integration**:
+- **Multiple Tools**: semgrep, snyk, bandit, safety integration
+- **OWASP Compliance**: Automated OWASP Top 10 validation
+- **Secret Detection**: Hardcoded credentials and API key scanning
+- **Dependency Audits**: NPM audit, Cargo audit, vulnerability databases
+
+**Performance Analysis**:
+- **Bundle Size Monitoring**: Track and alert on bundle size increases
+- **Benchmark Validation**: Automated performance regression testing
+- **Resource Usage**: Memory, CPU, and I/O impact assessment
+- **Load Testing**: Integration with performance testing frameworks
+
+**Reporting and Metrics**:
+- **JSON Reports**: Structured validation results with timestamps
+- **Quality Trends**: Historical quality metrics and trend analysis
+- **Dashboard Integration**: Integration with quality monitoring dashboards
+- **CI/CD Integration**: Seamless integration with GitHub Actions pipeline
+
+**CI/CD Integration**:
+```yaml
+# .github/workflows/simone-auto-quality.yml
+- name: Run Quality Gate Validation
+  run: ./.simone/01_UTILS/quality-gate-validator.sh --task-id ${{ steps.extract-task.outputs.task_id }}
+```
+
+**Benefits**:
+- **Comprehensive Coverage**: Multi-dimensional quality assessment
+- **Configurable Standards**: Adaptable thresholds for different project needs
+- **Automated Reporting**: Detailed reports with actionable insights
+- **CI/CD Ready**: Seamless integration with automation pipelines
+- **Trend Analysis**: Historical quality tracking and improvement measurement
+
+---
+
 ## Safety & Emergency Response Commands
 
 ### emergency_stop
@@ -1257,6 +1631,27 @@ Quality is built into every command:
 
 ---
 
+### command-validator
+
+> ⚠️ **DEPRECATED**: Command validation functionality has been integrated directly into the Simone framework. This utility script is no longer needed as validation is now built into automated commands and GitHub Actions.
+>
+> **Migration**: Remove references to command-validator.sh and rely on built-in framework validation.
+
+**Purpose**: Provided validation hooks for command execution (now integrated into framework).
+
+**Former Features**:
+- Command execution tracking and validation
+- Step completion verification  
+- File modification validation
+- Execution state management
+
+**Replacement**: Validation is now handled by:
+- `do_task_auto` command with built-in validation
+- GitHub Actions quality gates
+- Framework-native validation capabilities
+
+---
+
 ### user_intervention
 
 **Purpose**: Provide manual override and intervention capabilities for autonomous operations with approval workflows and safety overrides.
@@ -1328,7 +1723,29 @@ The Simone Framework commands are designed specifically for Claude Code and prov
 
 ---
 
+## Deprecated Components
+
+### Architecture Templates
+- **`architecture_initialization_checklist.md`**: ⚠️ **DEPRECATED** - Functionality merged into `architecture_template.md`
+- **Migration**: Use the unified `architecture_template.md` which includes the complete initialization checklist
+
+### Review Commands
+- **`code_review.md`**: ⚠️ **DEPRECATED** - Use `review --type-code` instead
+- **`quality_review.md`**: ⚠️ **DEPRECATED** - Use `review --type-quality` instead  
+- **`testing_review.md`**: ⚠️ **DEPRECATED** - Use `review --type-testing` instead
+- **`discuss_review.md`**: ⚠️ **DEPRECATED** - Use `review --type-discussion` instead
+
+### Bug Templates
+- **Legacy bug templates**: ⚠️ **DEPRECATED** - Consolidated into unified bug template
+
+### Utility Scripts
+- **`quality-gate-validator.sh`**: ⚠️ **DEPRECATED** - Functionality integrated into automated workflows
+- **`command-validator.sh`**: ⚠️ **DEPRECATED** - Validation now built into framework
+
+---
+
 For detailed implementation guides and examples, see:
 - [Template System Documentation](template-system.md)
 - [Workflow Documentation](../workflows/)
+- [Migration Guide](../migration/deprecated-features.md) - Migration paths for deprecated components
 - [Best Practices](../best-practices/)

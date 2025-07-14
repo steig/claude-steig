@@ -14,7 +14,23 @@ Simone is a directory-based project management system designed to work better wi
 
 ## 🚀 Key Features
 
-This fork includes specialized improvements for comprehensive project management:
+**Version 3.0.0** includes hierarchical completion tracking and enhanced metadata management:
+
+### **Hierarchical Completion Tracking (v3.0.0)**
+- **Automatic Status Propagation**: Tasks → Sprints → Milestones → Project completion
+- **Real-time Progress**: Live calculation at all hierarchy levels
+- **Completion Validation**: Prevents marking incomplete work as done
+- **Completion Dashboard**: Comprehensive progress visualization
+- **Project Completion Detection**: Automatic detection when all milestones finished
+- **Metadata Synchronization**: Comprehensive consistency across all tracking
+
+### **Enhanced Task Automation (v3.0.0)**
+- **Significant time reduction** in task completion with comprehensive automation
+- **Integrated completion validation** with acceptance criteria enforcement
+- **Quality gate enforcement** blocks completion until standards met
+- **Automatic hierarchical checking** when tasks complete
+- **Automated PR creation** with reviewer assignment and context
+- **CI/CD integration** with automated quality gates and validation
 
 ### ⚡ **Performance Optimization (v2.1.0)**
 - **60-80% faster** command execution through intelligent caching and indexing
@@ -49,7 +65,19 @@ This fork includes specialized improvements for comprehensive project management
 - **Documentation requirements** integrated into workflows
 - **Review checklists** for technical, business, and process validation
 
-**📋 Latest Updates**: See [CHANGELOG.md](CHANGELOG.md) for recent changes and improvements.
+### **Unified Review System (v3.0.0)**
+- **Single `review` command** replaces 4 separate review commands  
+- **`--type-code/quality/testing/discussion`** flags for specialized reviews
+- **Cross-type analysis** with comprehensive review integration
+- **Enhanced metadata tracking** for review history and patterns
+
+### **Metadata Synchronization (v3.0.0)**
+- **`sync_metadata` command** for comprehensive hierarchy synchronization
+- **Troubleshooting guide** for metadata tracking issues
+- **Completion validation** prevents incomplete work from being marked done
+- **Real-time progress dashboards** with accurate completion percentages
+
+**v3.0.0 Release**: Hierarchical completion tracking and enhanced metadata management. See [CHANGELOG.md](CHANGELOG.md) for complete details.
 
 ## How to Get Started
 
@@ -156,32 +184,48 @@ This analyzes your sprints, reviews documentation, researches necessary informat
 
 *Important: Only create tasks for your next sprint, not all sprints upfront. After completing Sprint 1, then create tasks for Sprint 2. This ensures the system can reference your existing codebase and incorporate completed work into future task creation.*
 
-### 6. Start Working with Enhanced Approval Workflow
+### 6. Start Working - Choose Your Workflow
 
+**🤖 Automated Workflow (NEW - Recommended for Routine Tasks)**:
 ```
-/project:simone:do_task
+/project:simone:do_task_auto T01_S01 --persona-security --quality-strict
 ```
 
-Experience the **new guided approval workflow** with user control at every step:
+Experience **comprehensive automation** with minimal human intervention:
+- **Intelligent task execution** with automatic persona activation
+- **Continuous quality validation** with real-time monitoring
+- **Automated issue resolution** for routine problems
+- **Technical debt management** with automatic assessment and resolution
+- **Comprehensive code review** with multi-domain analysis
+- **Validated commits** with comprehensive quality context
+- **Ready for PR creation** with complete automation context
 
+**📋 Standard Workflow (Manual Control)**:
+```
+/project:simone:do_task T01_S01
+```
+
+Experience the **guided approval workflow** with user control at every step:
 - **Commit Approval Gate**: Preview changes and approve commits
 - **PR Approval Gate**: Review PR details before creation  
 - **Auto-execution**: Commands run automatically after approval
 - **Complete Integration**: End-to-end task completion with Git workflow
 
-For faster execution, specify a task ID:
+**Workflow Selection Guide**:
+- **Use Automated** for: Well-defined tasks, bug fixes, refactoring, routine features
+- **Use Standard** for: Complex features, architectural changes, experimental work
 
+**🚀 Create Comprehensive PRs**:
 ```
-/project:simone:do_task T01_S01
+/project:simone:create_pr_auto T01_S01 --auto-assign --comprehensive
 ```
 
-**Enhanced Workflow Benefits**:
-- 🛡️ **User Control**: Review and approve each critical step
-- 🔍 **Quality Assurance**: Comprehensive validation before integration
-- 🔄 **Complete Workflow**: Task → Commit → PR → Review in one command
-- ⚡ **Team Ready**: PRs created with proper documentation and reviewers
-
-Claude will execute the task with full project context and guide you through approval gates for commits and PR creation.
+**Automated PR Benefits**:
+- **AI-generated descriptions** with comprehensive context and quality metrics
+- **Intelligent reviewer assignment** based on code ownership and expertise  
+- **Automated labeling** and project management integration
+- **Risk assessment** with specific review focus recommendations
+- **Quality transparency** with complete validation results
 
 That's the basic workflow to get started! You can also:
 
@@ -488,6 +532,9 @@ Custom Claude Code commands that power the Simone workflow:
 - `create_sprints_from_milestone` - Break milestones into logical sprints
 - `create_sprint_tasks` - Generate detailed tasks from sprint plans
 - `do_task` - Execute individual tasks with guided approval workflow for commits and PRs
+- `do_task_auto` - **NEW** Automated task execution with comprehensive validation and minimal human intervention
+- `create_pr_auto` - **NEW** AI-powered PR creation with intelligent reviewer assignment and quality context
+- `quality_gate_validator` - **NEW** Comprehensive validation pipeline with configurable quality thresholds
 - `yolo` - Autonomous sprint execution (use with caution)
 - And many more for testing, reviewing, and project management
 

@@ -146,10 +146,14 @@ stateDiagram-v2
 #### testing → completed
 **Trigger**: All tests pass and acceptance criteria met
 **Actions**:
-- Renames task file from `TASK_##` to `TX##` format
+- **NEW**: Validates completion requirements (acceptance criteria, quality gates)
+- Renames task file from `TASK_##` to `TX##` format  
 - Updates project manifest with completion metrics
 - Archives branch and updates sprint progress
+- **NEW**: Automatically checks hierarchical completion (sprint → milestone → project)
+- **NEW**: Updates progress percentages across all hierarchy levels
 - Triggers any dependent task notifications
+- **NEW**: Generates completion dashboard if milestones/project completed
 
 #### Any → blocked
 **Trigger**: Manual status update with blocker description
@@ -314,6 +318,149 @@ test_coverage:
 - Creates branch and updates status to in_progress
 - Loads context and displays implementation guidance
 - Sets up development environment
+
+## Hierarchical Completion Tracking
+
+**NEW in v3.0.0**: The Simone framework now includes comprehensive hierarchical completion tracking that automatically propagates completion status from tasks up through sprints, milestones, and project levels.
+
+### Completion Hierarchy
+
+```mermaid
+flowchart TD
+    A[Task Completion] --> B{All Sprint Tasks Done?}
+    B -->|Yes| C[Auto-Mark Sprint Complete]
+    B -->|No| D[Update Sprint Progress %]
+    
+    C --> E{All Milestone Sprints Done?}
+    E -->|Yes| F[Auto-Mark Milestone Complete]
+    E -->|No| G[Update Milestone Progress %]
+    
+    F --> H{All Project Milestones Done?}
+    H -->|Yes| I[🎉 PROJECT COMPLETE!]
+    H -->|No| J[Update Project Progress %]
+    
+    D --> K[Continue Development]
+    G --> K
+    J --> K
+    I --> L[Generate Completion Report]
+```
+
+### Completion Validation
+
+**Before marking any task as completed**, the system now validates:
+
+1. **Acceptance Criteria**: All `- [ ]` items must be checked `- [x]`
+2. **Quality Gates**: Any quality_gate fields must not be "failed"
+3. **Output Documentation**: Recommended to have an "## Output" section
+4. **Dependencies**: All hard dependencies must be completed
+
+**Example Validation**:
+```bash
+🔍 Validating completion requirements for: TASK_001_user_auth.md
+✅ All acceptance criteria completed
+✅ Quality gates passed
+⚠️ No output section - consider adding completion details
+✅ Task completion validation passed
+```
+
+### Automatic Status Propagation
+
+**When a task is marked completed**, the system automatically:
+
+1. **Checks Sprint Completion**:
+   ```bash
+   🔍 Checking sprint completion: S01_M01_Authentication_Sprint
+   📊 Sprint progress: 5/5 tasks completed
+   🎉 All tasks completed - updating sprint status
+   ```
+
+2. **Checks Milestone Completion**:
+   ```bash
+   🔗 Checking milestone completion for: M01
+   📊 Milestone progress: 3/4 sprints completed
+   📊 Milestone progress updated to: 75%
+   ```
+
+3. **Checks Project Completion**:
+   ```bash
+   🔍 Checking overall project completion
+   📊 Project progress: 2/4 milestones completed
+   📊 Project progress updated to: 50%
+   ```
+
+### Progress Tracking
+
+**Real-time progress percentages** are maintained at all levels:
+
+- **Task Level**: Individual completion status (completed/total)
+- **Sprint Level**: `(completed_tasks / total_tasks) × 100`
+- **Milestone Level**: `(completed_sprints / total_sprints) × 100`
+- **Project Level**: `(completed_milestones / total_milestones) × 100`
+
+### Completion Dashboard
+
+**Use the new completion dashboard** to monitor progress:
+
+```bash
+/project:simone:sync_metadata --dashboard
+```
+
+**Example Output**:
+```
+## 📊 Completion Status Dashboard
+
+### 🎯 Project Overview
+- **Project Progress**: 75% (3/4 milestones)
+- **Sprint Progress**: 85% (17/20 sprints)
+- **Task Progress**: 89% (156/175 tasks)
+
+### 🎯 Active Milestones
+- **M04_Deployment**: active (60%)
+
+### 🏃 Active Sprints  
+- **S03_M04_Production_Setup**: active (75%)
+- **S04_M04_Security_Hardening**: in_progress (25%)
+```
+
+### Metadata Synchronization
+
+**Weekly maintenance** with the sync command:
+
+```bash
+# Comprehensive sync across all levels
+/project:simone:sync_metadata
+
+# Validate without making changes
+/project:simone:sync_metadata --validate-only
+
+# Fix detected inconsistencies
+/project:simone:sync_metadata --fix-inconsistencies
+```
+
+**The sync process**:
+1. Validates all completion requirements
+2. Synchronizes sprint progress based on actual task completion
+3. Synchronizes milestone progress based on actual sprint completion  
+4. Synchronizes project progress based on actual milestone completion
+5. Fixes any detected inconsistencies
+6. Generates completion dashboard
+
+### Integration with Commands
+
+**Hierarchical completion is integrated into**:
+
+- **`update_task_status`**: Automatically checks hierarchy when marking tasks complete
+- **`do_task` / `do_task_auto`**: Includes completion checking in workflow
+- **`sync_metadata`**: Comprehensive hierarchy synchronization
+- **`status`**: Shows current completion state across all levels
+
+### Benefits
+
+✅ **Accurate Progress Tracking**: Real-time visibility into actual completion state  
+✅ **Automatic Status Updates**: No manual milestone/project status management  
+✅ **Completion Validation**: Prevents incomplete work from being marked as done  
+✅ **Consistency Assurance**: All tracking systems stay synchronized  
+✅ **Project Visibility**: Clear understanding of overall project completion  
 
 ## Best Practices
 

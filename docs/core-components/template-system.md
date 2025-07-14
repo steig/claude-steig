@@ -29,10 +29,11 @@ The template system is located in `.simone/99_TEMPLATES/` and provides standardi
 
 ### 🏗️ Architecture & Documentation Templates
 - [`adr_template.md`](#adr-template) - Architectural Decision Records
-- [`architecture_template.md`](#architecture-template) - System architecture documentation
-- [`architecture_initialization_checklist.md`](#architecture-checklist) - Setup validation
+- [`architecture_template.md`](#architecture-template) - System architecture documentation with integrated checklist
 - [`specs_template.md`](#specs-template) - Technical specifications
 - [`prd_template.md`](#prd-template) - Product Requirements Documents
+
+> **Note**: `architecture_initialization_checklist.md` has been deprecated and integrated into `architecture_template.md`
 
 ### 🚀 Release & Operations Templates
 - [`release_template.md`](#release-template) - Release planning and documentation

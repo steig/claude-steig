@@ -148,5 +148,5 @@ Planning Results:
 **Suggested Follow-up Commands:**
 - `create_milestone` for immediate milestone creation
 - `create_general_task` for urgent preliminary tasks
-- `start_task` to begin implementation
+- `do_task` or `do_task_auto` to begin implementation
 - `status` to track planning progress
