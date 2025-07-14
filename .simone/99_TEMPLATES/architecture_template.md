@@ -27,6 +27,32 @@
 ### Success Metrics
 {SUCCESS_METRICS}
 
+## Architecture Discovery Checklist
+
+> 💡 **Initialization Guide**: Use this checklist during project setup to ensure comprehensive architecture documentation.
+
+### Tech Stack Detection (Auto-Analysis)
+- [ ] **Primary Language**: {PRIMARY_LANGUAGE} - Detected from file extensions and package files
+- [ ] **Framework**: {PRIMARY_FRAMEWORK} - Identified from dependencies and project structure
+- [ ] **Database**: {DATABASE_TYPE} - Found in configuration files and dependencies
+- [ ] **Testing Framework**: {TEST_FRAMEWORK} - Detected from test directories and dependencies
+- [ ] **Build Tools**: {BUILD_TOOLS} - Identified from build configuration files
+- [ ] **Package Manager**: {PACKAGE_MANAGER} - Detected from lock files and configurations
+
+### Project Structure Analysis
+- [ ] **Folder Organization**: {FOLDER_PATTERNS} - Mapped directory structure and patterns
+- [ ] **Module Patterns**: {MODULE_ORGANIZATION} - Identified how code is organized into modules
+- [ ] **Configuration Management**: {CONFIG_APPROACH} - Located and analyzed config files
+- [ ] **Environment Setup**: {ENV_REQUIREMENTS} - Detected development environment requirements
+- [ ] **Script Analysis**: {SCRIPT_INVENTORY} - Identified build, test, and deployment scripts
+
+### Architectural Pattern Detection
+- [ ] **Primary Architecture**: {ARCHITECTURE_PATTERN} - MVC, microservices, monolithic, etc.
+- [ ] **Design Patterns**: {DESIGN_PATTERNS} - Singleton, Factory, Observer, etc.
+- [ ] **Data Access**: {DATA_PATTERNS} - ORM, Repository, DAO, etc.
+- [ ] **API Style**: {API_PATTERNS} - REST, GraphQL, RPC, etc.
+- [ ] **Authentication**: {AUTH_PATTERNS} - JWT, OAuth, Session-based, etc.
+
 ## 2. System Architecture
 
 ### High-Level Overview
@@ -236,4 +262,10 @@ sequenceDiagram
 
 ---
 
+**Template Version**: 3.0.0 (Unified with initialization checklist)  
+**Framework Version**: 3.0.0  
+**Last Updated**: 2025-01-14
+
 **Note**: This architecture document is a living document that evolves with the project. Update it as architectural decisions are made and reference relevant ADRs for decision context.
+
+**v3.0.0 Update**: This template now includes the complete architecture initialization checklist, eliminating the need for a separate checklist file.
