@@ -17,7 +17,7 @@ SIMONE_REPO="https://github.com/steig/claude-steig"
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="2.1.0"
+CURRENT_VERSION="3.0.0-beta"
 TARGET_DIR=""
 REMOTE_INSTALL=false
 TEMP_DIR=""
@@ -449,10 +449,26 @@ create_initial_manifest() {
 install_mcp_servers() {
     log "Installing MCP servers for enhanced Simone capabilities..."
     
-    # Check if claude mcp command is available
+    # Offer Docker option first
+    if command -v docker >/dev/null 2>&1 && (command -v docker-compose >/dev/null 2>&1 || docker compose version >/dev/null 2>&1); then
+        log "Docker detected. Choose MCP deployment method:"
+        echo "  1) Docker containers (recommended - isolated, scalable)"
+        echo "  2) Local installation (traditional - requires uvx)"
+        echo ""
+        read -p "Enter choice [1-2] (default: 1): " choice
+        choice=${choice:-1}
+        
+        if [[ "$choice" == "1" ]]; then
+            install_mcp_docker
+            return 0
+        fi
+    fi
+    
+    # Check if claude mcp command is available for local installation
     if ! command -v claude >/dev/null 2>&1; then
         warn "Claude CLI not found - skipping MCP server installation"
         warn "Install Claude CLI first, then run: claude mcp status to verify"
+        warn "Or use Docker option: ./scripts/mcp-docker.sh setup"
         return 0
     fi
     
@@ -471,8 +487,9 @@ install_mcp_servers() {
         "serena:uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)"
         "context7:uvx --from git+https://github.com/upstash/context7 context7-mcp-server"
         "playwright:uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server"
-        "work-history:uvx mcp-work-history"
+        "github:docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN:-} ghcr.io/github/github-mcp-server"
         "sequential-thinking:uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking"
+        "fetch:uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/fetch mcp-server-fetch"
     )
     
     for server_spec in "${mcp_servers[@]}"; do
@@ -500,9 +517,9 @@ install_mcp_servers() {
     
     # Summary
     if [[ $mcp_servers_installed -gt 0 ]]; then
-        success "MCP servers installed: $mcp_servers_installed/5"
+        success "MCP servers installed: $mcp_servers_installed/6"
         if [[ $mcp_servers_failed -gt 0 ]]; then
-            warn "MCP servers failed: $mcp_servers_failed/5"
+            warn "MCP servers failed: $mcp_servers_failed/6"
             warn "Use /project:simone:prime to check status and troubleshoot"
         fi
     else
@@ -511,6 +528,43 @@ install_mcp_servers() {
     fi
     
     log "MCP installation complete"
+}
+
+# Install MCP servers using Docker
+install_mcp_docker() {
+    log "Setting up MCP servers with Docker..."
+    
+    # Check if scripts directory exists
+    if [ ! -f "scripts/mcp-docker.sh" ]; then
+        error "MCP Docker script not found. Please ensure full installation completed."
+        return 1
+    fi
+    
+    # Make script executable
+    chmod +x scripts/mcp-docker.sh
+    
+    # Run Docker setup
+    log "Running Docker MCP setup..."
+    if ./scripts/mcp-docker.sh setup; then
+        success "Docker MCP setup completed successfully"
+        log "Services starting in background..."
+        
+        # Start services
+        if ./scripts/mcp-docker.sh start; then
+            success "All MCP services started"
+            log "Gateway available at: http://localhost:9000"
+            log "Service status: ./scripts/mcp-docker.sh status"
+            log "Health check: ./scripts/mcp-docker.sh health"
+        else
+            warn "MCP services failed to start - check logs with: ./scripts/mcp-docker.sh logs"
+        fi
+    else
+        error "Docker MCP setup failed"
+        warn "Fallback: Try local installation or check Docker configuration"
+        return 1
+    fi
+    
+    log "Docker MCP installation complete"
 }
 
 # Set version
