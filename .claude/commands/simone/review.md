@@ -109,7 +109,7 @@ esac
 **MCP INTEGRATION:**
 - **Sequential Thinking**: Structure the review process systematically
 - **Serena**: Enhanced code analysis and quality insights
-- **Work History**: Reference previous reviews and their outcomes
+- **GitHub**: Reference previous reviews and their outcomes
 
 ## 3 · Execute review based on type with persona-driven analysis
 

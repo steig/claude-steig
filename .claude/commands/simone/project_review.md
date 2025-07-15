@@ -29,7 +29,7 @@ Follow step by step and adhere closely to the following instructions for each st
 **MCP INTEGRATION:** Use MCP servers to enhance project review:
 - **Sequential Thinking**: Structure comprehensive project analysis systematically
 - **Context7**: Maintain context about project evolution and architectural decisions
-- **Work History**: Track review outcomes and recommendations over time
+- **GitHub**: Track review outcomes and recommendations over time
 - **Serena**: Enhance project analysis and architecture assessment
 
 Check: <$ARGUMENTS>
@@ -164,7 +164,7 @@ If empty, perform full project review. Otherwise interpret <$ARGUMENTS> to ident
 **MCP INTEGRATION:** Leverage MCP servers for debt analysis:
 - **Sequential Thinking**: Structure debt assessment systematically
 - **Serena**: Enhance debt pattern recognition and impact analysis
-- **Work History**: Track debt accumulation trends over time
+- **GitHub**: Track debt accumulation trends over time
 
 #### 8.1 · Technical Debt Inventory
 

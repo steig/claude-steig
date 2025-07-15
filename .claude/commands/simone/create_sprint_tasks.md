@@ -64,7 +64,7 @@ Use PARALLEL SUBAGENTS to READ and UNDERSTAND the project's context:
 **MCP INTEGRATION:** Use MCP servers for systematic task breakdown:
 - **Sequential Thinking**: Structure the task breakdown process methodically
 - **Serena**: Enhance analysis of deliverables and technical requirements
-- **Work History**: Reference similar task breakdowns from past sprints
+- **GitHub**: Reference similar task breakdowns from past sprints
 
 Based on sprint goals and deliverables (execute in Parallel Subagents):
 
@@ -78,7 +78,7 @@ Based on sprint goals and deliverables (execute in Parallel Subagents):
 
 **MCP INTEGRATION:** Use MCP servers for enhanced task creation:
 - **Sequential Thinking**: Structure each task creation process systematically
-- **Work History**: Track task creation decisions and rationale
+- **GitHub**: Track task creation decisions and rationale
 - **Context7**: Maintain context about task relationships and dependencies
 
 **NOW** For each identified Task spin up a Parallel Subagent with these Instructions:

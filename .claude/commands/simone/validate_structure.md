@@ -50,7 +50,7 @@ Performs comprehensive validation of project structure, naming conventions, file
 **MCP INTEGRATION:** Use MCP servers for enhanced structure validation:
 - **Sequential Thinking**: Structure validation checks systematically
 - **Serena**: Enhance directory analysis and pattern validation
-- **Work History**: Track structure evolution and compliance trends
+- **GitHub**: Track structure evolution and compliance trends
 
 **Core Structure Validation:**
 ```markdown

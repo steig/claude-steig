@@ -41,7 +41,7 @@ Follow these instructions from top to bottom.
 ## 1 · Analyze git status and parse arguments
 
 **MCP INTEGRATION:** Use MCP servers to enhance commit analysis:
-- **Work History**: Track commit patterns and document commit reasoning
+- **GitHub**: Track commit patterns and document commit reasoning
 - **Sequential Thinking**: Structure logical commit grouping systematically
 - **Serena**: Enhance code change analysis and commit message quality
 

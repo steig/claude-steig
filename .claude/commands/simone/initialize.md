@@ -39,11 +39,14 @@ claude mcp status context7
 # Verify Playwright MCP is installed and active
 claude mcp status playwright
 
-# Verify Work History MCP is installed and active
-claude mcp status work-history
+# Verify GitHub MCP is installed and active
+claude mcp status github
 
 # Verify Sequential Thinking MCP is installed and active
 claude mcp status sequential-thinking
+
+# Verify Fetch MCP is installed and active
+claude mcp status fetch
 ```
 
 **If any MCP servers are missing:**
@@ -57,7 +60,7 @@ claude mcp status sequential-thinking
 - Context-aware development support throughout Simone initialization (Serena)
 - Advanced context management and retrieval (Context7)
 - Browser automation and testing capabilities (Playwright)
-- Command history tracking and output logging (Work History)
+- Repository history tracking and integration capabilities (GitHub)
 - Sequential reasoning and structured thinking capabilities (Sequential Thinking)
 
 ### 3. Interactive confirmation with user

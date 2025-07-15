@@ -46,7 +46,7 @@ Updates the project dashboard with current metrics, progress tracking, and compr
 
 **MCP INTEGRATION:** Use MCP servers for enhanced data collection:
 - **Sequential Thinking**: Structure data collection systematically
-- **Work History**: Track historical patterns and trends
+- **GitHub**: Track historical patterns and trends
 - **Context7**: Maintain context about project evolution
 - **Serena**: Enhance data analysis and validation
 

@@ -76,12 +76,14 @@ Check: <$ARGUMENTS>
 
 ### 5. Research best practices and industry standards comparison
 
-**MCP INTEGRATION:** Context7 for industry knowledge integration
+**MCP INTEGRATION:** Context7 + Fetch for comprehensive industry research
 
 **Best Practices Research:**
-- COMPARE current implementation with industry standards
+- USE `/mcp__deepwiki__ask_question` to research relevant repositories and best practices
+- USE `WebFetch` to gather external documentation and industry standards
+- COMPARE current implementation with industry standards  
 - IDENTIFY opportunities for improvement and modernization
-- RESEARCH emerging patterns and technologies
+- RESEARCH emerging patterns and technologies using Fetch MCP
 - EVALUATE security and performance best practices alignment
 
 ### 6. Identify knowledge gaps and learning opportunities

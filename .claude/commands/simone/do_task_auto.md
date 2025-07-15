@@ -119,7 +119,7 @@ If validation fails, pause automation and request human intervention.
    - **Sequential Thinking**: Structure multi-persona analysis
    - **Serena**: Enhanced code understanding and context
    - **Context7**: Maintain cross-session knowledge
-   - **Work History**: Learn from similar task patterns
+   - **GitHub**: Learn from similar task patterns
 
 **CRITICAL AUTOMATED VALIDATION:**
 
@@ -265,7 +265,7 @@ tracking:
 1. **Task File**: Update YAML frontmatter and status header
 2. **Project Manifest**: Update task progress and sprint status
 3. **Automation Log**: Create detailed automation tracking entry
-4. **MCP Work History**: Log automation session start
+4. **MCP GitHub**: Log automation session start
 
 ### 6.3 · Automated Progress Tracking Setup
 ```yaml
@@ -385,7 +385,7 @@ For each subtask:
 **Advanced MCP Integration:**
 - **Sequential Thinking**: Structure complex implementation steps
 - **Serena**: Enhanced code analysis and suggestions during development
-- **Work History**: Learn from previous implementations and avoid past issues
+- **GitHub**: Learn from previous implementations and avoid past issues
 - **Context7**: Maintain implementation context across sessions
 
 ### 7.5 · Automated Issue Resolution

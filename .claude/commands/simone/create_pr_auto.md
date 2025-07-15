@@ -45,6 +45,9 @@
 **COMPREHENSIVE PR READINESS VALIDATION:**
 
 ### 1.1 · Git State Validation
+
+**MCP INTEGRATION:** GitHub MCP for repository state validation
+
 ```bash
 # Comprehensive git state check
 git status --porcelain          # Must be clean
@@ -72,10 +75,14 @@ task_validation:
 ```
 
 ### 1.3 · CI/CD Pipeline Validation
+
+**MCP INTEGRATION:** GitHub MCP for comprehensive pipeline status
+
 ```bash
-# Check CI/CD status
+# Check CI/CD status using GitHub MCP tools
 gh api repos/:owner/:repo/commits/$(git rev-parse HEAD)/status
 gh api repos/:owner/:repo/commits/$(git rev-parse HEAD)/check-runs
+# Use GitHub MCP to analyze repository checks and PR requirements
 ```
 
 **Pipeline Requirements:**

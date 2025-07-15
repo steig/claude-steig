@@ -37,7 +37,7 @@ Intelligently merges pull requests with task/bug status updates and branch clean
 
 **MCP INTEGRATION:** Use MCP servers for enhanced merge validation:
 - **Sequential Thinking**: Structure merge validation systematically
-- **Work History**: Track merge patterns and outcomes
+- **GitHub**: Track merge patterns and outcomes
 - **Context7**: Maintain context about PR dependencies
 - **Serena**: Enhance code analysis and quality validation
 

@@ -65,10 +65,11 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 4. **If multiple personas activated**: Plan multi-domain analysis approach
 
 **MCP INTEGRATION:** Use available MCP servers to enhance task analysis:
-- **Sequential Thinking**: Structure the task analysis and break down complex problems
-- **Serena**: Enhance code analysis and project understanding  
+- **Sequential Thinking**: Use `/mcp__serena__think_about_collected_information` and `/mcp__serena__think_about_task_adherence` for structured analysis
+- **Serena**: Use `/mcp__serena__get_symbols_overview`, `/mcp__serena__find_symbol`, and `/mcp__serena__find_referencing_symbols` for enhanced code analysis and project understanding  
 - **Context7**: Maintain context about project state and requirements
-- **Work History**: Review similar past tasks and their outcomes
+- **GitHub**: Use GitHub MCP for repository insights and issue/PR management when relevant
+- **Fetch**: Use Fetch MCP to retrieve external documentation and resources when needed
 
 **CRITICAL CONTEXT VALIDATION:** Before executing any task spin up Parallel Subagents for these tasks:
 
@@ -153,7 +154,7 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 **MCP INTEGRATION:** Leverage MCP servers during task execution:
 - **Sequential Thinking**: Structure implementation approach step-by-step
 - **Serena**: Get enhanced code analysis and suggestions
-- **Work History**: Log all task execution details and outcomes
+- **GitHub**: Log all task execution details and outcomes
 - **Context7**: Maintain context about implementation decisions
 
 - Follow Description, Goal and Acceptance Criteria.
@@ -166,7 +167,7 @@ Read the task description. If anything is unclear, ask clarifying questions befo
   5. Update **updated_date** in YAML frontmatter with current timestamp.
   6. Append detailed log entry to **## Output Log**: `[YYYY-MM-DD HH:MM]: <subtask_completed> - <implementation_notes>`
   7. If issues encountered, update **blocked_by** field if applicable.
-  8. Use **Work History** to track implementation progress and decisions.
+  8. Use **GitHub** to track implementation progress and decisions.
   9. **Update progress percentage** based on completed subtasks vs total.
   10. Repeat until all subtasks are complete.
 
@@ -177,7 +178,7 @@ Read the task description. If anything is unclear, ask clarifying questions befo
 **MCP INTEGRATION:** Use available MCP servers for enhanced debt analysis:
 - **Sequential Thinking**: Structure debt analysis systematically
 - **Serena**: Enhance debt pattern recognition and categorization
-- **Work History**: Track debt accumulation patterns and resolution outcomes
+- **GitHub**: Track debt accumulation patterns and resolution outcomes
 
 ### 7.1 · Debt Discovery Analysis
 
@@ -344,9 +345,13 @@ Follow these steps for a Code Review (in order)
 
 ## 9 · Guided Task Completion with Approval Gates
 
-**MCP INTEGRATION:** Complete task tracking:
-- **Work History**: Log final task completion and outcomes
+**MCP INTEGRATION:** Complete task tracking and logging:
+- **GitHub**: Log final task completion and outcomes via commit history and repository tracking
 - **Context7**: Store task completion context for future reference
+- **Serena**: Use `/mcp__serena__think_about_whether_you_are_done` and `/mcp__serena__summarize_changes` for completion validation
+- **Sequential Thinking**: Structure completion validation and ensure all steps completed
+
+**TASK EXECUTION LOGGING:** All logging happens in the task file itself via Output Log sections (Implementation Log, Decision Log, Issue Log) and YAML frontmatter updates managed by update_task_status command.
 
 **GUIDED WORKFLOW WITH USER CONTROL:**
 

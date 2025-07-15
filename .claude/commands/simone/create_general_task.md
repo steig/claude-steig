@@ -31,7 +31,7 @@ The argument format is: `<Task Title or Description>`
 
 **MCP INTEGRATION:** Use MCP servers to enhance general task creation:
 - **Sequential Thinking**: Structure task creation process systematically
-- **Work History**: Reference similar tasks and their outcomes
+- **GitHub**: Reference similar tasks and their outcomes
 - **Context7**: Maintain context about project requirements and goals
 - **Serena**: Enhance project analysis and task scoping
 

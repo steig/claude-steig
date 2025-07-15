@@ -233,7 +233,7 @@ All manifest, sprint meta, and database updates are handled atomically.
 ### 7. Log status change and report results
 
 **Comprehensive Logging:**
-- Use **Work History** MCP if available to log status change
+- Use **GitHub** MCP if available to log status change
 - Update any monitoring or tracking systems
 - Log effort tracking and time estimates vs actual
 

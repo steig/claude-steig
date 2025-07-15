@@ -83,7 +83,7 @@ Creates pull requests with auto-generated descriptions, checklists, and proper l
 
 **MCP INTEGRATION:** Use MCP servers for enhanced PR creation:
 - **Sequential Thinking**: Structure PR information gathering systematically
-- **Work History**: Reference similar PRs and their outcomes
+- **GitHub**: Reference similar PRs and their outcomes
 - **Context7**: Maintain context about task/bug relationships
 - **Serena**: Enhance code analysis for PR description
 

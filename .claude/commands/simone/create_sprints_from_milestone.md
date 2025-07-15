@@ -20,7 +20,7 @@ Follow these instructions to sprint the scope of a Milestone into Sprints
 **MCP INTEGRATION:** Use MCP servers to enhance milestone analysis:
 - **Sequential Thinking**: Structure milestone analysis and sprint planning process
 - **Context7**: Maintain context about milestone goals and project state
-- **Work History**: Reference previous milestone sprint planning decisions
+- **GitHub**: Reference previous milestone sprint planning decisions
 - **Serena**: Enhance analysis of milestone requirements and project structure
 
 **CRITICAL:** You are given additional Arguments: <$ARGUMENTS>

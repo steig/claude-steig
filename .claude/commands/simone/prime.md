@@ -16,11 +16,14 @@ claude mcp status context7
 # Verify Playwright MCP is installed and active
 claude mcp status playwright
 
-# Verify Work History MCP is installed and active
-claude mcp status work-history
+# Verify GitHub MCP is installed and active
+claude mcp status github
 
 # Verify Sequential Thinking MCP is installed and active
 claude mcp status sequential-thinking
+
+# Verify Fetch MCP is installed and active
+claude mcp status fetch
 ```
 
 **Load Serena instructions and tools:**
@@ -32,8 +35,9 @@ This ensures all MCP servers (installed during framework setup) are ready and Cl
 - **Serena's tools** for enhanced IDE assistance and project management capabilities
 - **Context7's tools** for advanced context management and retrieval
 - **Playwright's tools** for browser automation and testing
-- **Work History's tools** for command tracking and output logging
+- **GitHub's tools** for repository management and API integration
 - **Sequential Thinking's tools** for enhanced reasoning and structured problem-solving
+- **Fetch's tools** for web content retrieval and markdown extraction
 
 ## USE **PARALLEL AGENTS** to
 

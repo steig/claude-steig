@@ -47,7 +47,7 @@ Follow step by step and adhere closely to the following instructions for each st
 **MCP INTEGRATION:** Use MCP servers to enhance code review process:
 - **Serena**: Get enhanced code analysis and quality insights
 - **Sequential Thinking**: Structure the review process systematically
-- **Work History**: Reference previous code reviews and their outcomes
+- **GitHub**: Reference previous code reviews and their outcomes
 
 check: <$ARGUMENTS>
 

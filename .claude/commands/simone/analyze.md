@@ -37,7 +37,16 @@
 
 ### 1. Parse analysis target and define analysis scope
 
-**MCP INTEGRATION:** Sequential Thinking for systematic analysis approach
+**MCP INTEGRATION:** Sequential Thinking + Serena for systematic analysis approach
+
+**Sequential Thinking Usage:**
+- Structure the analysis process systematically
+- Break down complex analysis into manageable components
+
+**Serena MCP Usage:**
+- Use `/mcp__serena__get_symbols_overview` to understand codebase structure
+- Use `/mcp__serena__list_dir` to analyze project organization
+- Use `/mcp__serena__think_about_collected_information` before proceeding
 
 Check: <$ARGUMENTS>
 
@@ -49,10 +58,15 @@ Check: <$ARGUMENTS>
 
 ### 2. Execute comprehensive code scanning and metric collection
 
-**MCP INTEGRATION:** Sequential Thinking for systematic scanning
+**MCP INTEGRATION:** Sequential Thinking + Serena for comprehensive scanning
+
+**Serena MCP Usage:**
+- Use `/mcp__serena__find_symbol` to locate specific code elements
+- Use `/mcp__serena__find_referencing_symbols` to analyze dependencies
+- Use `/mcp__serena__search_for_pattern` to find code patterns
 
 **Code Scanning:**
-- SCAN target codebase for patterns and metrics
+- SCAN target codebase for patterns and metrics using Serena tools
 - COLLECT complexity metrics (cyclomatic, cognitive)
 - GATHER size metrics (lines of code, file counts)
 - IDENTIFY code duplication and similarity patterns
@@ -103,7 +117,7 @@ Check: <$ARGUMENTS>
 
 ### 7. Analyze dependency relationships and technical debt
 
-**MCP INTEGRATION:** Work History for debt pattern analysis
+**MCP INTEGRATION:** GitHub for debt pattern analysis
 
 **Dependency Analysis:**
 - MAP dependency relationships and coupling

@@ -50,7 +50,7 @@ Performs comprehensive analysis of code quality, technical debt, testing coverag
 **MCP INTEGRATION:** Use MCP servers for enhanced quality analysis:
 - **Sequential Thinking**: Structure quality analysis systematically
 - **Serena**: Enhance code analysis and pattern detection
-- **Work History**: Track quality trends and improvements over time
+- **GitHub**: Track quality trends and improvements over time
 
 **Code Quality Analysis:**
 ```markdown
