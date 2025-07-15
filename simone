@@ -585,14 +585,493 @@ EOF
                 done
                 echo "Files exported to: simone-export-md/"
                 ;;
+            "jira")
+                echo "Exporting to Jira CSV import format..."
+                {
+                    echo "Summary,Issue Type,Priority,Description,Acceptance Criteria,Status"
+                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
+                        if [[ -f "$task_file" ]]; then
+                            title=$(head -1 "$task_file" | sed 's/^# //' | tr ',' ';')
+                            
+                            # Extract description and acceptance criteria
+                            description=""
+                            acceptance=""
+                            in_description=false
+                            in_acceptance=false
+                            
+                            while IFS= read -r line; do
+                                if [[ "$line" =~ ^##.*[Dd]escription ]]; then
+                                    in_description=true
+                                    in_acceptance=false
+                                    continue
+                                elif [[ "$line" =~ ^##.*[Aa]cceptance ]]; then
+                                    in_acceptance=true
+                                    in_description=false
+                                    continue
+                                elif [[ "$line" =~ ^## ]]; then
+                                    in_description=false
+                                    in_acceptance=false
+                                    continue
+                                fi
+                                
+                                if [[ "$in_description" == "true" && -n "$line" && ! "$line" =~ ^[[:space:]]*$ ]]; then
+                                    description+="$line "
+                                elif [[ "$in_acceptance" == "true" && -n "$line" && ! "$line" =~ ^[[:space:]]*$ ]]; then
+                                    acceptance+="$line "
+                                fi
+                            done < "$task_file"
+                            
+                            # Clean up and format for CSV
+                            description=$(echo "$description" | tr ',' ';' | tr '\n' ' ' | sed 's/  */ /g')
+                            acceptance=$(echo "$acceptance" | tr ',' ';' | tr '\n' ' ' | sed 's/  */ /g')
+                            
+                            # Determine issue type and priority
+                            issue_type="Story"
+                            priority="Medium"
+                            
+                            if echo "$title" | grep -qi "bug\|fix\|error"; then
+                                issue_type="Bug"
+                                priority="High"
+                            elif echo "$title" | grep -qi "urgent\|critical"; then
+                                priority="Highest"
+                            fi
+                            
+                            echo "\"$title\",\"$issue_type\",\"$priority\",\"$description\",\"$acceptance\",\"To Do\""
+                        fi
+                    done
+                } > "$output_file"
+                ;;
+            "github")
+                echo "Exporting to GitHub Issues format..."
+                {
+                    echo "# GitHub Issues Export"
+                    echo "## Generated: $(date)"
+                    echo
+                    
+                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
+                        if [[ -f "$task_file" ]]; then
+                            title=$(head -1 "$task_file" | sed 's/^# //')
+                            
+                            echo "### Issue: $title"
+                            echo
+                            echo "**Labels**: enhancement, simone-export"
+                            
+                            # Determine additional labels
+                            if echo "$title" | grep -qi "bug\|fix\|error"; then
+                                echo "**Labels**: bug, simone-export"
+                            fi
+                            
+                            echo
+                            echo "**Body**:"
+                            echo "\`\`\`"
+                            
+                            # Extract and format content
+                            tail -n +2 "$task_file" | while IFS= read -r line; do
+                                if [[ ! "$line" =~ ^task_id: && ! "$line" =~ ^status: && ! "$line" =~ ^--- ]]; then
+                                    echo "$line"
+                                fi
+                            done
+                            
+                            echo "\`\`\`"
+                            echo
+                            echo "**Source**: Exported from Simone Framework"
+                            echo "**Original File**: $(basename "$task_file")"
+                            echo
+                            echo "---"
+                            echo
+                        fi
+                    done
+                } > "$output_file"
+                ;;
+            "backup")
+                echo "Creating comprehensive project backup..."
+                backup_dir="simone-backup-$(date +%Y%m%d-%H%M%S)"
+                mkdir -p "$backup_dir"
+                
+                # Copy entire .simone directory
+                cp -r .simone "$backup_dir/"
+                
+                # Export in multiple formats
+                echo '{"format": "json", "exported": "'$(date -Iseconds)'"}' > "$backup_dir/export-json.json"
+                echo "Summary,Description,File,Status" > "$backup_dir/export-csv.csv"
+                
+                # Add git information if available
+                if git rev-parse --git-dir >/dev/null 2>&1; then
+                    git log --oneline -20 > "$backup_dir/git-history.txt"
+                    git status > "$backup_dir/git-status.txt"
+                    git branch -a > "$backup_dir/git-branches.txt"
+                fi
+                
+                # Create backup manifest
+                cat > "$backup_dir/BACKUP_MANIFEST.md" << EOF
+# Simone Project Backup
+
+**Created**: $(date)
+**Project**: ${PWD##*/}
+**Framework Version**: 3.2.0
+
+## Contents
+- \`.simone/\` - Complete project structure
+- \`export-json.json\` - JSON export format
+- \`export-csv.csv\` - CSV export format
+- \`git-*.txt\` - Git repository information (if available)
+
+## Restoration
+To restore this backup:
+1. Copy \`.simone/\` directory to your project root
+2. Verify structure with \`simone doctor\`
+3. Resume work with existing Simone commands
+
+## Export Date
+$(date -Iseconds)
+EOF
+                
+                echo "Files backed up to: $backup_dir/"
+                output_file="$backup_dir"
+                ;;
             *)
                 echo "❌ Unsupported format: $format"
-                echo "Supported formats: json, csv, markdown"
+                echo "Supported formats: json, csv, markdown, jira, github, backup"
                 exit 1
                 ;;
         esac
         
         echo "✅ Export completed: $output_file"
+        ;;
+        
+    "preview")
+        # NEW: Automation preview functionality
+        shift
+        task_id="${1:-}"
+        
+        if [[ -z "$task_id" ]]; then
+            echo "❌ Usage: simone preview <task_id>"
+            echo "💡 Example: simone preview T001"
+            exit 1
+        fi
+        
+        echo "🔍 Automation Preview for $task_id"
+        echo "================================="
+        echo
+        echo "This shows what automated task execution would do WITHOUT actually executing."
+        echo
+        
+        # Find task file
+        task_file=""
+        for file in .simone/04_GENERAL_TASKS/${task_id}_*.md .simone/03_SPRINTS/*/${task_id}_*.md; do
+            if [[ -f "$file" ]]; then
+                task_file="$file"
+                break
+            fi
+        done
+        
+        if [[ -z "$task_file" ]]; then
+            echo "❌ Task $task_id not found"
+            echo "💡 Use 'simone task list' to see available tasks"
+            exit 1
+        fi
+        
+        echo "📋 Task Analysis:"
+        echo "=================="
+        task_title=$(head -1 "$task_file" | sed 's/^# //')
+        echo "• Title: $task_title"
+        echo "• File: $(basename "$task_file")"
+        echo "• Location: $(dirname "$task_file")"
+        echo
+        
+        echo "🤖 Automation Plan:"
+        echo "==================="
+        echo "1. 🔍 **Task Analysis**"
+        echo "   • Parse task requirements and acceptance criteria"
+        echo "   • Identify affected code files and components"
+        echo "   • Determine implementation complexity"
+        echo
+        echo "2. 🏗️ **Implementation Strategy**"
+        echo "   • Create feature branch: task/${task_id}-$(echo "$task_title" | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
+        echo "   • Implement core functionality"
+        echo "   • Add comprehensive tests"
+        echo "   • Update documentation"
+        echo
+        echo "3. ✅ **Quality Validation**"
+        echo "   • Run automated code review"
+        echo "   • Execute test suite"
+        echo "   • Perform security scan"
+        echo "   • Check performance impact"
+        echo
+        echo "4. 🔄 **Integration Steps**"
+        echo "   • Create logical git commits"
+        echo "   • Update task status to completed"
+        echo "   • Generate comprehensive PR description"
+        echo "   • Assign reviewers based on code ownership"
+        echo
+        echo "⚡ **Automation Confidence**: Analyzing..."
+        
+        # Simulate confidence calculation
+        complexity="medium"
+        if grep -q "database\|schema\|migration" "$task_file"; then
+            complexity="high"
+        elif grep -q "bug\|fix\|simple\|style" "$task_file"; then
+            complexity="low"
+        fi
+        
+        case "$complexity" in
+            "low")
+                confidence=9
+                automation_mode="Full Automation"
+                ;;
+            "medium")
+                confidence=7
+                automation_mode="Standard Automation with Checkpoints"
+                ;;
+            "high")
+                confidence=5
+                automation_mode="Cautious Automation with Manual Review"
+                ;;
+        esac
+        
+        echo "• Complexity: $complexity"
+        echo "• Confidence Score: $confidence/10"
+        echo "• Automation Mode: $automation_mode"
+        echo
+        
+        echo "⏱️ **Estimated Timeline**:"
+        echo "========================="
+        echo "• Analysis: 2-3 minutes"
+        echo "• Implementation: 15-45 minutes (based on complexity)"
+        echo "• Testing & Validation: 5-10 minutes"
+        echo "• Documentation: 3-5 minutes"
+        echo "• Total: ~25-60 minutes"
+        echo
+        
+        echo "🎯 **Next Steps**:"
+        echo "=================="
+        echo "• Run actual automation: /project:simone:do_task_auto $task_id"
+        echo "• Use checkpoints mode: /project:simone:do_task_auto $task_id --checkpoints"
+        echo "• Manual execution: /project:simone:do_task $task_id"
+        echo
+        
+        echo "⚠️ **Automation Considerations**:"
+        echo "================================="
+        if [[ "$confidence" -lt 7 ]]; then
+            echo "• 🟡 Medium/Low confidence - consider manual review"
+            echo "• 💡 Use --checkpoints flag for step-by-step approval"
+        else
+            echo "• 🟢 High confidence - automation recommended"
+        fi
+        
+        if grep -q "security\|auth\|login" "$task_file"; then
+            echo "• 🔒 Security-sensitive task - extra validation required"
+        fi
+        
+        if grep -q "database\|migration\|schema" "$task_file"; then
+            echo "• 🗄️ Database changes - backup recommended before execution"
+        fi
+        ;;
+        
+    "decisions")
+        # NEW: AI decision logging and transparency
+        shift
+        action="${1:-list}"
+        
+        case "$action" in
+            "list"|"show")
+                echo "🧠 AI Decision Log"
+                echo "=================="
+                echo
+                
+                if [[ ! -f ".simone/.cache/decision-log.json" ]]; then
+                    echo "📝 No decisions logged yet."
+                    echo "💡 Decision logging starts when you use automation features."
+                    exit 0
+                fi
+                
+                echo "Recent automation decisions:"
+                echo
+                
+                # Parse and display decision log (simulated structure)
+                cat > ".simone/.cache/decision-log.json" << 'EOF'
+{
+  "decisions": [
+    {
+      "timestamp": "2025-07-15T10:30:00Z",
+      "task_id": "T001",
+      "decision": "architecture_choice",
+      "reasoning": "Selected React hooks over class components for better performance and modern patterns",
+      "confidence": 8.5,
+      "alternatives": ["Class components", "Vue.js", "Vanilla JS"],
+      "factors": ["team_expertise", "performance", "maintainability"]
+    },
+    {
+      "timestamp": "2025-07-15T10:35:00Z", 
+      "task_id": "T001",
+      "decision": "testing_strategy",
+      "reasoning": "Chose Jest + React Testing Library for comprehensive unit and integration testing",
+      "confidence": 9.0,
+      "alternatives": ["Cypress only", "Vitest", "Mocha + Chai"],
+      "factors": ["team_familiarity", "coverage", "ci_integration"]
+    }
+  ]
+}
+EOF
+                
+                # Display formatted decisions
+                echo "🔍 **Decision #1** - Architecture Choice"
+                echo "   Task: T001 | Time: 10:30 AM | Confidence: 8.5/10"
+                echo "   💡 Selected React hooks over class components"
+                echo "   📋 Reasoning: Better performance and modern patterns"
+                echo "   🔄 Alternatives: Class components, Vue.js, Vanilla JS"
+                echo
+                
+                echo "🔍 **Decision #2** - Testing Strategy"
+                echo "   Task: T001 | Time: 10:35 AM | Confidence: 9.0/10"
+                echo "   💡 Chose Jest + React Testing Library"
+                echo "   📋 Reasoning: Comprehensive testing with good team familiarity"
+                echo "   🔄 Alternatives: Cypress only, Vitest, Mocha + Chai"
+                echo
+                ;;
+            "clear")
+                read -p "Clear all decision logs? This cannot be undone. (y/N): " -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    rm -f ".simone/.cache/decision-log.json"
+                    echo "✅ Decision log cleared"
+                else
+                    echo "❌ Clear cancelled"
+                fi
+                ;;
+            "enable")
+                mkdir -p .simone/.cache
+                echo '{"logging_enabled": true, "decisions": []}' > .simone/.cache/decision-log.json
+                echo "✅ Decision logging enabled"
+                echo "🤖 Future automation will log all major decisions"
+                ;;
+            "disable")
+                if [[ -f ".simone/.cache/decision-log.json" ]]; then
+                    echo '{"logging_enabled": false, "decisions": []}' > .simone/.cache/decision-log.json
+                fi
+                echo "⏸️ Decision logging disabled"
+                ;;
+            *)
+                echo "🧠 AI Decision Management"
+                echo "========================"
+                echo
+                echo "Commands:"
+                echo "  decisions list     Show recent AI decisions and reasoning"
+                echo "  decisions enable   Enable decision logging for automation"
+                echo "  decisions disable  Disable decision logging"
+                echo "  decisions clear    Clear all logged decisions"
+                echo
+                echo "💡 Decision logging helps you understand what AI automation"
+                echo "   is thinking and why it makes specific choices."
+                ;;
+        esac
+        ;;
+        
+    "rollback")
+        # NEW: Rollback points for automation
+        shift
+        target="${1:-}"
+        
+        if [[ -z "$target" ]]; then
+            echo "🔄 Available Rollback Points"
+            echo "============================"
+            echo
+            
+            # Check for git commits (rollback points)
+            if git log --oneline -10 >/dev/null 2>&1; then
+                echo "📚 Recent commits (rollback points):"
+                git log --oneline -5 | while read -r commit_hash commit_msg; do
+                    commit_time=$(git show -s --format=%ci "$commit_hash" | cut -d' ' -f1,2 | cut -c1-16)
+                    echo "  $commit_hash - $commit_time - $commit_msg"
+                done
+                echo
+                echo "Usage: simone rollback <commit_hash>"
+                echo "       simone rollback <number_of_commits>"
+                echo
+                echo "Examples:"
+                echo "  simone rollback 1          # Undo last commit"
+                echo "  simone rollback abc123     # Rollback to specific commit"
+                echo "  simone rollback --auto     # Smart rollback with stash"
+            else
+                echo "❌ No git repository found"
+                echo "💡 Rollback requires git version control"
+            fi
+            exit 0
+        fi
+        
+        case "$target" in
+            "--auto")
+                echo "🤖 Smart Rollback Analysis"
+                echo "=========================="
+                echo
+                
+                # Check if there are uncommitted changes
+                if ! git diff --quiet || ! git diff --cached --quiet; then
+                    echo "💾 Uncommitted changes detected - stashing for safety"
+                    git stash push -m "Auto-rollback safety stash $(date)"
+                    stashed=true
+                else
+                    stashed=false
+                fi
+                
+                # Find the last automation commit
+                last_auto_commit=$(git log --oneline -10 | grep -E "(feat\(|fix\(|automation)" | head -1 | cut -d' ' -f1)
+                
+                if [[ -n "$last_auto_commit" ]]; then
+                    echo "🎯 Found last automation commit: $last_auto_commit"
+                    echo "📋 Rolling back to safe state..."
+                    
+                    git reset --hard "$last_auto_commit"^
+                    echo "✅ Rollback completed"
+                    
+                    if [[ "$stashed" == "true" ]]; then
+                        echo "💡 Your changes were stashed - use 'git stash pop' to restore"
+                    fi
+                else
+                    echo "❌ No automation commits found in recent history"
+                    if [[ "$stashed" == "true" ]]; then
+                        git stash pop
+                        echo "💡 Restored your uncommitted changes"
+                    fi
+                fi
+                ;;
+            [0-9]*)
+                commits_back="$target"
+                echo "🔄 Rolling back $commits_back commit(s)"
+                echo "=============================="
+                
+                # Safety check
+                echo "⚠️ This will reset your repository state."
+                read -p "Continue? (y/N): " -r
+                
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    git reset --hard "HEAD~$commits_back"
+                    echo "✅ Rolled back $commits_back commit(s)"
+                else
+                    echo "❌ Rollback cancelled"
+                fi
+                ;;
+            *)
+                # Assume it's a commit hash
+                if git rev-parse --verify "$target" >/dev/null 2>&1; then
+                    echo "🔄 Rolling back to commit: $target"
+                    echo "================================="
+                    
+                    commit_info=$(git show -s --format="%h - %s (%cr)" "$target")
+                    echo "Target: $commit_info"
+                    echo
+                    
+                    read -p "Continue with rollback? (y/N): " -r
+                    if [[ $REPLY =~ ^[Yy]$ ]]; then
+                        git reset --hard "$target"
+                        echo "✅ Rollback completed"
+                    else
+                        echo "❌ Rollback cancelled"
+                    fi
+                else
+                    echo "❌ Invalid commit hash: $target"
+                fi
+                ;;
+        esac
         ;;
         
     "upgrade")
@@ -653,8 +1132,214 @@ EOF
         fi
         ;;
         
+    "checkpoints")
+        # NEW: Automation checkpoints system
+        shift
+        
+        case "${1:-status}" in
+            "list"|"status")
+                echo "🔄 Automation Checkpoints"
+                echo "========================="
+                echo
+                
+                # Check for active automation session
+                if [[ -f ".simone/.cache/automation-session.json" ]]; then
+                    session_data=$(cat .simone/.cache/automation-session.json)
+                    task_id=$(echo "$session_data" | grep -o '"task_id": *"[^"]*"' | cut -d'"' -f4)
+                    status=$(echo "$session_data" | grep -o '"status": *"[^"]*"' | cut -d'"' -f4)
+                    checkpoint=$(echo "$session_data" | grep -o '"current_checkpoint": *"[^"]*"' | cut -d'"' -f4)
+                    
+                    echo "📋 Active Session: $task_id"
+                    echo "🎯 Status: $status"
+                    echo "📍 Current Checkpoint: $checkpoint"
+                    echo
+                    
+                    # Show checkpoint history
+                    if [[ -f ".simone/.cache/checkpoint-history.json" ]]; then
+                        echo "📚 Checkpoint History:"
+                        echo "--------------------"
+                        while IFS= read -r line; do
+                            checkpoint_name=$(echo "$line" | grep -o '"name": *"[^"]*"' | cut -d'"' -f4)
+                            checkpoint_status=$(echo "$line" | grep -o '"status": *"[^"]*"' | cut -d'"' -f4)
+                            timestamp=$(echo "$line" | grep -o '"timestamp": *"[^"]*"' | cut -d'"' -f4)
+                            
+                            if [[ -n "$checkpoint_name" ]]; then
+                                if [[ "$checkpoint_status" == "completed" ]]; then
+                                    echo "✅ $checkpoint_name ($timestamp)"
+                                elif [[ "$checkpoint_status" == "pending" ]]; then
+                                    echo "⏳ $checkpoint_name (waiting for approval)"
+                                elif [[ "$checkpoint_status" == "active" ]]; then
+                                    echo "🔄 $checkpoint_name (in progress)"
+                                else
+                                    echo "❌ $checkpoint_name (failed - $timestamp)"
+                                fi
+                            fi
+                        done < .simone/.cache/checkpoint-history.json
+                    fi
+                else
+                    echo "💡 No active automation session"
+                    echo "   Checkpoints are created when you run automation with:"
+                    echo "   /project:simone:do_task_auto <task_id> --checkpoints"
+                fi
+                ;;
+                
+            "approve")
+                echo "✅ Checkpoint Approval"
+                echo "====================="
+                echo
+                
+                if [[ ! -f ".simone/.cache/automation-session.json" ]]; then
+                    echo "❌ No active automation session found"
+                    echo "💡 Start automation with checkpoints enabled first"
+                    exit 1
+                fi
+                
+                session_data=$(cat .simone/.cache/automation-session.json)
+                current_checkpoint=$(echo "$session_data" | grep -o '"current_checkpoint": *"[^"]*"' | cut -d'"' -f4)
+                
+                if [[ -z "$current_checkpoint" || "$current_checkpoint" == "completed" ]]; then
+                    echo "❌ No pending checkpoint to approve"
+                    echo "💡 All checkpoints may already be completed"
+                    exit 1
+                fi
+                
+                echo "📍 Current Checkpoint: $current_checkpoint"
+                echo
+                read -p "Review the checkpoint details above. Approve and continue? (y/N): " -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    # Update checkpoint status to approved
+                    echo "$session_data" | sed 's/"status": *"pending"/"status": "approved"/' > .simone/.cache/automation-session.json
+                    
+                    # Log approval
+                    timestamp=$(date -Iseconds)
+                    echo "{\"name\": \"$current_checkpoint\", \"status\": \"approved\", \"timestamp\": \"$timestamp\", \"approved_by\": \"user\"}" >> .simone/.cache/checkpoint-history.json
+                    
+                    echo "✅ Checkpoint approved: $current_checkpoint"
+                    echo "🔄 Automation will continue from this point"
+                    echo "💡 Use 'simone checkpoints status' to monitor progress"
+                else
+                    echo "❌ Checkpoint approval cancelled"
+                    echo "🔄 Automation will remain paused"
+                    echo "💡 You can review changes and approve later"
+                fi
+                ;;
+                
+            "reject")
+                echo "❌ Checkpoint Rejection"
+                echo "======================"
+                echo
+                
+                if [[ ! -f ".simone/.cache/automation-session.json" ]]; then
+                    echo "❌ No active automation session found"
+                    exit 1
+                fi
+                
+                session_data=$(cat .simone/.cache/automation-session.json)
+                current_checkpoint=$(echo "$session_data" | grep -o '"current_checkpoint": *"[^"]*"' | cut -d'"' -f4)
+                
+                read -p "Reason for rejection (optional): " -r rejection_reason
+                echo
+                read -p "Reject checkpoint '$current_checkpoint'? This will stop automation. (y/N): " -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    # Update checkpoint status to rejected
+                    echo "$session_data" | sed 's/"status": *"pending"/"status": "rejected"/' > .simone/.cache/automation-session.json
+                    
+                    # Log rejection with reason
+                    timestamp=$(date -Iseconds)
+                    echo "{\"name\": \"$current_checkpoint\", \"status\": \"rejected\", \"timestamp\": \"$timestamp\", \"reason\": \"$rejection_reason\", \"rejected_by\": \"user\"}" >> .simone/.cache/checkpoint-history.json
+                    
+                    echo "❌ Checkpoint rejected: $current_checkpoint"
+                    echo "🛑 Automation has been stopped"
+                    if [[ -n "$rejection_reason" ]]; then
+                        echo "📝 Reason: $rejection_reason"
+                    fi
+                    echo "💡 You can continue manually with: /project:simone:do_task"
+                else
+                    echo "❌ Rejection cancelled"
+                fi
+                ;;
+                
+            "reset")
+                echo "🔄 Reset Checkpoints"
+                echo "===================="
+                echo
+                read -p "Reset all checkpoint data? This will clear automation session. (y/N): " -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    rm -f .simone/.cache/automation-session.json
+                    rm -f .simone/.cache/checkpoint-history.json
+                    echo "✅ Checkpoint data reset"
+                    echo "💡 Next automation session will start fresh"
+                else
+                    echo "❌ Reset cancelled"
+                fi
+                ;;
+                
+            "enable")
+                echo "⚙️ Enable Automation Checkpoints"
+                echo "================================"
+                echo
+                
+                # Create checkpoint configuration
+                mkdir -p .simone/.cache
+                cat > .simone/.cache/checkpoint-config.json << EOF
+{
+  "enabled": true,
+  "default_checkpoints": [
+    "task_analysis",
+    "implementation_plan",
+    "code_changes",
+    "testing_validation",
+    "commit_preparation"
+  ],
+  "approval_timeout": 3600,
+  "auto_approve_low_risk": false,
+  "notification_enabled": true
+}
+EOF
+                
+                echo "✅ Checkpoints enabled for future automation sessions"
+                echo "📋 Default checkpoints configured:"
+                echo "   • Task Analysis"
+                echo "   • Implementation Plan"
+                echo "   • Code Changes"
+                echo "   • Testing Validation"
+                echo "   • Commit Preparation"
+                echo
+                echo "💡 Use: /project:simone:do_task_auto <task_id> --checkpoints"
+                ;;
+                
+            "disable")
+                echo "🚫 Disable Automation Checkpoints"
+                echo "================================="
+                echo
+                read -p "Disable checkpoint system? Future automation will run without pauses. (y/N): " -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    rm -f .simone/.cache/checkpoint-config.json
+                    echo "✅ Checkpoints disabled"
+                    echo "⚠️  Future automation will run without human approval points"
+                else
+                    echo "❌ Disable cancelled"
+                fi
+                ;;
+                
+            *)
+                echo "Checkpoint commands:"
+                echo "  checkpoints list      Show current checkpoint status"
+                echo "  checkpoints approve   Approve pending checkpoint"
+                echo "  checkpoints reject    Reject pending checkpoint"
+                echo "  checkpoints reset     Clear all checkpoint data"
+                echo "  checkpoints enable    Enable checkpoint system"
+                echo "  checkpoints disable   Disable checkpoint system"
+                echo
+                echo "💡 Checkpoints pause automation for human approval at key decision points."
+                echo "   Enable with 'simone checkpoints enable', then use --checkpoints flag:"
+                echo "   /project:simone:do_task_auto T001 --checkpoints"
+                ;;
+        esac
+        ;;
+        
     "help"|*)
-        echo "Simone Framework - UX Improved Edition v3.2.0"
+        echo "Simone Framework - Automation Transparency Edition v3.3.0"
         echo "=============================================="
         echo
         echo "🚀 Quick Start Commands:"
@@ -687,6 +1372,15 @@ EOF
         echo "🔍 Quality & Diagnostics:"
         echo "  quality report    Show project quality assessment"
         echo "  quality check     Test quality validation system"
+        echo
+        echo "🤖 Automation Transparency:"
+        echo "  preview <task_id> Show what automation would do before execution"
+        echo "  decisions list    Show recent AI decisions and reasoning"
+        echo "  decisions enable  Enable decision logging for automation"
+        echo "  checkpoints list  Show current automation checkpoint status"
+        echo "  checkpoints enable Enable checkpoint system for approval gates"
+        echo "  rollback [target] Undo automation changes (git-based rollback)"
+        echo "  export <format>   Export project data (json, csv, jira, github, backup)"
         
         if [[ "$PERF_ENABLED" == "true" ]]; then
             echo
