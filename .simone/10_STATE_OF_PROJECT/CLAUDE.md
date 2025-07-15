@@ -100,9 +100,9 @@ Each project review file should contain:
 
 ## Integration with MCP Servers
 
-### Work History
-- Track project review creation and outcomes
-- Maintain history of review recommendations and their implementation
+### GitHub
+- Track project review creation and outcomes via repository history
+- Maintain history of review recommendations and their implementation through issues and PRs
 
 ### Sequential Thinking
 - Structure comprehensive project analysis systematically

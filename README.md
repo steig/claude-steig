@@ -1,83 +1,76 @@
 # Simone for Claude Code
 
-## What is this?
+## Overview
 
-Simone is a directory-based project management system designed to work better with Claude Code. It's a sophisticated framework of folders, markdown files, and custom commands that help break down software projects into manageable chunks that AI can handle effectively.
+Simone is a directory-based project management framework designed to enhance Claude Code development workflows. It provides a structured approach to organizing software projects through folders, markdown files, and custom commands that break down complex projects into manageable components optimized for AI-assisted development.
 
-**🙏 Attribution**: This is a specialized fork of the original Simone framework created by [Helmi](https://github.com/helmi). The original work provided the foundational concepts and workflow design. This fork adds comprehensive metadata management and project tracking capabilities.
+**Attribution**: This framework builds upon the original Simone implementation created by [Helmi](https://github.com/helmi). The foundational concepts and workflow design from the original work have been extended with comprehensive metadata management and project tracking capabilities.
 
-**🎭 Inspiration**: Cognitive personas and command patterns inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude), which pioneered innovative approaches to AI-driven development workflows and specialized assistant capabilities.
+**Inspiration**: Cognitive personas and command patterns are inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude), which introduced innovative approaches to AI-driven development workflows and specialized assistant capabilities.
 
-**⚠️ Complexity Warning**: Simone is a sophisticated system that requires time to understand properly. It's not a simple plug-and-play solution, but rather a framework that works best when you take the time to learn how it operates and adapt it to your workflow.
+**Important Considerations**: Simone is a comprehensive framework that requires understanding of its concepts and structure for effective use. It is designed for teams and individuals who benefit from structured project management integrated with AI-assisted development workflows.
 
-**🚨 EXPERIMENTAL WARNING**: This is a rapidly evolving, experimental project. Things move fast here and stuff might break. Features change frequently, commands may be unstable, and documentation might lag behind reality. Use at your own risk and expect the unexpected. YOLO! 🎢
+**Development Status**: This framework is actively developed with regular feature updates and improvements. Users should review documentation and test features in non-critical environments before full adoption.
 
-## 🚀 Key Features
+## Key Features
 
-**Version 3.0.0** includes hierarchical completion tracking and enhanced metadata management:
+Current version includes hierarchical completion tracking and enhanced metadata management:
 
-### **Hierarchical Completion Tracking (v3.0.0)**
-- **Automatic Status Propagation**: Tasks → Sprints → Milestones → Project completion
-- **Real-time Progress**: Live calculation at all hierarchy levels
-- **Completion Validation**: Prevents marking incomplete work as done
-- **Completion Dashboard**: Comprehensive progress visualization
-- **Project Completion Detection**: Automatic detection when all milestones finished
-- **Metadata Synchronization**: Comprehensive consistency across all tracking
+### Hierarchical Completion Tracking
+- Automatic status propagation from tasks through sprints to milestones and project completion
+- Real-time progress calculation at all hierarchy levels
+- Completion validation that prevents marking incomplete work as done
+- Comprehensive progress visualization through completion dashboard
+- Automatic project completion detection when all milestones are finished
+- Metadata synchronization ensuring consistency across all tracking levels
 
-### **Enhanced Task Automation (v3.0.0)**
-- **Significant time reduction** in task completion with comprehensive automation
-- **Integrated completion validation** with acceptance criteria enforcement
-- **Quality gate enforcement** blocks completion until standards met
-- **Automatic hierarchical checking** when tasks complete
-- **Automated PR creation** with reviewer assignment and context
-- **CI/CD integration** with automated quality gates and validation
+### Enhanced Task Automation
+- Streamlined task completion through comprehensive automation
+- Integrated completion validation with acceptance criteria enforcement
+- Quality gate enforcement that blocks completion until standards are met
+- Automatic hierarchical status checking when tasks complete
+- Automated pull request creation with reviewer assignment and context
+- CI/CD integration with automated quality gates and validation
 
-### ⚡ **Performance Optimization (v2.1.0)**
-- **60-80% faster** command execution through intelligent caching and indexing
-- **SQLite task database** for instant queries (95% faster than file scanning)
-- **Smart caching system** with TTL management (90% faster template operations)
-- **Git operation batching** reduces sequential operations by 70%
-- **Parallel processing** for independent operations
-- **Built-in performance monitoring** and benchmarking tools
 
-### 📋 **Comprehensive Templates**
-- **Detailed YAML frontmatter** with complete metadata tracking
-- **Structured sections** for requirements, implementation, testing, and quality control
-- **Progress tracking** and status management throughout the project lifecycle
-- **Risk assessment** and mitigation planning built into templates
-- **Quality checklists** and review processes
+### Comprehensive Templates
+- Detailed YAML frontmatter with complete metadata tracking
+- Structured sections for requirements, implementation, testing, and quality control
+- Progress tracking and status management throughout the project lifecycle
+- Risk assessment and mitigation planning built into templates
+- Quality checklists and review processes
 
-### 🔧 **Smart Installation System**
-- **Automated installer** with intelligent upgrade detection
-- **Backup and rollback** capabilities for safe upgrades
-- **Version management** to track framework updates
-- **Preservation of user data** during upgrades
+### Smart Installation System
+- Automated installer with intelligent upgrade detection
+- Backup and rollback capabilities for safe upgrades
+- Version management to track framework updates
+- Preservation of user data during upgrades
 
-### 📊 **Advanced Project Management**
-- **Detailed task breakdown** with implementation guidance
-- **Architecture decision tracking** with comprehensive ADR templates
-- **Project health monitoring** with detailed review templates
-- **Success metrics** and measurement frameworks
+### Advanced Project Management
+- Detailed task breakdown with implementation guidance
+- Architecture decision tracking with comprehensive ADR templates
+- Project health monitoring with detailed review templates
+- Success metrics and measurement frameworks
 
-### 🎯 **Quality & Process Improvements**
-- **Built-in quality gates** and approval workflows
-- **Compliance tracking** and governance processes
-- **Documentation requirements** integrated into workflows
-- **Review checklists** for technical, business, and process validation
+### Quality & Process Improvements
+- Built-in quality gates and approval workflows
+- Compliance tracking and governance processes
+- Documentation requirements integrated into workflows
+- Review checklists for technical, business, and process validation
 
-### **Unified Review System (v3.0.0)**
-- **Single `review` command** replaces 4 separate review commands  
-- **`--type-code/quality/testing/discussion`** flags for specialized reviews
-- **Cross-type analysis** with comprehensive review integration
-- **Enhanced metadata tracking** for review history and patterns
+### Unified Review System
+- Single review command replaces multiple separate review commands
+- Specialized review types with configurable flags for code, quality, testing, and discussion
+- Cross-type analysis with comprehensive review integration
+- Enhanced metadata tracking for review history and patterns
 
-### **Metadata Synchronization (v3.0.0)**
-- **`sync_metadata` command** for comprehensive hierarchy synchronization
-- **Troubleshooting guide** for metadata tracking issues
-- **Completion validation** prevents incomplete work from being marked done
-- **Real-time progress dashboards** with accurate completion percentages
+### Metadata Synchronization
+- Comprehensive hierarchy synchronization command for maintaining consistency
+- Troubleshooting guide for metadata tracking issues
+- Completion validation that prevents incomplete work from being marked done
+- Real-time progress dashboards with accurate completion percentages
 
-**v3.0.0 Release**: Hierarchical completion tracking and enhanced metadata management. See [CHANGELOG.md](CHANGELOG.md) for complete details.
+See [CHANGELOG.md](CHANGELOG.md) for complete version history and feature details.
 
 ## How to Get Started
 
@@ -127,12 +120,13 @@ cd claude-steig
 
 The installer works with both new and existing projects, automatically preserving your manifests, milestones, sprints, tasks, and architectural decisions while updating the framework components.
 
-**MCP Integration**: The installer automatically sets up 5 essential MCP servers:
+**MCP Integration**: The installer automatically sets up 6 essential MCP servers:
 - **Serena**: Enhanced IDE assistance and project management
 - **Context7**: Advanced context management and retrieval
 - **Playwright**: Browser automation and testing capabilities
-- **Work History**: Command tracking and output logging
+- **GitHub**: Repository management and API integration
 - **Sequential Thinking**: Enhanced reasoning and structured problem-solving
+- **Fetch**: Web content retrieval and markdown extraction capabilities
 
 ### 2. Initialize Your Project
 
@@ -146,25 +140,25 @@ This guides you through the basic setup process. Works with new or existing code
 
 ### 3. Set Up Your First Milestone
 
-**NEW**: Use AI-powered milestone generation for faster, comprehensive planning:
+Use AI-powered milestone generation for efficient, comprehensive planning:
 
 ```
 /project:simone:create_milestone "Build user authentication system with JWT tokens, social login, and MFA support"
 ```
 
 This command will:
-- 🤖 **Analyze your prompt** and extract features, requirements, and constraints
-- 📝 **Generate comprehensive milestone** with business objectives, success criteria, and risk assessment
-- 🎯 **Create sprint breakdown** with timeline estimation and dependency mapping
-- 📊 **Populate all metadata** automatically (30+ YAML fields)
-- 🔗 **Integrate with project** by updating manifest and creating proper directory structure
+- Analyze your prompt and extract features, requirements, and constraints
+- Generate comprehensive milestone with business objectives, success criteria, and risk assessment
+- Create sprint breakdown with timeline estimation and dependency mapping
+- Populate all metadata automatically with 30+ YAML fields
+- Integrate with project by updating manifest and creating proper directory structure
 
-**Alternative (Manual Setup)**: Create a milestone folder in `.simone/02_REQUIREMENTS/` named `M01_Your_Milestone_Name` (e.g., `M01_Basic_Application`). Include at least:
+Alternative (Manual Setup): Create a milestone folder in `.simone/02_REQUIREMENTS/` named `M01_Your_Milestone_Name` (e.g., `M01_Basic_Application`). Include at least:
 
 - `M01_PRD.md` - Product requirements document
 - Other specs as needed: `M01_Database_Schema.md`, `M01_API_Specs.md`, etc.
 
-*Use the existing chat from step 2 to guide Claude through manual milestone creation, ensuring proper naming with the `M##_` prefix and underscores.*
+Use the existing chat from step 2 to guide Claude through manual milestone creation, ensuring proper naming with the `M##_` prefix and underscores.
 
 ### 4. Break Down into Sprints
 
@@ -182,50 +176,50 @@ This analyzes your milestone and breaks it down into logical sprints. It looks a
 
 This analyzes your sprints, reviews documentation, researches necessary information, and identifies knowledge gaps to gain comprehensive understanding of your project. Creates detailed, actionable tasks for the current sprint.
 
-*Important: Only create tasks for your next sprint, not all sprints upfront. After completing Sprint 1, then create tasks for Sprint 2. This ensures the system can reference your existing codebase and incorporate completed work into future task creation.*
+Important: Only create tasks for your next sprint, not all sprints upfront. After completing Sprint 1, then create tasks for Sprint 2. This ensures the system can reference your existing codebase and incorporate completed work into future task creation.
 
 ### 6. Start Working - Choose Your Workflow
 
-**🤖 Automated Workflow (NEW - Recommended for Routine Tasks)**:
+**Automated Workflow (Recommended for Routine Tasks)**:
 ```
 /project:simone:do_task_auto T01_S01 --persona-security --quality-strict
 ```
 
-Experience **comprehensive automation** with minimal human intervention:
-- **Intelligent task execution** with automatic persona activation
-- **Continuous quality validation** with real-time monitoring
-- **Automated issue resolution** for routine problems
-- **Technical debt management** with automatic assessment and resolution
-- **Comprehensive code review** with multi-domain analysis
-- **Validated commits** with comprehensive quality context
-- **Ready for PR creation** with complete automation context
+Experience comprehensive automation with minimal human intervention:
+- Intelligent task execution with automatic persona activation
+- Continuous quality validation with real-time monitoring
+- Automated issue resolution for routine problems
+- Technical debt management with automatic assessment and resolution
+- Comprehensive code review with multi-domain analysis
+- Validated commits with comprehensive quality context
+- Ready for PR creation with complete automation context
 
-**📋 Standard Workflow (Manual Control)**:
+**Standard Workflow (Manual Control)**:
 ```
 /project:simone:do_task T01_S01
 ```
 
-Experience the **guided approval workflow** with user control at every step:
-- **Commit Approval Gate**: Preview changes and approve commits
-- **PR Approval Gate**: Review PR details before creation  
-- **Auto-execution**: Commands run automatically after approval
-- **Complete Integration**: End-to-end task completion with Git workflow
+Experience the guided approval workflow with user control at every step:
+- Commit Approval Gate: Preview changes and approve commits
+- PR Approval Gate: Review PR details before creation  
+- Auto-execution: Commands run automatically after approval
+- Complete Integration: End-to-end task completion with Git workflow
 
 **Workflow Selection Guide**:
-- **Use Automated** for: Well-defined tasks, bug fixes, refactoring, routine features
-- **Use Standard** for: Complex features, architectural changes, experimental work
+- Use Automated for: Well-defined tasks, bug fixes, refactoring, routine features
+- Use Standard for: Complex features, architectural changes, experimental work
 
-**🚀 Create Comprehensive PRs**:
+**Create Comprehensive PRs**:
 ```
 /project:simone:create_pr_auto T01_S01 --auto-assign --comprehensive
 ```
 
 **Automated PR Benefits**:
-- **AI-generated descriptions** with comprehensive context and quality metrics
-- **Intelligent reviewer assignment** based on code ownership and expertise  
-- **Automated labeling** and project management integration
-- **Risk assessment** with specific review focus recommendations
-- **Quality transparency** with complete validation results
+- AI-generated descriptions with comprehensive context and quality metrics
+- Intelligent reviewer assignment based on code ownership and expertise  
+- Automated labeling and project management integration
+- Risk assessment with specific review focus recommendations
+- Quality transparency with complete validation results
 
 That's the basic workflow to get started! You can also:
 
@@ -270,9 +264,11 @@ The `update_task_status` command provides comprehensive status management with f
 
 ## MCP Server Integration
 
-Simone now includes automatic integration with multiple MCP servers that provide comprehensive IDE assistance, project management, and context management capabilities.
+Simone includes integration with multiple MCP servers that provide comprehensive IDE assistance, project management, and context management capabilities. Choose between **local installation** or **Docker containers**.
 
-### Automatic Setup
+### Deployment Options
+
+#### Option 1: Local Installation (Default)
 
 All MCP servers are automatically installed during project initialization:
 
@@ -281,9 +277,65 @@ All MCP servers are automatically installed during project initialization:
 claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
 claude mcp add context7 -- uvx --from git+https://github.com/upstash/context7 context7-mcp-server
 claude mcp add playwright -- uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server
-claude mcp add work-history -- uvx mcp-work-history
+claude mcp add github -- docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN} ghcr.io/github/github-mcp-server
 claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking
+claude mcp add fetch -- uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/fetch mcp-server-fetch
 ```
+
+#### Option 2: Docker Containers (Recommended)
+
+**Choose between single-project or multi-project setup:**
+
+##### Single Project (Simple)
+```bash
+# One-time setup
+./scripts/mcp-docker.sh setup
+
+# Start MCP services (serves current project)
+./scripts/mcp-docker.sh start
+
+# Check service status
+./scripts/mcp-docker.sh health
+```
+
+##### Multi-Project (Up to 3 simultaneous projects)
+```bash
+# Setup project 1
+cd /path/to/project1
+./scripts/mcp-multi.sh setup 1
+
+# Setup project 2  
+cd /path/to/project2
+./scripts/mcp-multi.sh setup 2
+
+# Start both projects (can run simultaneously)
+./scripts/mcp-multi.sh start 1 /path/to/project1
+./scripts/mcp-multi.sh start 2 /path/to/project2
+
+# Check status of all projects
+./scripts/mcp-multi.sh status
+```
+
+**Docker Benefits:**
+- **Isolated environments** for each MCP server
+- **Consistent deployments** across different systems  
+- **Complete project isolation** with separate ports, networks, and data
+- **Simultaneous operation** of multiple projects
+- **Health monitoring** and service discovery
+- **Persistent data storage** with Docker volumes
+
+**Port Assignments (Multi-Project):**
+- **Project 1**: Gateway `9000`, Services `8080-8084`
+- **Project 2**: Gateway `9010`, Services `8090-8094`
+- **Project 3**: Gateway `9020`, Services `8100-8104`
+
+**Multi-Project Benefits:**
+- ✅ **Complete isolation** - no data mixing between projects
+- ✅ **Simultaneous operation** - work on multiple projects at once
+- ✅ **No port conflicts** - automatic port assignment
+- ✅ **Independent scaling** - start/stop projects individually
+
+See [Multi-Project Guide](docs/multi-project/README.md) for complete multi-project setup instructions.
 
 ### Capabilities
 
@@ -302,15 +354,20 @@ claude mcp add sequential-thinking -- uvx --from git+https://github.com/modelcon
 - **End-to-end testing** support
 - **Web scraping** and interaction tools
 
-**Work History** provides:
-- **Command tracking** and output logging for all Simone operations
-- **Historical context** of project development activities
-- **Audit trail** of all executed commands and their results
+**GitHub** provides:
+- **Repository management** and API integration capabilities
+- **Issue and PR management** with automated workflows
+- **Code review automation** and repository insights
 
 **Sequential Thinking** provides:
 - **Structured reasoning** and step-by-step problem-solving capabilities
 - **Enhanced logical thinking** for complex development challenges
 - **Systematic approach** to breaking down and solving technical problems
+
+**Fetch** provides:
+- **Web content retrieval** from URLs and conversion to markdown format
+- **Internet research capabilities** for gathering external documentation and resources
+- **Content extraction** for integrating external information into development workflows
 
 ### Usage
 
@@ -332,113 +389,6 @@ Simone organizes your project into:
 
 Each task gets full project context so Claude knows exactly what to build and how it fits into your architecture.
 
-## 🧪 Testing & Quality Assurance
-
-Simone v2.1.0 includes comprehensive testing infrastructure to validate the performance optimizations and ensure system reliability.
-
-### Performance Test Suite
-
-The framework includes three levels of performance testing:
-
-#### 1. **Infrastructure Tests** (Unit Tests)
-```bash
-# Run BATS unit tests for performance components
-bats tests/test-performance-infrastructure.bats
-bats tests/test-performance-commands.bats
-```
-
-**Coverage:**
-- SQLite database operations and indexing
-- Caching system with TTL management
-- Git operation batching functionality
-- Template caching effectiveness
-- Task indexing and querying performance
-
-#### 2. **Integration Tests** (End-to-End)
-```bash
-# Run comprehensive performance integration tests
-tests/test-performance-integration.sh --medium
-tests/test-performance-integration.sh --large
-```
-
-**Coverage:**
-- Baseline vs optimized performance comparison
-- Data integrity validation during optimization
-- Large dataset handling (200+ tasks)
-- Concurrent operation testing
-- Real-world usage simulation
-
-#### 3. **Quick Validation** (Smoke Tests)
-```bash
-# Run quick performance validation
-tests/run-performance-tests.sh quick
-```
-
-### Test Runner
-
-Use the unified test runner for comprehensive testing:
-
-```bash
-# Run all performance tests
-tests/run-performance-tests.sh
-
-# Run specific test suites
-tests/run-performance-tests.sh infrastructure
-tests/run-performance-tests.sh integration
-tests/run-performance-tests.sh benchmark
-
-# Run with different project sizes
-tests/run-performance-tests.sh integration large
-tests/run-performance-tests.sh benchmark small
-
-# Enable verbose output
-VERBOSE=true tests/run-performance-tests.sh
-```
-
-### GitHub Actions Integration
-
-Performance tests run automatically on:
-- **Push to main/develop**: Full test suite with performance benchmarks
-- **Pull Requests**: Regression testing and performance impact analysis
-- **Manual Trigger**: Configurable test size and benchmark options
-
-**Workflows:**
-- `.github/workflows/test-performance.yml` - Comprehensive performance testing
-- `.github/workflows/test-install.yml` - Installation testing with performance validation
-
-### Performance Claims Validation
-
-The test suite validates these v2.1.0 performance improvements:
-- ✅ **SQLite Task Database**: 95% faster than file scanning
-- ✅ **Smart Caching**: 90% faster template operations
-- ✅ **Git Batching**: 70% reduction in sequential calls
-- ✅ **Overall Performance**: 60-80% faster operations
-
-### Test Prerequisites
-
-```bash
-# Ubuntu/Debian
-sudo apt-get install sqlite3 bc git
-npm install -g bats
-
-# macOS
-brew install sqlite3 bc git bats-core
-
-# Verify installation
-tests/run-performance-tests.sh --help
-```
-
-### CI/CD Integration
-
-The performance tests integrate with continuous integration:
-
-```yaml
-# Example GitHub Actions usage
-- name: Run Performance Tests
-  run: |
-    tests/run-performance-tests.sh integration medium
-    tests/run-performance-tests.sh benchmark
-```
 
 ## 📋 Completion Naming Convention
 
