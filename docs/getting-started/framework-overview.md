@@ -253,7 +253,7 @@ Every task includes comprehensive tracking:
 
 ### 6. Cognitive Personas - Domain Expertise Integration
 
-Simone includes **9 specialized AI personas** that provide domain-specific expertise throughout the development lifecycle. This revolutionary system is inspired by **SuperClaude**, pioneering advanced AI persona concepts and cognitive enhancement patterns.
+Simone includes **9 specialized AI personas** that provide domain-specific expertise throughout the development lifecycle. This system is inspired by **SuperClaude**, which provides AI persona concepts and cognitive enhancement patterns.
 
 **Key capabilities**: 🏗️ Architecture • 🔒 Security • 🎨 Frontend • ⚙️ Backend • 📊 Analysis • 🎓 Mentoring • 🔧 Refactoring • ⚡ Performance • ✅ QA
 

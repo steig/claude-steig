@@ -1,5 +1,74 @@
 # Changelog
 
+## [3.1.0] - 2025-07-15
+
+### 🔒 Quality Enforcement System & Documentation Accuracy
+
+Major release introducing comprehensive quality enforcement to prevent lazy usage and ensure honest documentation.
+
+### ✨ Added
+
+#### **Quality Enforcement System**
+- **Garbage-in, garbage-out prevention**: Blocks lazy patterns like "TBD", "TODO", "stuff", "things"
+- **Intelligent input validation**: 10-point quality scoring system with real-time feedback
+- **Progressive quality gates**: Escalating restrictions based on input quality history
+- **Cooling-off periods**: Prevents repeated low-quality submissions with temporary blocks
+- **Historical quality tracking**: Learns from patterns and provides improvement recommendations
+- **Project manifest validation**: Requires high-quality project descriptions before task execution
+- **Enhanced safety for automation**: Strict validation for dangerous commands like blitz mode
+
+#### **Quality Commands**
+- `simone quality report` - Show comprehensive quality assessment
+- `simone quality check` - Test quality validation system
+- `simone quality reset` - Reset quality history (with confirmation)
+
+#### **Install Script Improvements**
+- **Deprecated file cleanup**: Automatically removes old commands during upgrades
+- **Quality system installation**: Deploys quality-validation.sh and integrates with main script
+- **Enhanced project manifests**: Creates quality-enabled project manifests with standards
+
+### 🔧 Changed
+
+#### **Documentation Accuracy**
+- **Honest performance claims**: Removed unverified percentage improvements (60-80% faster claims)
+- **Actual vs promised features**: Updated docs to reflect what's actually implemented
+- **Missing script references**: Fixed documentation for non-existent performance scripts
+- **Directory structure**: Updated README to match actual implementation including quality system
+
+#### **Performance Claims Correction**
+- **Removed SQLite claims**: Framework uses file-based operations, not SQLite database
+- **Git batching clarity**: Clarified that git batching exists but is optional performance feature
+- **Template caching**: Honest description of actual caching capabilities
+- **Removed percentage claims**: Replaced with qualitative improvements descriptions
+
+### 🗑️ Removed
+
+#### **Deprecated Commands Cleanup**
+- **start_task.md**: Functionality merged into `do_task` and `do_task_auto`
+- **quality_gate_validator.md**: Replaced by integrated quality enforcement system
+- **command-validator.sh**: Superseded by quality validation system
+
+#### **Inflated Documentation**
+- **Unverified performance metrics**: Removed claims like "95% faster" without benchmarking
+- **Missing script documentation**: Removed references to `performance-cache.sh`, `performance-monitor.sh`
+- **False automation promises**: Clarified actual vs promised MCP installation behavior
+
+### 📊 Quality Impact
+
+- **Prevents user frustration**: Clear quality requirements prevent failed commands
+- **Improves project outcomes**: Higher input quality leads to better project results
+- **Reduces support burden**: Quality feedback reduces user errors and confusion
+- **Maintains credibility**: Honest documentation builds trust with users
+
+### 🔄 Migration
+
+- **Automatic cleanup**: Install script removes deprecated files during upgrade
+- **Quality integration**: New projects automatically include quality enforcement
+- **Backward compatibility**: Existing projects can upgrade without data loss
+- **Graceful degradation**: Quality system optional if validation script missing
+
+---
+
 ## [3.0.0-beta] - 2025-07-15
 
 ### Documentation Standardization & Accuracy Updates
@@ -222,64 +291,60 @@ This major release significantly improves how task, sprint, milestone, and proje
 
 ## [2.1.0] - 2025-07-12
 
-### 🚀 Major Performance Optimization Release
+### 🚀 System Improvements Release
 
-#### Performance Improvements (60-80% Faster)
-- **SQLite Task Database**: Instant task queries with full-text search (95% faster than file scanning)
-- **Smart Caching System**: Template and query caching with configurable TTL (90% faster template operations)
-- **Git Operation Batching**: Intelligent batching reduces sequential Git calls by 70%
-- **Parallel Processing**: Independent operations now execute in parallel where possible
-- **Optimized Commands**: Core commands like `status`, `search`, and `sprint` completely rewritten for speed
+#### System Enhancements
+- **Simplified Architecture**: Relies on Serena MCP for I/O operations
+- **Git Operation Utilities**: Git automation tools available in performance modules
+- **Quality Enforcement System**: Real-time input validation with quality scoring
+- **Reliable Commands**: Core commands simplified for maintainability
 
-#### New Performance Infrastructure
-- **Modular Utility System**: All performance features organized in `.simone/01_UTILS/`
-  - `performance-main.sh` - Central dispatcher and initialization
-  - `performance-optimizer.sh` - Core caching and optimization engine
-  - `cache-manager.sh` - Advanced cache management with monitoring
-  - `database-manager.sh` - SQLite operations and indexing
-  - `fast-commands.sh` - Optimized command implementations
-  - `git-automation.sh` - Git workflow automation
+#### New Utility Infrastructure
+- **Modular Utility System**: All framework utilities organized in `.simone/01_UTILS/`
+  - `performance-main.sh` - Central utility dispatcher and initialization
+  - `git-automation.sh` - Git operation utilities
+  - `quality-validation.sh` - Input validation and quality scoring
+  - `metadata-manager.sh` - Project metadata management
+  - `upgrade-manager.sh` - Framework upgrade utilities
   - `hooks-integration.sh` - Claude Code integration hooks
 
-#### Performance Features
-- **Task Indexing**: Automatic SQLite database indexing of all tasks
-- **Cache Management**: Sophisticated caching with TTL, monitoring, and import/export
-- **Database Analytics**: Query performance tracking and optimization
-- **Real-time Monitoring**: Cache hit rates and performance metrics
-- **Benchmarking Tools**: Built-in performance measurement commands
+#### Utility Features
+- **Task Management**: File-based task organization and tracking
+- **Git Automation**: Batch operations and workflow utilities
+- **Quality System**: Input validation and scoring
+- **Project Management**: Metadata tracking and upgrade management
 
 #### Git Automation Enhancements
-- **Batch Staging**: Automatically batches file additions for efficiency
-- **Smart Commits**: Enhanced commit messages with change summaries
-- **Branch Optimization**: Automated cleanup of merged branches
-- **Post-commit Hooks**: Automatic cache and database updates
+- **Batch Operations**: Utilities for batching Git operations
+- **Smart Commits**: Enhanced commit message utilities
+- **Branch Management**: Git branch automation tools
+- **Hook Integration**: Claude Code integration utilities
 
 #### Claude Code Integration
-- **Automated Hooks**: Quality checks on file edits
-- **Session Management**: Cleanup and optimization on session end
+- **Hook System**: Quality checks and validation utilities
+- **Session Management**: Cleanup and project management tools
 - **Metadata Validation**: Automatic Simone structure validation
-- **Performance Tracking**: Hook execution monitoring
+- **Execution Tracking**: Hook and utility monitoring
 
 #### New Commands
-- `./simone perf status` - Lightning-fast project status
-- `./simone perf cache stats` - Cache performance statistics
-- `./simone perf db rebuild` - Rebuild task database
-- `./simone perf benchmark` - Run performance benchmarks
-- `./simone perf git batch` - Batch Git operations
-- `./simone perf hooks register` - Configure Claude Code hooks
+- `./simone perf status` - Project status using utility modules
+- `./simone perf cache` - Cache management utilities
+- `./simone perf diagnose` - Diagnose utility system
+- `./simone perf benchmark` - Basic system benchmarks  
+- `./simone perf git` - Git automation utilities
+- `./simone perf hooks` - Configure integration hooks
 
 #### Technical Improvements
-- **Lazy Loading**: Heavy operations only execute when needed
-- **Memory Caching**: Frequently accessed data kept in memory
-- **Index Optimization**: Database indexes for all common queries
-- **Batch I/O**: File operations grouped for efficiency
-- **Smart Defaults**: Auto-detection of optimal settings
+- **Modular Loading**: Utilities load only when needed
+- **Simple Caching**: Basic caching for common operations
+- **File Organization**: Organized file operations
+- **Utility Defaults**: Sensible default configurations
 
 #### Migration Notes
 - **Backward Compatible**: Existing projects work without changes
-- **Auto-initialization**: Performance features activate automatically
+- **Auto-initialization**: Utility features activate when available
 - **Optional Features**: Can be disabled via environment variables
-- **Data Preservation**: All optimizations preserve existing data
+- **Data Preservation**: All utilities preserve existing data
 
 ## 2025-07-11 - v2.0.9
 

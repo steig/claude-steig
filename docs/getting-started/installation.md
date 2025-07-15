@@ -11,49 +11,53 @@ Complete guide to installing and setting up the Simone Framework.
 
 ## Quick Installation
 
-### Option 1: Remote Installation (Recommended)
+### Option 1: Local Installation (Current Method)
 
-The fastest way to install Simone directly from GitHub:
-
-```bash
-# Install in current directory
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
-
-# Install to a specific directory
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- /path/to/project
-
-# Using wget instead of curl
-wget -qO- https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash
-
-# Force remote fetch (even from local repo)
-./install-simone.sh --remote
-
-# Force reinstallation
-curl -sSL https://raw.githubusercontent.com/steig/claude-steig/main/install-simone.sh | bash -s -- --force
-```
-
-### Option 2: Local Installation (For Development)
-
-If you want to customize Simone or contribute to its development:
+**Note**: This version of Simone is currently distributed as a local framework. Remote installation via GitHub is planned for future releases.
 
 ```bash
-# Clone the repository
-git clone https://github.com/steig/claude-steig.git
-cd claude-steig
+# Clone or download the Simone framework
+git clone [repository-url] claude-simone
+cd claude-simone
 
-# Install in current directory
+# Install in current directory  
 ./install-simone.sh
 
 # Or install in a specific project directory
 ./install-simone.sh /path/to/your/project
+
+# Force reinstallation
+./install-simone.sh --force
+
+# Show version information
+./install-simone.sh --version
+```
+
+### Option 2: Copy Framework to Project
+
+For existing projects, copy the framework structure:
+
+```bash
+# Copy Simone framework to your project
+cp -r /path/to/claude-simone/.simone /path/to/your/project/
+cp /path/to/claude-simone/simone /path/to/your/project/
+
+# Make the script executable
+chmod +x /path/to/your/project/simone
+
+# Initialize with quality enforcement
+cd /path/to/your/project
+./simone init
 ```
 
 The installer will:
-- Create the `.simone/` directory structure
-- Copy all templates and configuration files
-- Set up command integration with Claude Code
-- Create an initial project manifest
+- Create the `.simone/` directory structure with quality enforcement
+- Copy all templates and configuration files (19 templates available)
+- Set up command integration with Claude Code (47 commands)
+- Install quality validation system with lazy pattern detection
+- Create an initial project manifest with quality requirements
 - Detect if upgrading and preserve your data
+- Enable progressive quality restrictions and scoring
 
 ## Installation Options
 
@@ -306,6 +310,6 @@ After installation:
 
 ## Version Information
 
-- **Current Version**: 2.1.0
+- **Current Version**: 3.1.0
 - **Minimum Claude Code Version**: Latest stable release
 - **Repository**: https://github.com/steig/claude-steig

@@ -12,12 +12,12 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Configuration
-SIMONE_REPO="https://github.com/steig/claude-steig"
+# Configuration - Repository for remote installation
+SIMONE_REPO="https://github.com/steig/claude-steig"  # Main Simone repository
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="3.0.0-beta"
+CURRENT_VERSION="3.1.0"
 TARGET_DIR=""
 REMOTE_INSTALL=false
 TEMP_DIR=""
@@ -281,6 +281,41 @@ install_commands() {
     fi
 }
 
+# Clean up deprecated commands and files
+cleanup_deprecated_files() {
+    log "Cleaning up deprecated commands and files..."
+    
+    # Deprecated command files to remove
+    local deprecated_commands=(
+        ".claude/commands/simone/start_task.md"
+        ".claude/commands/simone/quality_gate_validator.md"
+        ".claude/commands/simone/command-validator.sh"
+    )
+    
+    # Remove deprecated command files
+    for cmd_file in "${deprecated_commands[@]}"; do
+        if [[ -f "$cmd_file" ]]; then
+            log "Removing deprecated command: $cmd_file"
+            rm -f "$cmd_file"
+        fi
+    done
+    
+    # Remove old utility scripts that have been replaced
+    if [[ -f "$SIMONE_DIR/01_UTILS/command-validator.sh" ]]; then
+        log "Removing deprecated utility: command-validator.sh"
+        rm -f "$SIMONE_DIR/01_UTILS/command-validator.sh"
+    fi
+    
+    # Clean up old cache files
+    if [[ -d "$SIMONE_DIR/.cache" ]]; then
+        log "Cleaning old cache files..."
+        find "$SIMONE_DIR/.cache" -name "*.old" -delete 2>/dev/null || true
+        find "$SIMONE_DIR/.cache" -name "*.bak" -delete 2>/dev/null || true
+    fi
+    
+    success "Deprecated files cleaned up"
+}
+
 # Upgrade existing installation
 upgrade_installation() {
     log "Upgrading existing Simone installation..."
@@ -325,6 +360,9 @@ upgrade_installation() {
         [[ -d "$SIMONE_DIR/04_GENERAL_TASKS" ]] && backup_tasks="$SIMONE_DIR/04_GENERAL_TASKS"
         [[ -d "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS" ]] && backup_architectural_decisions="$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
         [[ -d "$SIMONE_DIR/10_STATE_OF_PROJECT" ]] && backup_reviews="$SIMONE_DIR/10_STATE_OF_PROJECT"
+        
+        # Clean up deprecated files first
+        cleanup_deprecated_files
         
         # Install new version
         install_core_structure "$source_dir"

@@ -2,9 +2,7 @@
 # Simone Upgrade Manager - Smart upgrade for existing projects
 # Detects existing Simone projects and migrates them to the new performance system
 
-# Source performance modules
-source "$(dirname "${BASH_SOURCE[0]}")/performance-optimizer.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/database-manager.sh"
+# Performance modules not available - using basic implementations
 
 # Upgrade configuration
 BACKUP_DIR=".simone/.upgrade-backup-$(date +%Y%m%d-%H%M%S)"
@@ -191,7 +189,7 @@ update_project_structure() {
     local utils_dir=".simone/01_UTILS"
     local source_utils="$(dirname "${BASH_SOURCE[0]}")"
     
-    for util_file in performance-optimizer.sh cache-manager.sh database-manager.sh fast-commands.sh performance-main.sh; do
+    for util_file in fast-commands.sh performance-main.sh; do
         if [[ ! -f "$utils_dir/$util_file" ]] && [[ -f "$source_utils/$util_file" ]]; then
             cp "$source_utils/$util_file" "$utils_dir/"
             log_upgrade "✅ Installed utility: $util_file"

@@ -6,7 +6,7 @@ Simone is a directory-based project management framework designed to enhance Cla
 
 **Attribution**: This framework builds upon the original Simone implementation created by [Helmi](https://github.com/helmi). The foundational concepts and workflow design from the original work have been extended with comprehensive metadata management and project tracking capabilities.
 
-**Inspiration**: Cognitive personas and command patterns are inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude), which introduced innovative approaches to AI-driven development workflows and specialized assistant capabilities.
+**Inspiration**: Cognitive personas and command patterns are inspired by [SuperClaude](https://github.com/NomenAK/SuperClaude), which provides AI-driven development workflows and specialized assistant capabilities.
 
 **Important Considerations**: Simone is a comprehensive framework that requires understanding of its concepts and structure for effective use. It is designed for teams and individuals who benefit from structured project management integrated with AI-assisted development workflows.
 
@@ -14,7 +14,17 @@ Simone is a directory-based project management framework designed to enhance Cla
 
 ## Key Features
 
-Current version includes hierarchical completion tracking and enhanced metadata management:
+**Version 3.1.0** includes **quality enforcement system** and hierarchical completion tracking:
+
+### 🔒 Quality Enforcement System (NEW)
+- **Garbage-in, garbage-out prevention**: Blocks lazy, low-quality inputs at all entry points
+- **Intelligent input validation**: Detects lazy patterns ("TBD", "TODO", "stuff") and requires specific detail
+- **Progressive quality gates**: Escalates from warnings to blocks based on input quality history
+- **Quality scoring system**: 10-point scoring with real-time feedback on specificity and structure
+- **Cooling-off periods**: Prevents repeated low-quality submissions with temporary restrictions
+- **Historical quality tracking**: Learns from patterns and provides quality improvement recommendations
+- **Automated project validation**: Requires high-quality project manifests before any task execution
+- **Enhanced safety for automation**: Strict validation for dangerous commands like blitz mode
 
 ### Hierarchical Completion Tracking
 - Automatic status propagation from tasks through sprints to milestones and project completion
@@ -492,34 +502,47 @@ Custom Claude Code commands that power the Simone workflow:
 
 ```plaintext
 .simone/
-├── 00_PROJECT_MANIFEST.md
-├── 01_PROJECT_DOCS/
-├── 02_REQUIREMENTS/
+├── 00_PROJECT_MANIFEST.md              # Project overview with quality standards
+├── 01_PROJECT_DOCS/                    # General documentation
+├── 01_UTILS/                           # Framework utilities and scripts
+│   ├── quality-validation.sh           # 🔒 Quality enforcement system
+│   ├── performance-main.sh             # Performance optimization
+│   └── ...
+├── 02_REQUIREMENTS/                     # Milestone-based requirements
 │   ├── M01_Backend_Setup/
 │   ├── M02_Frontend_Setup/
 │   └── ...
-├── 03_SPRINTS/
+├── 03_SPRINTS/                         # Sprint planning and execution
 │   ├── S01_M01_Initial_API/
 │   ├── S02_M01_Database_Schema/
 │   └── ...
-├── 04_GENERAL_TASKS/
+├── 04_GENERAL_TASKS/                   # Non-sprint tasks
 │   ├── TX001_Refactor_Logging_Module.md  # Completed task
 │   ├── T002_API_Rate_Limiting.md          # Open task
 │   └── ...
-├── 05_ARCHITECTURE_DECISIONS/
+├── 05_ARCHITECTURAL_DECISIONS/         # ADRs and technical decisions
 │   ├── ADR001_Database_Selection.md
 │   └── ...
-├── 10_STATE_OF_PROJECT/         # Project review snapshots
-└── 99_TEMPLATES/                 # Template collection
-    ├── adr_template.md           # Architecture Decision Records
-    ├── architecture_template.md  # Complete architecture docs
-    ├── milestone_meta_template.md
-    ├── prd_template.md          # Product Requirements
-    ├── project_manifest_template.md
-    ├── project_review_template.md
-    ├── specs_template.md        # Technical specifications
-    ├── sprint_meta_template.md
-    └── task_template.md
+├── 06_BUGS/                            # Bug tracking and resolution
+│   ├── BUG001_Login_Validation_Error.md
+│   ├── BUGX002_Cache_Memory_Leak.md    # Resolved bug
+│   └── ...
+├── 07_TECHNICAL_DEBT/                  # Technical debt management
+│   ├── ACTIVE/                         # Current debt items
+│   ├── RESOLVED/                       # Completed debt items
+│   └── DEBT001_Legacy_API_Cleanup.md
+├── 10_STATE_OF_PROJECT/                # Project review snapshots
+│   ├── PROJECT_REVIEW_2024-01-15.md
+│   └── ...
+├── 99_TEMPLATES/                       # Template collection (19 templates)
+│   ├── adr_template.md                 # Architecture Decision Records
+│   ├── milestone_meta_template.md      # Milestone planning
+│   ├── prd_template.md                 # Product Requirements
+│   ├── task_template.md                # Task structure
+│   └── ...
+└── .cache/                             # System cache and quality logs
+    ├── quality-history.log             # Quality metrics tracking
+    └── ...
 ```
 
 ## Configuration Tips

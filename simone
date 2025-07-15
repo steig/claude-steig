@@ -19,11 +19,40 @@ else
     PERF_ENABLED=false
 fi
 
+# Source quality validation system
+if [[ -f ".simone/01_UTILS/quality-validation.sh" ]]; then
+    source ".simone/01_UTILS/quality-validation.sh"
+    QUALITY_ENABLED=true
+else
+    QUALITY_ENABLED=false
+fi
+
 # Main command routing
 case "${1:-help}" in
     "init"|"initialize")
-        # Initialize new Simone project
+        # Initialize new Simone project with quality enforcement
         echo "🚀 Initializing Simone project..."
+        echo
+        
+        # Quality Gate: Require proper project description
+        echo "📝 Project Setup - Quality validation required"
+        echo "============================================="
+        echo
+        
+        # Get project description with quality validation
+        echo "Enter a detailed project description:"
+        echo "(Minimum 10 meaningful words, be specific about goals and scope)"
+        echo
+        read -p "Description: " -r project_description
+        
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            if ! validate_input_quality "$project_description" 10 "Project Description" false; then
+                echo
+                echo "❌ Project initialization cancelled due to insufficient description quality."
+                echo "Please provide a detailed, specific project description and try again."
+                exit 1
+            fi
+        fi
         
         # Create directory structure
         mkdir -p .simone/{00_PROJECT_MANIFEST,01_UTILS,02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,05_ARCHITECTURAL_DECISIONS,99_TEMPLATES,.cache}
@@ -33,7 +62,7 @@ case "${1:-help}" in
             cp -r "$(dirname "$0")/.simone/01_UTILS"/* .simone/01_UTILS/ 2>/dev/null || true
         fi
         
-        # Create project manifest
+        # Create quality project manifest with actual description
         cat > .simone/00_PROJECT_MANIFEST.md << EOF
 # Project Manifest
 
@@ -43,12 +72,24 @@ case "${1:-help}" in
 ## Framework: Simone Optimized
 
 ### Description
-[Project description here]
+$project_description
+
+### Quality Standards
+- Input validation: enabled
+- Quality scoring: enabled
+- Lazy pattern detection: enabled
+- Progressive restrictions: enabled
 
 ### Performance Features
 - SQLite task indexing: enabled
 - Template caching: enabled
 - Command optimization: enabled
+
+### Success Criteria
+[To be defined based on project requirements]
+
+### Risk Assessment
+[To be completed during project planning]
 EOF
         
         # Initialize performance if available
@@ -56,12 +97,23 @@ EOF
             init_simone_performance
         fi
         
-        echo "✅ Simone project initialized"
+        # Log initial quality metrics
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            local quality_score
+            quality_score=$(calculate_quality_score "$project_description" 10 "Project Description")
+            local word_count
+            word_count=$(count_meaningful_words "$project_description")
+            log_quality_metrics "project_init" "$quality_score" "$word_count"
+        fi
+        
+        echo
+        echo "✅ Simone project initialized with quality enforcement enabled"
+        echo "📊 All future commands will validate input quality to prevent lazy usage"
         ;;
         
     "status")
         if [[ "$PERF_ENABLED" == "true" ]]; then
-            fast_status
+            simple_status
         else
             echo "📊 Project Status"
             find .simone -name "*.md" -type f | wc -l | xargs echo "Total files:"
@@ -71,7 +123,7 @@ EOF
     "search")
         shift
         if [[ "$PERF_ENABLED" == "true" ]]; then
-            fast_search "$@"
+            simple_search "$@"
         else
             grep -r "$@" .simone --include="*.md"
         fi
@@ -81,11 +133,47 @@ EOF
         shift
         case "${1:-list}" in
             "create"|"new")
+                # Quality Gate: Validate project manifest before task creation
+                if [[ "$QUALITY_ENABLED" == "true" ]]; then
+                    if ! validate_project_manifest; then
+                        echo
+                        echo "❌ Task creation blocked. Please improve project manifest quality first."
+                        exit 1
+                    fi
+                fi
+                
+                # Interactive task creation with quality validation
+                echo "📝 Task Creation - Quality validation required"
+                echo "============================================="
+                echo
+                
+                # Get task details with validation
+                read -p "Task title (be specific): " -r task_title
+                echo
+                echo "Task description (explain what needs to be done and why):"
+                read -r task_description
+                echo
+                echo "Acceptance criteria (how will you know it's complete?):"
+                read -r acceptance_criteria
+                echo
+                
+                # Validate task inputs
+                if [[ "$QUALITY_ENABLED" == "true" ]]; then
+                    if ! validate_task_creation "$task_title" "$task_description" "$acceptance_criteria"; then
+                        echo
+                        echo "❌ Task creation cancelled due to insufficient quality."
+                        echo "Please provide more detailed, specific information and try again."
+                        exit 1
+                    fi
+                fi
+                
                 if [[ "$PERF_ENABLED" == "true" ]]; then
-                    fast_create_task "general" "${2:-New Task}" "${3:-medium}" "${4:-unassigned}"
+                    fast_create_task "general" "$task_title" "${3:-medium}" "${4:-unassigned}"
                 else
-                    echo "Creating task..."
-                    # Basic task creation
+                    echo "✅ Creating task: $task_title"
+                    echo "   Description: $task_description"
+                    echo "   Acceptance: $acceptance_criteria"
+                    # Basic task creation would go here
                 fi
                 ;;
             "list")
@@ -100,11 +188,75 @@ EOF
         
     "sprint")
         shift
+        # Quality Gate: Validate project manifest before sprint operations
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            if ! validate_project_manifest; then
+                echo
+                echo "❌ Sprint operations blocked. Please improve project manifest quality first."
+                exit 1
+            fi
+        fi
+        
         if [[ "$PERF_ENABLED" == "true" ]]; then
-            fast_sprint_status "$@"
+            simple_sprint_status "$@"
         else
             echo "Sprint management requires performance modules"
         fi
+        ;;
+        
+    "blitz")
+        shift
+        echo "🚀 Sprint Blitz Automation"
+        echo "========================="
+        echo
+        echo "⚠️  WARNING: This command executes ALL tasks in a sprint with minimal human intervention."
+        echo
+        
+        # Quality Gate: Enhanced validation for dangerous blitz mode
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            echo "🔒 SAFETY CHECK: Blitz mode requires high-quality project foundation"
+            echo "------------------------------------------------------------"
+            echo
+            
+            # Validate project manifest
+            if ! validate_project_manifest; then
+                echo
+                echo "❌ Blitz mode blocked. Project manifest quality insufficient."
+                exit 1
+            fi
+            
+            # Check recent quality history
+            if ! check_project_quality_history; then
+                echo
+                echo "❌ Blitz mode blocked due to recent low-quality inputs."
+                echo "Please improve project planning quality before using automated execution."
+                exit 1
+            fi
+            
+            # Generate quality report
+            echo "📊 Current project quality status:"
+            generate_quality_report
+            echo
+            
+            # Final confirmation
+            echo "🚨 FINAL WARNING: Blitz mode will execute tasks automatically."
+            echo "Are you confident in the quality of your project planning?"
+            echo
+            read -p "Type 'EXECUTE' to confirm blitz mode: " -r confirm
+            
+            if [[ "$confirm" != "EXECUTE" ]]; then
+                echo "❌ Blitz mode cancelled. Good decision - take time to plan properly."
+                exit 0
+            fi
+            
+            echo
+            echo "✅ Quality validation passed. Proceeding with blitz mode."
+            echo
+        fi
+        
+        echo "Use Claude Code with: /project:simone:blitz [sprint_id]"
+        echo
+        echo "For the full command template, see: .simone/99_TEMPLATES/blitz.md"
         ;;
         
     "perf"|"performance")
@@ -127,17 +279,68 @@ EOF
         fi
         ;;
         
+    "quality"|"qa")
+        shift
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            case "${1:-report}" in
+                "report"|"status")
+                    echo "📊 Project Quality Assessment"
+                    echo "=============================="
+                    echo
+                    
+                    # Check project manifest quality
+                    if validate_project_manifest; then
+                        echo "✅ Project manifest: High quality"
+                    else
+                        echo "❌ Project manifest: Needs improvement"
+                    fi
+                    echo
+                    
+                    # Show quality history
+                    generate_quality_report
+                    ;;
+                "check")
+                    echo "🔍 Testing quality validation system..."
+                    echo
+                    read -p "Enter test text: " -r test_text
+                    validate_input_quality "$test_text" 5 "Test Input" true
+                    ;;
+                "reset")
+                    read -p "Reset quality history? This will delete all quality metrics. (y/N): " -r
+                    if [[ $REPLY =~ ^[Yy]$ ]]; then
+                        rm -f ".simone/.cache/quality-history.log"
+                        echo "✅ Quality history reset."
+                    else
+                        echo "❌ Reset cancelled."
+                    fi
+                    ;;
+                *)
+                    echo "Quality commands:"
+                    echo "  quality report    Show project quality assessment"
+                    echo "  quality check     Test quality validation system"
+                    echo "  quality reset     Reset quality history"
+                    ;;
+            esac
+        else
+            echo "❌ Quality validation system not available"
+            echo "Copy .simone/01_UTILS from the Simone repository"
+        fi
+        ;;
+        
     "help"|*)
         echo "Simone Framework - Performance-Optimized Edition"
         echo
         echo "Commands:"
-        echo "  init              Initialize new project"
+        echo "  init              Initialize new project (with quality validation)"
         echo "  upgrade           Upgrade existing project to performance system"
         echo "  status            Show project status"
         echo "  search <query>    Search tasks"
-        echo "  task create       Create new task"
+        echo "  task create       Create new task (with quality validation)"
         echo "  task list         List tasks"
-        echo "  sprint [status]   Sprint management"
+        echo "  sprint [status]   Sprint management (quality gates)"
+        echo "  blitz [sprint]    Automated sprint execution (strict validation)"
+        echo "  quality report    Show project quality assessment"
+        echo "  quality check     Test quality validation system"
         
         if [[ "$PERF_ENABLED" == "true" ]]; then
             echo
@@ -146,6 +349,15 @@ EOF
             echo "  perf db           Database management"
             echo "  perf benchmark    Run performance benchmark"
             echo "  perf diagnose     Diagnose performance issues"
+        fi
+        
+        if [[ "$QUALITY_ENABLED" == "true" ]]; then
+            echo
+            echo "🔒 Quality Enforcement Active:"
+            echo "  • Lazy pattern detection enabled"
+            echo "  • Minimum word count requirements enforced"
+            echo "  • Progressive restrictions for poor quality inputs"
+            echo "  • Quality scoring and history tracking active"
         fi
         ;;
 esac

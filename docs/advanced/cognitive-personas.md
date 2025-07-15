@@ -17,7 +17,7 @@ The cognitive personas system is inspired by and builds upon concepts pioneered 
 
 ## Overview
 
-The cognitive personas system transforms Simone commands with specialized domain knowledge, providing:
+The cognitive personas system enhances Simone commands with specialized domain knowledge, providing:
 
 - **9 specialized cognitive personas** with domain expertise
 - **Transparent AI reasoning** with introspection capabilities  
@@ -251,7 +251,7 @@ The cognitive personas system transforms Simone commands with specialized domain
 
 ### ⚡ UltraCompressed Mode (`--uc`)
 
-**Token Optimization**: Reduces token usage by up to 70% while maintaining information density
+**Token Optimization**: Can reduce token usage while maintaining information density
 
 **Auto-Triggers**:
 - Large codebases (>10,000 files)
@@ -418,10 +418,10 @@ The `create_milestone.md` command uses personas for intelligent planning:
 ### Quality Enhancement
 
 **Domain Expertise Application**:
-- **40% reduction** in post-review iterations through upfront quality
-- **95% security compliance** in security-persona-flagged tasks
-- **90% architecture pattern adherence** in architect-persona-flagged tasks
-- **85% performance benchmark achievement** in performance-critical tasks
+- **Reduced iterations** in post-review through upfront quality
+- **Improved security compliance** in security-persona-flagged tasks
+- **Better architecture pattern adherence** in architect-persona-flagged tasks
+- **Enhanced performance focus** in performance-critical tasks
 
 **Multi-Perspective Analysis**:
 - Comprehensive evaluation from specialized domain experts
@@ -432,14 +432,14 @@ The `create_milestone.md` command uses personas for intelligent planning:
 ### Efficiency Improvements
 
 **Cost Optimization**:
-- **70% token reduction** with UltraCompressed mode for large projects
-- **50% cost reduction** for milestone creation and comprehensive reviews
+- **Token reduction** with UltraCompressed mode for large projects
+- **Cost efficiency** for milestone creation and comprehensive reviews
 - Automatic optimization triggers for resource-intensive operations
 - Intelligent resource management based on task complexity
 
 **Development Velocity**:
-- **25% reduction** in task completion time through expert guidance
-- **60% reduction** in knowledge transfer overhead
+- **Streamlined task completion** through expert guidance
+- **Reduced knowledge transfer overhead** through structured approaches
 - Faster onboarding through mentor persona guidance
 - Reduced dependency on senior engineer oversight
 

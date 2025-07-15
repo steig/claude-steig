@@ -2,11 +2,11 @@
 # Git automation utilities for Simone
 # Provides intelligent automation for Git operations
 
-# Source performance optimizer
-source "$(dirname "${BASH_SOURCE[0]}")/performance-optimizer.sh"
+# Performance optimizer not available - functions will use basic implementations
 
 # Configuration
-AUTOMATION_DIR="${SIMONE_CACHE_DIR}/automation"
+SIMONE_CACHE_DIR="${SIMONE_CACHE_DIR:-.simone/.cache}"
+AUTOMATION_DIR="$SIMONE_CACHE_DIR/automation"
 AUTOMATION_LOG="$AUTOMATION_DIR/automation.log"
 GIT_BATCH_FILE="$AUTOMATION_DIR/git_batch.tmp"
 
