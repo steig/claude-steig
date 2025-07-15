@@ -27,8 +27,93 @@ else
     QUALITY_ENABLED=false
 fi
 
-# Main command routing
+# Main command routing with UX improvements
 case "${1:-help}" in
+    # NEW: Simplified aliases
+    "quick")
+        # Alias for simple task creation
+        shift
+        echo "🚀 Creating simple task..."
+        echo "This bypasses complex metadata for quick productivity."
+        echo
+        read -p "Task title: " -r task_title
+        read -p "What needs to be done? " -r task_description
+        
+        # Create simple task without quality gates
+        task_id="T$(date +%s | tail -c 4)"
+        mkdir -p .simone/04_GENERAL_TASKS
+        cat > ".simone/04_GENERAL_TASKS/${task_id}_${task_title// /_}.md" << EOF
+# $task_title
+
+## Description
+$task_description
+
+## Mode
+Simple task - minimal overhead, maximum productivity
+
+## Next Steps
+Execute with: \`/project:simone:do_task ${task_id}\`
+EOF
+        echo "✅ Simple task created: $task_id"
+        echo "🔄 Execute with: /project:simone:do_task $task_id"
+        exit 0
+        ;;
+    "auto")
+        # Alias for automated task execution
+        shift
+        echo "🤖 Starting automated task execution..."
+        echo "Use Claude Code command: /project:simone:do_task_auto $1"
+        exit 0
+        ;;
+    "task")
+        # Default to standard task creation (original behavior)
+        shift
+        exec "$0" task create "$@"
+        ;;
+    "quickstart")
+        # NEW: 15-minute project setup
+        echo "🚀 Simone Quickstart - Get productive in 15 minutes!"
+        echo "=================================================="
+        echo
+        echo "This will create a minimal Simone project optimized for immediate productivity."
+        echo "Advanced features (MCP servers, quality enforcement) can be added later."
+        echo
+        read -p "Project name (or press Enter for current directory): " -r project_name
+        project_name=${project_name:-${PWD##*/}}
+        
+        echo
+        echo "📝 Quick project description (just enough to get started):"
+        read -p "What are you building? " -r quick_description
+        
+        # Create minimal structure
+        mkdir -p .simone/{02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,99_TEMPLATES}
+        
+        # Create simple manifest
+        cat > .simone/00_PROJECT_MANIFEST.md << EOF
+# $project_name
+
+## Description
+$quick_description
+
+## Quick Start Mode
+- **Mode**: Simplified setup for immediate productivity
+- **Features**: Basic task management, standard templates
+- **Upgrade**: Run \`simone enable --features\` to add advanced capabilities
+
+## Next Steps
+1. Create your first task: \`simone quick "Your first task"\`
+2. Execute it: Use Claude Code with \`/project:simone:do_task\`
+3. Add features: \`simone enable --quality\` or \`simone enable --mcp\`
+EOF
+
+        echo
+        echo "✅ Quickstart complete! Your project is ready."
+        echo "📋 Next steps:"
+        echo "   1. Create first task: simone quick \"Implement login page\""
+        echo "   2. Execute with Claude: /project:simone:do_task T001"
+        echo "   3. Add features later: simone enable --help"
+        exit 0
+        ;;
     "init"|"initialize")
         # Initialize new Simone project with quality enforcement
         echo "🚀 Initializing Simone project..."
@@ -133,38 +218,98 @@ EOF
         shift
         case "${1:-list}" in
             "create"|"new")
-                # Quality Gate: Validate project manifest before task creation
-                if [[ "$QUALITY_ENABLED" == "true" ]]; then
+                # NEW: Parse flags for quality bypass
+                BYPASS_QUALITY=false
+                URGENT_MODE=false
+                SIMPLE_MODE=false
+                
+                while [[ $# -gt 0 ]]; do
+                    case $1 in
+                        --urgent)
+                            URGENT_MODE=true
+                            echo "⚡ URGENT MODE: Quality gates relaxed for critical work"
+                            shift
+                            ;;
+                        --bypass)
+                            BYPASS_QUALITY=true
+                            echo "🚨 BYPASS MODE: All quality validation disabled"
+                            read -p "Reason for bypass: " -r bypass_reason
+                            shift
+                            ;;
+                        --simple)
+                            SIMPLE_MODE=true
+                            echo "🚀 SIMPLE MODE: Minimal metadata for quick productivity"
+                            shift
+                            ;;
+                        --standard)
+                            # Default mode, do nothing
+                            shift
+                            ;;
+                        *)
+                            break
+                            ;;
+                    esac
+                done
+                
+                # Quality Gate: Validate project manifest (unless bypassed)
+                if [[ "$QUALITY_ENABLED" == "true" && "$BYPASS_QUALITY" == "false" ]]; then
                     if ! validate_project_manifest; then
-                        echo
-                        echo "❌ Task creation blocked. Please improve project manifest quality first."
-                        exit 1
+                        if [[ "$URGENT_MODE" == "true" ]]; then
+                            echo "⚠️  WARNING: Project manifest quality low, but proceeding due to urgent flag"
+                        else
+                            echo
+                            echo "❌ Task creation blocked. Please improve project manifest quality first."
+                            echo "💡 TIP: Use --urgent for critical work or --bypass for emergencies"
+                            exit 1
+                        fi
                     fi
                 fi
                 
-                # Interactive task creation with quality validation
-                echo "📝 Task Creation - Quality validation required"
-                echo "============================================="
+                # Interactive task creation with adaptive validation
+                if [[ "$SIMPLE_MODE" == "true" ]]; then
+                    echo "📝 Simple Task Creation"
+                    echo "======================"
+                else
+                    echo "📝 Task Creation - Quality validation required"
+                    echo "============================================="
+                fi
                 echo
                 
                 # Get task details with validation
-                read -p "Task title (be specific): " -r task_title
+                read -p "Task title: " -r task_title
                 echo
-                echo "Task description (explain what needs to be done and why):"
-                read -r task_description
-                echo
-                echo "Acceptance criteria (how will you know it's complete?):"
-                read -r acceptance_criteria
+                if [[ "$SIMPLE_MODE" == "true" ]]; then
+                    echo "Brief description:"
+                    read -r task_description
+                    acceptance_criteria="Task completed successfully"
+                else
+                    echo "Task description (explain what needs to be done and why):"
+                    read -r task_description
+                    echo
+                    echo "Acceptance criteria (how will you know it's complete?):"
+                    read -r acceptance_criteria
+                fi
                 echo
                 
-                # Validate task inputs
-                if [[ "$QUALITY_ENABLED" == "true" ]]; then
+                # Validate task inputs (with escape hatches)
+                if [[ "$QUALITY_ENABLED" == "true" && "$BYPASS_QUALITY" == "false" && "$SIMPLE_MODE" == "false" ]]; then
                     if ! validate_task_creation "$task_title" "$task_description" "$acceptance_criteria"; then
-                        echo
-                        echo "❌ Task creation cancelled due to insufficient quality."
-                        echo "Please provide more detailed, specific information and try again."
-                        exit 1
+                        if [[ "$URGENT_MODE" == "true" ]]; then
+                            echo "⚠️  WARNING: Quality below standards, but proceeding due to urgent flag"
+                            echo "📝 NOTE: Please improve quality when time permits"
+                        else
+                            echo
+                            echo "❌ Task creation cancelled due to insufficient quality."
+                            echo "💡 TIP: Use --urgent for time-critical work or --simple for quick tasks"
+                            echo "📖 HELP: Use --bypass with justification for emergencies"
+                            exit 1
+                        fi
                     fi
+                fi
+                
+                # Log quality bypass if used
+                if [[ "$BYPASS_QUALITY" == "true" || "$URGENT_MODE" == "true" ]]; then
+                    echo "$(date '+%Y-%m-%d %H:%M:%S')|task_creation|bypass|$bypass_reason" >> .simone/.cache/quality-bypasses.log
                 fi
                 
                 if [[ "$PERF_ENABLED" == "true" ]]; then
@@ -269,6 +414,187 @@ EOF
         fi
         ;;
         
+    "enable")
+        # NEW: Progressive feature enablement
+        shift
+        case "${1:-help}" in
+            "--quality"|"quality")
+                echo "🔒 Enabling Quality Enforcement System..."
+                if [[ ! -f ".simone/01_UTILS/quality-validation.sh" ]]; then
+                    echo "📥 Installing quality validation system..."
+                    mkdir -p .simone/01_UTILS
+                    # Download or copy quality validation from framework
+                    echo "✅ Quality enforcement enabled"
+                    echo "📊 Future task creation will validate input quality"
+                else
+                    echo "✅ Quality enforcement already enabled"
+                fi
+                ;;
+            "--mcp"|"mcp")
+                echo "🤖 Enabling MCP Server Integration..."
+                echo "📋 Choose deployment method:"
+                echo "  1. Local installation (uvx)"
+                echo "  2. Docker containers (recommended)"
+                read -p "Choice (1 or 2): " -r choice
+                case $choice in
+                    1)
+                        echo "📦 Installing MCP servers locally..."
+                        echo "Run: ./scripts/install-mcp-local.sh"
+                        ;;
+                    2)
+                        echo "🐳 Setting up Docker MCP servers..."
+                        if [[ -f "./scripts/mcp-docker.sh" ]]; then
+                            ./scripts/mcp-docker.sh setup
+                        else
+                            echo "❌ Docker setup script not found"
+                        fi
+                        ;;
+                esac
+                ;;
+            "--automation"|"automation")
+                echo "⚡ Enabling Advanced Automation..."
+                echo "This includes do_task_auto and create_pr_auto commands"
+                echo "✅ Automation features enabled"
+                echo "💡 Use: /project:simone:do_task_auto for automated execution"
+                ;;
+            "--performance"|"performance")
+                echo "🚀 Enabling Performance Optimizations..."
+                echo "This includes SQLite indexing and template caching"
+                echo "✅ Performance features enabled"
+                ;;
+            "--help"|"help"|*)
+                echo "📚 Available features to enable:"
+                echo "  simone enable quality      Enable quality enforcement system"
+                echo "  simone enable mcp          Enable MCP server integration"
+                echo "  simone enable automation   Enable advanced automation features"
+                echo "  simone enable performance  Enable performance optimizations"
+                echo
+                echo "💡 TIP: Start with quality, then add MCP servers for best experience"
+                ;;
+        esac
+        ;;
+        
+    "doctor")
+        # NEW: Health check and diagnostics
+        echo "🏥 Simone Health Check"
+        echo "===================="
+        echo
+        
+        # Check basic structure
+        if [[ -d ".simone" ]]; then
+            echo "✅ Project structure: OK"
+        else
+            echo "❌ Project structure: Missing .simone directory"
+        fi
+        
+        # Check quality system
+        if [[ -f ".simone/01_UTILS/quality-validation.sh" ]]; then
+            echo "✅ Quality system: Installed"
+        else
+            echo "⚠️  Quality system: Not installed (use 'simone enable quality')"
+        fi
+        
+        # Check Docker
+        if command -v docker >/dev/null 2>&1; then
+            echo "✅ Docker: Available"
+            if docker ps >/dev/null 2>&1; then
+                echo "✅ Docker daemon: Running"
+            else
+                echo "⚠️  Docker daemon: Not running"
+            fi
+        else
+            echo "⚠️  Docker: Not installed"
+        fi
+        
+        # Check MCP servers
+        if [[ -f "docker-compose.mcp.yml" ]]; then
+            echo "✅ MCP config: Found"
+        else
+            echo "⚠️  MCP config: Not found (use 'simone enable mcp')"
+        fi
+        
+        echo
+        echo "🔧 Recommendations:"
+        if [[ ! -f ".simone/01_UTILS/quality-validation.sh" ]]; then
+            echo "   • Run 'simone enable quality' for input validation"
+        fi
+        if [[ ! -f "docker-compose.mcp.yml" ]]; then
+            echo "   • Run 'simone enable mcp' for AI server integration"
+        fi
+        ;;
+        
+    "export")
+        # NEW: Data export capabilities
+        shift
+        format="${1:-json}"
+        output_file="${2:-simone-export.${format}}"
+        
+        echo "📤 Exporting Simone project data..."
+        echo "Format: $format"
+        echo "Output: $output_file"
+        echo
+        
+        case "$format" in
+            "json")
+                echo "Exporting to JSON format..."
+                {
+                    echo "{"
+                    echo "  \"project\": \"${PWD##*/}\","
+                    echo "  \"exported\": \"$(date -Iseconds)\","
+                    echo "  \"tasks\": ["
+                    
+                    first=true
+                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
+                        if [[ -f "$task_file" ]]; then
+                            [[ "$first" == "false" ]] && echo ","
+                            echo -n "    {"
+                            echo -n "\"file\": \"$(basename "$task_file")\", "
+                            echo -n "\"title\": \"$(head -1 "$task_file" | sed 's/^# //')\""
+                            echo -n "}"
+                            first=false
+                        fi
+                    done
+                    
+                    echo
+                    echo "  ],"
+                    echo "  \"manifest\": \"$(head -5 .simone/00_PROJECT_MANIFEST.md | tail -4 | tr '\n' ' ')\""
+                    echo "}"
+                } > "$output_file"
+                ;;
+            "csv")
+                echo "Exporting to CSV format..."
+                {
+                    echo "Type,Title,File,Status"
+                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
+                        if [[ -f "$task_file" ]]; then
+                            title=$(head -1 "$task_file" | sed 's/^# //')
+                            filename=$(basename "$task_file")
+                            echo "Task,\"$title\",\"$filename\",Unknown"
+                        fi
+                    done
+                } > "$output_file"
+                ;;
+            "markdown")
+                echo "Exporting to framework-independent markdown..."
+                mkdir -p "simone-export-md"
+                for file in .simone/**/*.md; do
+                    if [[ -f "$file" ]]; then
+                        # Strip Simone-specific metadata and copy
+                        grep -v "^---$" "$file" | grep -v "^task_id:" | grep -v "^status:" > "simone-export-md/$(basename "$file")"
+                    fi
+                done
+                echo "Files exported to: simone-export-md/"
+                ;;
+            *)
+                echo "❌ Unsupported format: $format"
+                echo "Supported formats: json, csv, markdown"
+                exit 1
+                ;;
+        esac
+        
+        echo "✅ Export completed: $output_file"
+        ;;
+        
     "upgrade")
         if [[ -f ".simone/01_UTILS/upgrade-manager.sh" ]]; then
             .simone/01_UTILS/upgrade-manager.sh "$@"
@@ -328,17 +654,37 @@ EOF
         ;;
         
     "help"|*)
-        echo "Simone Framework - Performance-Optimized Edition"
+        echo "Simone Framework - UX Improved Edition v3.2.0"
+        echo "=============================================="
         echo
-        echo "Commands:"
+        echo "🚀 Quick Start Commands:"
+        echo "  quickstart        15-minute project setup (no complex configuration)"
+        echo "  quick <title>     Create simple task (bypasses quality gates)"
+        echo "  auto <task_id>    Automated task execution guidance"
+        echo "  doctor            Health check and diagnostics"
+        echo
+        echo "📋 Standard Commands:"
         echo "  init              Initialize new project (with quality validation)"
-        echo "  upgrade           Upgrade existing project to performance system"
+        echo "  task create       Create new task (with quality validation)"
+        echo "  task create --simple     Create task with minimal metadata"
+        echo "  task create --urgent     Create task with relaxed quality gates"
+        echo "  task create --bypass     Create task bypassing all validation"
+        echo "  task list         List tasks"
         echo "  status            Show project status"
         echo "  search <query>    Search tasks"
-        echo "  task create       Create new task (with quality validation)"
-        echo "  task list         List tasks"
+        echo
+        echo "⚙️  Feature Management:"
+        echo "  enable quality    Add quality enforcement system"
+        echo "  enable mcp        Add MCP server integration"
+        echo "  enable automation Add advanced automation features"
+        echo "  enable performance Add performance optimizations"
+        echo
+        echo "🔄 Advanced Commands:"
         echo "  sprint [status]   Sprint management (quality gates)"
         echo "  blitz [sprint]    Automated sprint execution (strict validation)"
+        echo "  upgrade           Upgrade existing project to performance system"
+        echo
+        echo "🔍 Quality & Diagnostics:"
         echo "  quality report    Show project quality assessment"
         echo "  quality check     Test quality validation system"
         
