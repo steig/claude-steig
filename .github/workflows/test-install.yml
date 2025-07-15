@@ -224,14 +224,35 @@ jobs:
         # Install and verify backup was created
         echo "y" | bash $GITHUB_WORKSPACE/install-simone.sh
         
-        # Should have backup
+        # Should have backup - with detailed debugging
+        echo "🔍 Checking for backup creation..."
         ls -la
-        BACKUP_DIRS=($(find . -maxdepth 1 -type d -name ".simone.backup.*" 2>/dev/null))
-        [[ ${#BACKUP_DIRS[@]} -gt 0 ]] || (echo "ERROR: No backup created" && exit 1)
-        echo "✅ Backup found: ${BACKUP_DIRS[0]}"
         
-        # Original data should be preserved somewhere
-        find . -name "important.md" | grep -q "backup" || (echo "ERROR: Important data not backed up" && exit 1)
+        echo "🔍 Looking for backup directories..."
+        find . -maxdepth 1 -type d -name ".simone.backup.*" || echo "No backup dirs found"
+        
+        BACKUP_DIRS=($(find . -maxdepth 1 -type d -name ".simone.backup.*" 2>/dev/null))
+        echo "🔍 Found ${#BACKUP_DIRS[@]} backup directories"
+        
+        if [[ ${#BACKUP_DIRS[@]} -gt 0 ]]; then
+            echo "✅ Backup found: ${BACKUP_DIRS[0]}"
+            
+            # Original data should be preserved somewhere
+            echo "🔍 Looking for important.md files..."
+            find . -name "important.md" -type f
+            
+            if find . -name "important.md" | grep -q "backup"; then
+                echo "✅ Important data backed up successfully"
+            else
+                echo "❌ ERROR: Important data not found in backup"
+                exit 1
+            fi
+        else
+            echo "❌ ERROR: No backup created"
+            echo "🔍 Current directory contents:"
+            find . -type d | head -10
+            exit 1
+        fi
 
   test-performance-post-install:
     name: Test Performance System After Installation

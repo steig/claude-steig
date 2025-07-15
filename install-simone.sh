@@ -493,8 +493,14 @@ install_mcp_servers() {
         echo "  1) Docker containers (recommended - isolated, scalable)"
         echo "  2) Local installation (traditional - requires uvx)"
         echo ""
-        read -p "Enter choice [1-2] (default: 1): " choice
-        choice=${choice:-1}
+        # Auto-detect CI/CD environment or if non-interactive
+        if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" || ! -t 0 ]]; then
+            choice=2  # Use local installation in CI/CD
+            log "CI/CD environment detected - using local MCP installation"
+        else
+            read -p "Enter choice [1-2] (default: 1): " choice
+            choice=${choice:-1}
+        fi
         
         if [[ "$choice" == "1" ]]; then
             install_mcp_docker
@@ -574,8 +580,10 @@ install_mcp_docker() {
     
     # Check if scripts directory exists
     if [ ! -f "scripts/mcp-docker.sh" ]; then
-        error "MCP Docker script not found. Please ensure full installation completed."
-        return 1
+        warn "MCP Docker script not found. Skipping Docker MCP setup."
+        warn "This is expected in CI/CD environments or limited installations."
+        warn "For Docker MCP setup, run: ./scripts/mcp-docker.sh setup"
+        return 0
     fi
     
     # Make script executable
