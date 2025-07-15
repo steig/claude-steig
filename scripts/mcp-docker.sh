@@ -35,21 +35,213 @@ info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
 
-# Check if Docker and Docker Compose are installed
+# NEW: Auto-detect and resolve port conflicts
+detect_port_conflicts() {
+    local ports=(9000 8080 8081 8082 8083 8084)
+    local conflicts=()
+    
+    log "Checking for port conflicts..."
+    
+    for port in "${ports[@]}"; do
+        if netstat -tlpn 2>/dev/null | grep -q ":$port "; then
+            conflicts+=($port)
+            warn "Port $port is already in use"
+        fi
+    done
+    
+    if [[ ${#conflicts[@]} -gt 0 ]]; then
+        warn "Found port conflicts: ${conflicts[*]}"
+        echo
+        echo "Options:"
+        echo "1. Auto-find alternative ports"
+        echo "2. Stop conflicting services"
+        echo "3. Exit and resolve manually"
+        read -p "Choose option (1-3): " -r choice
+        
+        case $choice in
+            1)
+                auto_assign_ports "${conflicts[@]}"
+                ;;
+            2)
+                stop_conflicting_services "${conflicts[@]}"
+                ;;
+            3)
+                error "Please resolve port conflicts manually and retry"
+                exit 1
+                ;;
+        esac
+    else
+        log "No port conflicts detected"
+    fi
+}
+
+# Auto-assign alternative ports
+auto_assign_ports() {
+    local conflicts=("$@")
+    local port_map=""
+    
+    log "Auto-assigning alternative ports..."
+    
+    for port in "${conflicts[@]}"; do
+        local new_port=$((port + 1000))
+        while netstat -tlpn 2>/dev/null | grep -q ":$new_port "; do
+            new_port=$((new_port + 1))
+        done
+        port_map+="$port->$new_port "
+        log "Reassigning port $port to $new_port"
+    done
+    
+    # Update docker-compose file with new ports
+    if [[ -n "$port_map" ]]; then
+        log "Updating docker-compose configuration..."
+        # This would update the compose file with new ports
+        warn "Manual port configuration required in docker-compose.mcp.yml"
+        warn "Port mappings needed: $port_map"
+    fi
+}
+
+# Stop conflicting services
+stop_conflicting_services() {
+    local conflicts=("$@")
+    
+    for port in "${conflicts[@]}"; do
+        local pid=$(netstat -tlpn 2>/dev/null | grep ":$port " | awk '{print $7}' | cut -d'/' -f1)
+        if [[ -n "$pid" && "$pid" != "-" ]]; then
+            echo "Stop service on port $port (PID: $pid)? [y/N]"
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                kill "$pid" 2>/dev/null && log "Stopped service on port $port" || warn "Failed to stop service on port $port"
+            fi
+        fi
+    done
+}
+
+# Check if Docker and Docker Compose are installed with auto-fixes
 check_dependencies() {
     log "Checking dependencies..."
     
+    # Check Docker
     if ! command -v docker >/dev/null 2>&1; then
-        error "Docker is not installed. Please install Docker first."
-        exit 1
+        error "Docker is not installed."
+        echo
+        echo "🔧 Auto-fix options:"
+        echo "1. Install Docker automatically (requires sudo)"
+        echo "2. Show manual installation instructions"
+        echo "3. Exit"
+        read -p "Choose option (1-3): " -r choice
+        
+        case $choice in
+            1)
+                install_docker_auto
+                ;;
+            2)
+                show_docker_install_instructions
+                exit 1
+                ;;
+            3)
+                exit 1
+                ;;
+        esac
     fi
     
+    # Check Docker daemon
+    if ! docker ps >/dev/null 2>&1; then
+        error "Docker daemon is not running."
+        echo
+        echo "🔧 Auto-fix options:"
+        echo "1. Start Docker automatically"
+        echo "2. Show manual start instructions"
+        read -p "Choose option (1-2): " -r choice
+        
+        case $choice in
+            1)
+                start_docker_daemon
+                ;;
+            2)
+                show_docker_start_instructions
+                exit 1
+                ;;
+        esac
+    fi
+    
+    # Check Docker Compose
     if ! command -v docker-compose >/dev/null 2>&1 && ! docker compose version >/dev/null 2>&1; then
-        error "Docker Compose is not installed. Please install Docker Compose first."
-        exit 1
+        error "Docker Compose is not installed."
+        echo
+        echo "🔧 Auto-fix: Installing Docker Compose plugin..."
+        install_docker_compose
     fi
     
     log "Dependencies check passed"
+}
+
+# Auto-install Docker (Linux only)
+install_docker_auto() {
+    log "Attempting to install Docker automatically..."
+    
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
+        sudo usermod -aG docker "$USER"
+        log "Docker installed. Please log out and back in, then rerun this script."
+        exit 0
+    else
+        error "Automatic Docker installation only supported on Linux"
+        show_docker_install_instructions
+        exit 1
+    fi
+}
+
+# Show Docker installation instructions
+show_docker_install_instructions() {
+    echo
+    echo "📖 Manual Docker Installation:"
+    echo "Linux:   curl -fsSL https://get.docker.com | sh"
+    echo "macOS:   brew install --cask docker"
+    echo "Windows: Download from https://docker.com/products/docker-desktop"
+}
+
+# Start Docker daemon
+start_docker_daemon() {
+    log "Attempting to start Docker daemon..."
+    
+    if command -v systemctl >/dev/null 2>&1; then
+        sudo systemctl start docker
+        sudo systemctl enable docker
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        open -a Docker
+        log "Docker Desktop starting... Please wait for it to fully start."
+        sleep 10
+    else
+        error "Please start Docker manually for your system"
+        exit 1
+    fi
+}
+
+# Show Docker start instructions
+show_docker_start_instructions() {
+    echo
+    echo "📖 Manual Docker Start:"
+    echo "Linux:   sudo systemctl start docker"
+    echo "macOS:   Open Docker Desktop application"
+    echo "Windows: Start Docker Desktop"
+}
+
+# Install Docker Compose
+install_docker_compose() {
+    if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+        log "Docker Compose (plugin) is already available"
+        return
+    fi
+    
+    log "Installing Docker Compose..."
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+    else
+        error "Please install Docker Compose manually for your system"
+        exit 1
+    fi
 }
 
 # Setup environment configuration
