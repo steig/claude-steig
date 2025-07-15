@@ -154,7 +154,7 @@ jobs:
           extra_args: --debug --only-verified
       
       - name: Snyk Security Scan
-        if: ${{ secrets.SNYK_TOKEN }}
+        if: ${{ secrets.SNYK_TOKEN != '' }}
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

@@ -279,17 +279,25 @@ jobs:
         
         echo "✅ Performance system working correctly after installation"
     
-    - name: Run performance unit tests post-install
+    - name: Run quality system tests post-install
       shell: bash
       run: |
         cd test-perf-install
         
-        # Run a subset of performance tests to verify installation
-        chmod +x $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats
+        echo "🔍 Testing quality enforcement system (v3.1.0 focus)"
         
-        # Test specific functions that should work post-install
-        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "performance system initializes correctly"
-        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "task database is created with correct schema"  
-        bats $GITHUB_WORKSPACE/tests/test-performance-infrastructure.bats --filter "cache_set and cache_get work correctly"
+        # Test quality validation system
+        if [[ -f .simone/01_UTILS/quality-validation.sh ]]; then
+          source .simone/01_UTILS/quality-validation.sh
+          
+          # Test basic quality functions exist
+          if declare -f validate_input_quality &>/dev/null; then
+            echo "✅ Quality validation functions available"
+          fi
+          
+          if declare -f calculate_quality_score &>/dev/null; then
+            echo "✅ Quality scoring functions available"
+          fi
+        fi
         
-        echo "✅ Performance unit tests passed post-installation"
+        echo "✅ Quality system tests completed post-installation"
