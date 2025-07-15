@@ -1,11 +1,24 @@
 # Simone Framework Documentation
 
-**Updated**: 2025-07-15
+**Version**: 3.3.0 - Automation Transparency Edition  
+**Updated**: 2025-07-15  
 **Audience**: Development Teams, Technical Leaders, Project Managers
 
 ## What is Simone?
 
-Simone is a sophisticated, directory-based project management framework specifically designed for AI-assisted enterprise software development. It provides comprehensive metadata management, architectural decision tracking, and integrated quality control processes that bridge traditional project management disciplines with modern AI-driven development workflows.
+Simone is a progressive AI development assistant that grows with your team. Starting with v3.2.0, teams can be productive in 15 minutes with simple workflows, then gradually add enterprise features as needed. It provides comprehensive metadata management, architectural decision tracking, and integrated quality control processes optimized for AI-assisted development.
+
+## 🚀 Version 3.3.0 Highlights
+
+**New in this release**:
+- 🤖 **Automation transparency** - see what AI will do before execution
+- 🔍 **AI decision logging** - complete audit trail of automation reasoning
+- ⏸️ **Checkpoints system** - human approval gates for automation control
+- ↩️ **Smart rollback** - git-based undo for automation decisions
+- 📤 **Enhanced data export** - 6 formats including Jira, GitHub, backup
+- 🛡️ **User control** - maintain oversight through approval workflows
+
+See [Development Guide](./migration/v3.3.0-migration-guide.md) for v3.3.0 feature overview.
 
 ## Documentation Structure
 
