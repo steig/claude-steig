@@ -1,0 +1,199 @@
+version: '3.8'
+
+services:
+  # Serena MCP Server - Enhanced IDE assistance and project management
+  serena:
+    build:
+      context: ./docker/mcp-servers/serena
+      dockerfile: Dockerfile
+    container_name: mcp-serena
+    environment:
+      - MCP_SERVER_NAME=serena
+      - PROJECT_PATH=${PWD}
+      - CONTEXT=ide-assistant
+    volumes:
+      - ${PWD}:/workspace:ro
+      - mcp-serena-data:/app/data
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8080:8080"
+
+  # Context7 MCP Server - Advanced context management and retrieval
+  context7:
+    build:
+      context: ./docker/mcp-servers/context7
+      dockerfile: Dockerfile
+    container_name: mcp-context7
+    environment:
+      - MCP_SERVER_NAME=context7
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL:-}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN:-}
+    volumes:
+      - mcp-context7-data:/app/data
+      - ${PWD}/.simone:/workspace/.simone:ro
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8081:8081"
+
+  # Playwright MCP Server - Browser automation and testing
+  playwright:
+    build:
+      context: ./docker/mcp-servers/playwright
+      dockerfile: Dockerfile
+    container_name: mcp-playwright
+    environment:
+      - MCP_SERVER_NAME=playwright
+      - DISPLAY=${DISPLAY:-:99}
+    volumes:
+      - mcp-playwright-data:/app/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${PWD}:/workspace:ro
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8082:8082"
+    # Enable headless browser automation
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+
+  # GitHub MCP Server - Repository management and API integration
+  github:
+    build:
+      context: ./docker/mcp-servers/github
+      dockerfile: Dockerfile
+    container_name: mcp-github
+    environment:
+      - MCP_SERVER_NAME=github
+      - GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN}
+      - GITHUB_READ_ONLY=${GITHUB_READ_ONLY:-false}
+    volumes:
+      - mcp-github-data:/app/data
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8083:8083"
+
+  # Sequential Thinking MCP Server - Enhanced reasoning and problem-solving
+  sequential-thinking:
+    build:
+      context: ./docker/mcp-servers/sequential-thinking
+      dockerfile: Dockerfile
+    container_name: mcp-sequential-thinking
+    environment:
+      - MCP_SERVER_NAME=sequential-thinking
+      - THINKING_MODE=${THINKING_MODE:-structured}
+    volumes:
+      - mcp-sequential-thinking-data:/app/data
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8084:8084"
+
+  # Fetch MCP Server - Web content retrieval and markdown extraction
+  fetch:
+    build:
+      context: ./docker/mcp-servers/fetch
+      dockerfile: Dockerfile
+    container_name: mcp-fetch
+    environment:
+      - MCP_SERVER_NAME=fetch
+      - USER_AGENT=${FETCH_USER_AGENT:-Mozilla/5.0 (compatible; MCPFetch/1.0)}
+    volumes:
+      - mcp-fetch-data:/app/data
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8085:8085"
+
+  # MCP Gateway - Central proxy and load balancer for all MCP services
+  mcp-gateway:
+    build:
+      context: ./docker/mcp-gateway
+      dockerfile: Dockerfile
+    container_name: mcp-gateway
+    environment:
+      - GATEWAY_PORT=9000
+      - SERENA_URL=http://serena:8080
+      - CONTEXT7_URL=http://context7:8081
+      - PLAYWRIGHT_URL=http://playwright:8082
+      - GITHUB_URL=http://github:8083
+      - SEQUENTIAL_THINKING_URL=http://sequential-thinking:8084
+      - FETCH_URL=http://fetch:8085
+    ports:
+      - "9000:9000"
+    networks:
+      - mcp-network
+    depends_on:
+      - serena
+      - context7
+      - playwright
+      - github
+      - sequential-thinking
+      - fetch
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  mcp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  mcp-serena-data:
+    driver: local
+  mcp-context7-data:
+    driver: local
+  mcp-playwright-data:
+    driver: local
+  mcp-github-data:
+    driver: local
+  mcp-sequential-thinking-data:
+    driver: local
+  mcp-fetch-data:
+    driver: local

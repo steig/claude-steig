@@ -28,6 +28,14 @@ Thumbs.db
 !/docs-site
 !/scripts
 !/simone
+!/docker-compose.mcp.yml
+!/docker-compose.mcp-multi.yml
+!/docker-compose.mcp-multi-secure.yml
+!/docker
+!/install-simone-secure.sh
+!/Makefile
+!/.env.mcp.example
+!/.dockerignore
 
 !/.version
 !/.secrets.baseline
