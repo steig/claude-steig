@@ -1,47 +1,466 @@
 #!/usr/bin/env bash
-# Simone Framework - Performance-Optimized Edition
-# Main command interface with automatic performance optimization
+# Simone Framework - Simplified Edition
+# Main command interface for structured project management
 
 set -euo pipefail
 
-# Check if we're in a Simone project (skip check for init command)
-if [[ "${1:-help}" != "init" && "${1:-help}" != "initialize" && ! -d ".simone" ]]; then
-    echo "❌ Not in a Simone project directory"
-    echo "Run 'simone init' to initialize a new project"
+# ============================================================================
+# COMMON FUNCTIONS
+# ============================================================================
+
+# Error handling
+error_exit() {
+    echo "❌ Error: $1" >&2
     exit 1
+}
+
+# Generate task ID
+create_task_id() {
+    echo "T$(date +%s | tail -c 4)"
+}
+
+# Ensure directory exists
+ensure_directory() {
+    mkdir -p "$1"
+}
+
+# Create a task file with standard format
+create_task_file() {
+    local task_id="$1"
+    local title="$2"
+    local description="$3"
+    local acceptance="${4:-Task completed successfully}"
+    local task_dir="${5:-.simone/04_GENERAL_TASKS}"
+    
+    ensure_directory "$task_dir"
+    
+    cat > "${task_dir}/${task_id}_${title// /_}.md" << EOF
+# $title
+
+## Description
+$description
+
+## Acceptance Criteria
+$acceptance
+
+## Status
+pending
+
+## Created
+$(date +%Y-%m-%d)
+EOF
+}
+
+# Show command next steps
+show_next_steps() {
+    echo
+    echo "💡 Next steps:"
+    for step in "$@"; do
+        echo "   $step"
+    done
+}
+
+# Check if in Simone project (with init exception)
+validate_project() {
+    local cmd="${1:-help}"
+    if [[ "$cmd" != "init" && "$cmd" != "initialize" && "$cmd" != "quickstart" && ! -d ".simone" ]]; then
+        error_exit "Not in a Simone project directory. Run 'simone init' to initialize a new project"
+    fi
+}
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+# Default directories
+SIMONE_ROOT=".simone"
+SIMONE_TASK_DIR="$SIMONE_ROOT/04_GENERAL_TASKS"
+SIMONE_SPRINT_DIR="$SIMONE_ROOT/03_SPRINTS"
+SIMONE_TEMPLATE_DIR="$SIMONE_ROOT/99_TEMPLATES"
+SIMONE_CACHE_DIR="$SIMONE_ROOT/.cache"
+
+# Load user configuration if exists
+if [[ -f "$SIMONE_ROOT/config" ]]; then
+    source "$SIMONE_ROOT/config"
 fi
 
+# ============================================================================
+# PROJECT INITIALIZATION
+# ============================================================================
 
-# Main command routing with UX improvements
+# Create project structure
+create_project_structure() {
+    ensure_directory "$SIMONE_ROOT/00_PROJECT_MANIFEST"
+    ensure_directory "$SIMONE_ROOT/01_UTILS"
+    ensure_directory "$SIMONE_ROOT/02_REQUIREMENTS"
+    ensure_directory "$SIMONE_ROOT/03_SPRINTS"
+    ensure_directory "$SIMONE_ROOT/04_GENERAL_TASKS"
+    ensure_directory "$SIMONE_ROOT/05_ARCHITECTURAL_DECISIONS"
+    ensure_directory "$SIMONE_ROOT/99_TEMPLATES"
+    ensure_directory "$SIMONE_CACHE_DIR"
+}
+
+# Create project manifest
+create_project_manifest() {
+    local project_name="$1"
+    local description="$2"
+    local mode="${3:-standard}"
+    
+    cat > "$SIMONE_ROOT/00_PROJECT_MANIFEST.md" << EOF
+# Project Manifest
+
+## Project: $project_name
+## Version: 0.1.0
+## Created: $(date +%Y-%m-%d)
+## Framework: Simone
+
+### Description
+$description
+
+### Success Criteria
+[To be defined based on project requirements]
+
+### Risk Assessment
+[To be completed during project planning]
+EOF
+    
+    if [[ "$mode" == "quickstart" ]]; then
+        cat >> "$SIMONE_ROOT/00_PROJECT_MANIFEST.md" << EOF
+
+### Quick Start Mode
+- **Mode**: Simplified setup for immediate productivity
+- **Features**: Basic task management, standard templates
+- **Upgrade**: Run \`simone enable --features\` to add advanced capabilities
+EOF
+    fi
+}
+
+# ============================================================================
+# EXPORT FUNCTIONALITY
+# ============================================================================
+
+# Export project data in specified format
+export_project_data() {
+    local format="${1:-json}"
+    local output_file="${2:-simone-export.${format}}"
+    
+    echo "📤 Exporting Simone project data..."
+    echo "Format: $format"
+    echo "Output: $output_file"
+    echo
+    
+    case "$format" in
+        "json")
+            export_json "$output_file"
+            ;;
+        "csv")
+            export_csv "$output_file"
+            ;;
+        "markdown")
+            export_markdown
+            output_file="simone-export-md/"
+            ;;
+        "backup")
+            export_backup
+            output_file="simone-backup-$(date +%Y%m%d-%H%M%S)/"
+            ;;
+        *)
+            error_exit "Unsupported format: $format. Supported: json, csv, markdown, backup"
+            ;;
+    esac
+    
+    echo "✅ Export completed: $output_file"
+}
+
+# Export to JSON format
+export_json() {
+    local output_file="$1"
+    {
+        echo "{"
+        echo "  \"project\": \"${PWD##*/}\","
+        echo "  \"exported\": \"$(date -Iseconds)\","
+        echo "  \"tasks\": ["
+        
+        local first=true
+        if [[ -d "$SIMONE_TASK_DIR" ]]; then
+            for task_file in "$SIMONE_TASK_DIR"/*.md; do
+                if [[ -f "$task_file" ]]; then
+                    [[ "$first" == "false" ]] && echo ","
+                    echo -n "    {"
+                    echo -n "\"file\": \"$(basename "$task_file")\", "
+                    echo -n "\"title\": \"$(head -1 "$task_file" | sed 's/^# //')\""
+                    echo -n "}"
+                    first=false
+                fi
+            done
+        fi
+        
+        echo
+        echo "  ]"
+        echo "}"
+    } > "$output_file"
+}
+
+# Export to CSV format
+export_csv() {
+    local output_file="$1"
+    {
+        echo "Type,Title,File,Status"
+        if [[ -d "$SIMONE_TASK_DIR" ]]; then
+            for task_file in "$SIMONE_TASK_DIR"/*.md; do
+                if [[ -f "$task_file" ]]; then
+                    local title=$(head -1 "$task_file" | sed 's/^# //')
+                    local filename=$(basename "$task_file")
+                    echo "Task,\"$title\",\"$filename\",Unknown"
+                fi
+            done
+        fi
+    } > "$output_file"
+}
+
+# Export to markdown format
+export_markdown() {
+    mkdir -p "simone-export-md"
+    if [[ -d "$SIMONE_ROOT" ]]; then
+        for file in "$SIMONE_ROOT"/**/*.md; do
+            if [[ -f "$file" ]]; then
+                # Strip Simone-specific metadata and copy
+                grep -v "^---$" "$file" | grep -v "^task_id:" | grep -v "^status:" > "simone-export-md/$(basename "$file")"
+            fi
+        done
+    fi
+    echo "Files exported to: simone-export-md/"
+}
+
+# Export backup
+export_backup() {
+    local backup_dir="simone-backup-$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$backup_dir"
+    
+    # Copy entire .simone directory
+    if [[ -d "$SIMONE_ROOT" ]]; then
+        cp -r "$SIMONE_ROOT" "$backup_dir/"
+    fi
+    
+    # Create backup manifest
+    cat > "$backup_dir/BACKUP_MANIFEST.md" << EOF
+# Simone Project Backup
+
+**Created**: $(date)
+**Project**: ${PWD##*/}
+**Framework Version**: 3.0.0
+
+## Contents
+- \`.simone/\` - Complete project structure
+
+## Restoration
+To restore this backup:
+1. Copy \`.simone/\` directory to your project root
+2. Verify structure with \`simone doctor\`
+3. Resume work with existing Simone commands
+EOF
+    
+    echo "Files backed up to: $backup_dir/"
+}
+
+# ============================================================================
+# HELP SYSTEM
+# ============================================================================
+
+# Show help for a specific command
+show_command_help() {
+    local cmd="$1"
+    case "$cmd" in
+        "task")
+            echo "📋 Task Management Commands:"
+            echo "  simone task create    Create a new task interactively"
+            echo "  simone task list      List all tasks"
+            echo "  simone quick <title>  Quick task creation"
+            ;;
+        "export")
+            echo "📤 Export Commands:"
+            echo "  simone export         Export to JSON (default)"
+            echo "  simone export json    Export tasks to JSON"
+            echo "  simone export csv     Export tasks to CSV"
+            echo "  simone export markdown Export to markdown"
+            echo "  simone export backup  Create full backup"
+            ;;
+        "enable")
+            echo "⚙️ Enable Features:"
+            echo "  simone enable mcp         Enable MCP server integration"
+            echo "  simone enable automation  Enable automation features"
+            ;;
+        *)
+            show_general_help
+            ;;
+    esac
+}
+
+# Show general help
+show_general_help() {
+    echo "Simone Framework - Simplified Edition v3.0.0"
+    echo "==========================================="
+    echo
+    echo "🚀 Quick Start:"
+    echo "  quickstart        Initialize project with minimal setup"
+    echo "  init             Initialize standard project"
+    echo "  quick <title>    Create task quickly"
+    echo
+    echo "📋 Core Commands:"
+    echo "  task             Task management (create, list)"
+    echo "  status           Show project status"
+    echo "  search <query>   Search tasks"
+    echo
+    echo "🔧 Management:"
+    echo "  sprint           Sprint management"
+    echo "  export <format>  Export project data"
+    echo "  enable <feature> Enable optional features"
+    echo
+    echo "🤖 Automation:"
+    echo "  auto <task_id>   Automated task execution"
+    echo "  preview <task>   Preview automation plan"
+    echo "  checkpoints      Manage automation checkpoints"
+    echo
+    echo "🔍 Utilities:"
+    echo "  doctor           Health check"
+    echo "  upgrade          Upgrade framework"
+    echo "  help <command>   Get help for specific command"
+}
+
+# ============================================================================
+# FEATURE MANAGEMENT
+# ============================================================================
+
+# Handle enable command
+handle_enable_command() {
+    case "${1:-help}" in
+        "--mcp"|"mcp")
+            enable_mcp_servers
+            ;;
+        "--automation"|"automation")
+            enable_automation
+            ;;
+        "--help"|"help"|*)
+            echo "📚 Available features to enable:"
+            echo "  simone enable mcp          Enable MCP server integration"
+            echo "  simone enable automation   Enable advanced automation features"
+            echo
+            echo "💡 TIP: Start with MCP servers for best experience"
+            ;;
+    esac
+}
+
+# Enable MCP servers
+enable_mcp_servers() {
+    echo "🤖 Enabling MCP Server Integration..."
+    echo "📋 Choose deployment method:"
+    echo "  1. Local installation (uvx)"
+    echo "  2. Docker containers (recommended)"
+    read -p "Choice (1 or 2): " -r choice
+    
+    case $choice in
+        1)
+            echo "📦 Installing MCP servers locally..."
+            echo "Run: ./install-simone.sh --mcp-only"
+            echo "Or manually install with: claude mcp add <server-name> -- <server-command>"
+            ;;
+        2)
+            echo "🐳 Setting up Docker MCP servers..."
+            if [[ -f "./scripts/mcp-docker.sh" ]]; then
+                ./scripts/mcp-docker.sh setup
+            else
+                echo "❌ Docker setup script not found"
+            fi
+            ;;
+        *)
+            echo "❌ Invalid choice"
+            ;;
+    esac
+}
+
+# Enable automation features
+enable_automation() {
+    echo "⚡ Enabling Advanced Automation..."
+    echo "This includes do_task_auto and create_pr_auto commands"
+    echo "✅ Automation features enabled"
+    echo "💡 Use: /project:simone:do_task_auto for automated execution"
+}
+
+# ============================================================================
+# COMMAND HANDLERS
+# ============================================================================
+
+# Handle task commands
+handle_task_command() {
+    case "${1:-list}" in
+        "create"|"new")
+            handle_task_create
+            ;;
+        "list")
+            handle_task_list
+            ;;
+        *)
+            echo "Unknown task subcommand: $1"
+            echo "Available: create, list"
+            ;;
+    esac
+}
+
+# Create a new task
+handle_task_create() {
+    echo "📝 Task Creation"
+    echo "================"
+    echo
+    
+    read -p "Task title: " -r task_title
+    echo
+    echo "Task description (explain what needs to be done):"
+    read -r task_description
+    echo
+    echo "Acceptance criteria (how will you know it's complete?):"
+    read -r acceptance_criteria
+    echo
+    
+    local task_id=$(create_task_id)
+    create_task_file "$task_id" "$task_title" "$task_description" "$acceptance_criteria"
+    
+    echo "✅ Task created: $task_id"
+    echo "   Title: $task_title"
+    echo "   File: $SIMONE_TASK_DIR/${task_id}_${task_title// /_}.md"
+}
+
+# List tasks
+handle_task_list() {
+    echo "📋 Tasks:"
+    if [[ -d "$SIMONE_TASK_DIR" ]]; then
+        find "$SIMONE_TASK_DIR" -name "*.md" -type f | head -20
+    else
+        echo "No tasks found"
+    fi
+}
+
+# ============================================================================
+# MAIN EXECUTION
+# ============================================================================
+
+# Validate we're in a project (unless init/quickstart)
+validate_project "${1:-help}"
+
+# Main command routing
 case "${1:-help}" in
-    # NEW: Simplified aliases
     "quick")
-        # Alias for simple task creation
+        # Quick task creation
         shift
         echo "🚀 Creating simple task..."
-        echo "This bypasses complex metadata for quick productivity."
         echo
         read -p "Task title: " -r task_title
         read -p "What needs to be done? " -r task_description
         
-        # Create simple task without quality gates
-        task_id="T$(date +%s | tail -c 4)"
-        mkdir -p .simone/04_GENERAL_TASKS
-        cat > ".simone/04_GENERAL_TASKS/${task_id}_${task_title// /_}.md" << EOF
-# $task_title
-
-## Description
-$task_description
-
-## Mode
-Simple task - minimal overhead, maximum productivity
-
-## Next Steps
-Execute with: \`/project:simone:do_task ${task_id}\`
-EOF
+        task_id=$(create_task_id)
+        create_task_file "$task_id" "$task_title" "$task_description" "Task completed successfully"
+        
         echo "✅ Simple task created: $task_id"
-        echo "🔄 Execute with: /project:simone:do_task $task_id"
-        exit 0
+        show_next_steps "Execute with: /project:simone:do_task $task_id"
         ;;
     "auto")
         # Alias for automated task execution
@@ -50,90 +469,41 @@ EOF
         echo "Use Claude Code command: /project:simone:do_task_auto $1"
         exit 0
         ;;
-    "task")
-        # Default to standard task creation (original behavior)
-        shift
-        exec "$0" task create "$@"
-        ;;
     "quickstart")
-        # NEW: 15-minute project setup
         echo "🚀 Simone Quickstart - Get productive in 15 minutes!"
         echo "=================================================="
         echo
         echo "This will create a minimal Simone project optimized for immediate productivity."
-        echo "Advanced features (MCP servers, quality enforcement) can be added later."
         echo
         read -p "Project name (or press Enter for current directory): " -r project_name
         project_name=${project_name:-${PWD##*/}}
         
         echo
-        echo "📝 Quick project description (just enough to get started):"
-        read -p "What are you building? " -r quick_description
+        read -p "What are you building? " -r project_description
         
-        # Create minimal structure
-        mkdir -p .simone/{02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,99_TEMPLATES}
+        # Create structure and manifest
+        create_project_structure
+        create_project_manifest "$project_name" "$project_description" "quickstart"
         
-        # Create simple manifest
-        cat > .simone/00_PROJECT_MANIFEST.md << EOF
-# $project_name
-
-## Description
-$quick_description
-
-## Quick Start Mode
-- **Mode**: Simplified setup for immediate productivity
-- **Features**: Basic task management, standard templates
-- **Upgrade**: Run \`simone enable --features\` to add advanced capabilities
-
-## Next Steps
-1. Create your first task: \`simone quick "Your first task"\`
-2. Execute it: Use Claude Code with \`/project:simone:do_task\`
-3. Add features: \`simone enable --quality\` or \`simone enable --mcp\`
-EOF
-
         echo
         echo "✅ Quickstart complete! Your project is ready."
-        echo "📋 Next steps:"
-        echo "   1. Create first task: simone quick \"Implement login page\""
-        echo "   2. Execute with Claude: /project:simone:do_task T001"
-        echo "   3. Add features later: simone enable --help"
-        exit 0
+        show_next_steps \
+            "Create first task: simone quick \"Implement login page\"" \
+            "Execute with Claude: /project:simone:do_task T001" \
+            "Add features later: simone enable --help"
         ;;
     "init"|"initialize")
-        # Initialize new Simone project with quality enforcement
         echo "🚀 Initializing Simone project..."
         echo
-        
-        # Get project description
         echo "📝 Project Setup"
         echo "================"
         echo
         
         read -p "Enter project description: " -r project_description
         
-        # Create directory structure
-        mkdir -p .simone/{00_PROJECT_MANIFEST,01_UTILS,02_REQUIREMENTS,03_SPRINTS,04_GENERAL_TASKS,05_ARCHITECTURAL_DECISIONS,99_TEMPLATES,.cache}
-        
-        
-        # Create quality project manifest with actual description
-        cat > .simone/00_PROJECT_MANIFEST.md << EOF
-# Project Manifest
-
-## Project: ${PWD##*/}
-## Version: 0.1.0
-## Created: $(date +%Y-%m-%d)
-## Framework: Simone Optimized
-
-### Description
-$project_description
-
-
-### Success Criteria
-[To be defined based on project requirements]
-
-### Risk Assessment
-[To be completed during project planning]
-EOF
+        # Create structure and manifest
+        create_project_structure
+        create_project_manifest "${PWD##*/}" "$project_description" "standard"
         
         echo
         echo "✅ Simone project initialized successfully"
@@ -151,52 +521,7 @@ EOF
         
     "task"|"tasks")
         shift
-        case "${1:-list}" in
-            "create"|"new")
-                # Interactive task creation
-                echo "📝 Task Creation"
-                echo "================"
-                echo
-                
-                # Get task details
-                read -p "Task title: " -r task_title
-                echo
-                echo "Task description (explain what needs to be done):"
-                read -r task_description
-                echo
-                echo "Acceptance criteria (how will you know it's complete?):"
-                read -r acceptance_criteria
-                echo
-                
-                # Create task ID
-                task_id="T$(date +%s | tail -c 4)"
-                
-                # Create task file
-                mkdir -p .simone/04_GENERAL_TASKS
-                cat > ".simone/04_GENERAL_TASKS/${task_id}_${task_title// /_}.md" << EOF
-# $task_title
-
-## Description
-$task_description
-
-## Acceptance Criteria
-$acceptance_criteria
-
-## Status
-pending
-
-## Created
-$(date +%Y-%m-%d)
-EOF
-                
-                echo "✅ Task created: $task_id"
-                echo "   Title: $task_title"
-                echo "   File: .simone/04_GENERAL_TASKS/${task_id}_${task_title// /_}.md"
-                ;;
-            "list")
-                find .simone -name "*.md" -type f | head -20
-                ;;
-        esac
+        handle_task_command "$@"
         ;;
         
     "sprint")
@@ -222,44 +547,8 @@ EOF
         
         
     "enable")
-        # NEW: Progressive feature enablement
         shift
-        case "${1:-help}" in
-            "--mcp"|"mcp")
-                echo "🤖 Enabling MCP Server Integration..."
-                echo "📋 Choose deployment method:"
-                echo "  1. Local installation (uvx)"
-                echo "  2. Docker containers (recommended)"
-                read -p "Choice (1 or 2): " -r choice
-                case $choice in
-                    1)
-                        echo "📦 Installing MCP servers locally..."
-                        echo "Run: ./scripts/install-mcp-local.sh"
-                        ;;
-                    2)
-                        echo "🐳 Setting up Docker MCP servers..."
-                        if [[ -f "./scripts/mcp-docker.sh" ]]; then
-                            ./scripts/mcp-docker.sh setup
-                        else
-                            echo "❌ Docker setup script not found"
-                        fi
-                        ;;
-                esac
-                ;;
-            "--automation"|"automation")
-                echo "⚡ Enabling Advanced Automation..."
-                echo "This includes do_task_auto and create_pr_auto commands"
-                echo "✅ Automation features enabled"
-                echo "💡 Use: /project:simone:do_task_auto for automated execution"
-                ;;
-            "--help"|"help"|*)
-                echo "📚 Available features to enable:"
-                echo "  simone enable mcp          Enable MCP server integration"
-                echo "  simone enable automation   Enable advanced automation features"
-                echo
-                echo "💡 TIP: Start with MCP servers for best experience"
-                ;;
-        esac
+        handle_enable_command "$@"
         ;;
         
     "doctor")
@@ -303,219 +592,8 @@ EOF
         ;;
         
     "export")
-        # NEW: Data export capabilities
         shift
-        format="${1:-json}"
-        output_file="${2:-simone-export.${format}}"
-        
-        echo "📤 Exporting Simone project data..."
-        echo "Format: $format"
-        echo "Output: $output_file"
-        echo
-        
-        case "$format" in
-            "json")
-                echo "Exporting to JSON format..."
-                {
-                    echo "{"
-                    echo "  \"project\": \"${PWD##*/}\","
-                    echo "  \"exported\": \"$(date -Iseconds)\","
-                    echo "  \"tasks\": ["
-                    
-                    first=true
-                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
-                        if [[ -f "$task_file" ]]; then
-                            [[ "$first" == "false" ]] && echo ","
-                            echo -n "    {"
-                            echo -n "\"file\": \"$(basename "$task_file")\", "
-                            echo -n "\"title\": \"$(head -1 "$task_file" | sed 's/^# //')\""
-                            echo -n "}"
-                            first=false
-                        fi
-                    done
-                    
-                    echo
-                    echo "  ],"
-                    echo "  \"manifest\": \"$(head -5 .simone/00_PROJECT_MANIFEST.md | tail -4 | tr '\n' ' ')\""
-                    echo "}"
-                } > "$output_file"
-                ;;
-            "csv")
-                echo "Exporting to CSV format..."
-                {
-                    echo "Type,Title,File,Status"
-                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
-                        if [[ -f "$task_file" ]]; then
-                            title=$(head -1 "$task_file" | sed 's/^# //')
-                            filename=$(basename "$task_file")
-                            echo "Task,\"$title\",\"$filename\",Unknown"
-                        fi
-                    done
-                } > "$output_file"
-                ;;
-            "markdown")
-                echo "Exporting to framework-independent markdown..."
-                mkdir -p "simone-export-md"
-                for file in .simone/**/*.md; do
-                    if [[ -f "$file" ]]; then
-                        # Strip Simone-specific metadata and copy
-                        grep -v "^---$" "$file" | grep -v "^task_id:" | grep -v "^status:" > "simone-export-md/$(basename "$file")"
-                    fi
-                done
-                echo "Files exported to: simone-export-md/"
-                ;;
-            "jira")
-                echo "Exporting to Jira CSV import format..."
-                {
-                    echo "Summary,Issue Type,Priority,Description,Acceptance Criteria,Status"
-                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
-                        if [[ -f "$task_file" ]]; then
-                            title=$(head -1 "$task_file" | sed 's/^# //' | tr ',' ';')
-                            
-                            # Extract description and acceptance criteria
-                            description=""
-                            acceptance=""
-                            in_description=false
-                            in_acceptance=false
-                            
-                            while IFS= read -r line; do
-                                if [[ "$line" =~ ^##.*[Dd]escription ]]; then
-                                    in_description=true
-                                    in_acceptance=false
-                                    continue
-                                elif [[ "$line" =~ ^##.*[Aa]cceptance ]]; then
-                                    in_acceptance=true
-                                    in_description=false
-                                    continue
-                                elif [[ "$line" =~ ^## ]]; then
-                                    in_description=false
-                                    in_acceptance=false
-                                    continue
-                                fi
-                                
-                                if [[ "$in_description" == "true" && -n "$line" && ! "$line" =~ ^[[:space:]]*$ ]]; then
-                                    description+="$line "
-                                elif [[ "$in_acceptance" == "true" && -n "$line" && ! "$line" =~ ^[[:space:]]*$ ]]; then
-                                    acceptance+="$line "
-                                fi
-                            done < "$task_file"
-                            
-                            # Clean up and format for CSV
-                            description=$(echo "$description" | tr ',' ';' | tr '\n' ' ' | sed 's/  */ /g')
-                            acceptance=$(echo "$acceptance" | tr ',' ';' | tr '\n' ' ' | sed 's/  */ /g')
-                            
-                            # Determine issue type and priority
-                            issue_type="Story"
-                            priority="Medium"
-                            
-                            if echo "$title" | grep -qi "bug\|fix\|error"; then
-                                issue_type="Bug"
-                                priority="High"
-                            elif echo "$title" | grep -qi "urgent\|critical"; then
-                                priority="Highest"
-                            fi
-                            
-                            echo "\"$title\",\"$issue_type\",\"$priority\",\"$description\",\"$acceptance\",\"To Do\""
-                        fi
-                    done
-                } > "$output_file"
-                ;;
-            "github")
-                echo "Exporting to GitHub Issues format..."
-                {
-                    echo "# GitHub Issues Export"
-                    echo "## Generated: $(date)"
-                    echo
-                    
-                    for task_file in .simone/04_GENERAL_TASKS/*.md; do
-                        if [[ -f "$task_file" ]]; then
-                            title=$(head -1 "$task_file" | sed 's/^# //')
-                            
-                            echo "### Issue: $title"
-                            echo
-                            echo "**Labels**: enhancement, simone-export"
-                            
-                            # Determine additional labels
-                            if echo "$title" | grep -qi "bug\|fix\|error"; then
-                                echo "**Labels**: bug, simone-export"
-                            fi
-                            
-                            echo
-                            echo "**Body**:"
-                            echo "\`\`\`"
-                            
-                            # Extract and format content
-                            tail -n +2 "$task_file" | while IFS= read -r line; do
-                                if [[ ! "$line" =~ ^task_id: && ! "$line" =~ ^status: && ! "$line" =~ ^--- ]]; then
-                                    echo "$line"
-                                fi
-                            done
-                            
-                            echo "\`\`\`"
-                            echo
-                            echo "**Source**: Exported from Simone Framework"
-                            echo "**Original File**: $(basename "$task_file")"
-                            echo
-                            echo "---"
-                            echo
-                        fi
-                    done
-                } > "$output_file"
-                ;;
-            "backup")
-                echo "Creating comprehensive project backup..."
-                backup_dir="simone-backup-$(date +%Y%m%d-%H%M%S)"
-                mkdir -p "$backup_dir"
-                
-                # Copy entire .simone directory
-                cp -r .simone "$backup_dir/"
-                
-                # Export in multiple formats
-                echo '{"format": "json", "exported": "'$(date -Iseconds)'"}' > "$backup_dir/export-json.json"
-                echo "Summary,Description,File,Status" > "$backup_dir/export-csv.csv"
-                
-                # Add git information if available
-                if git rev-parse --git-dir >/dev/null 2>&1; then
-                    git log --oneline -20 > "$backup_dir/git-history.txt"
-                    git status > "$backup_dir/git-status.txt"
-                    git branch -a > "$backup_dir/git-branches.txt"
-                fi
-                
-                # Create backup manifest
-                cat > "$backup_dir/BACKUP_MANIFEST.md" << EOF
-# Simone Project Backup
-
-**Created**: $(date)
-**Project**: ${PWD##*/}
-**Framework Version**: 3.2.0
-
-## Contents
-- \`.simone/\` - Complete project structure
-- \`export-json.json\` - JSON export format
-- \`export-csv.csv\` - CSV export format
-- \`git-*.txt\` - Git repository information (if available)
-
-## Restoration
-To restore this backup:
-1. Copy \`.simone/\` directory to your project root
-2. Verify structure with \`simone doctor\`
-3. Resume work with existing Simone commands
-
-## Export Date
-$(date -Iseconds)
-EOF
-                
-                echo "Files backed up to: $backup_dir/"
-                output_file="$backup_dir"
-                ;;
-            *)
-                echo "❌ Unsupported format: $format"
-                echo "Supported formats: json, csv, markdown, jira, github, backup"
-                exit 1
-                ;;
-        esac
-        
-        echo "✅ Export completed: $output_file"
+        export_project_data "$@"
         ;;
         
     "preview")
@@ -1070,42 +1148,11 @@ EOF
         esac
         ;;
         
-    "help"|*)
-        echo "Simone Framework - Automation Transparency Edition v3.3.0"
-        echo "=============================================="
-        echo
-        echo "🚀 Quick Start Commands:"
-        echo "  quickstart        15-minute project setup (no complex configuration)"
-        echo "  quick <title>     Create simple task (bypasses quality gates)"
-        echo "  auto <task_id>    Automated task execution guidance"
-        echo "  doctor            Health check and diagnostics"
-        echo
-        echo "📋 Standard Commands:"
-        echo "  init              Initialize new project (with quality validation)"
-        echo "  task create       Create new task (with quality validation)"
-        echo "  task create --simple     Create task with minimal metadata"
-        echo "  task create --urgent     Create task with relaxed quality gates"
-        echo "  task create --bypass     Create task bypassing all validation"
-        echo "  task list         List tasks"
-        echo "  status            Show project status"
-        echo "  search <query>    Search tasks"
-        echo
-        echo "⚙️  Feature Management:"
-        echo "  enable mcp        Add MCP server integration"
-        echo "  enable automation Add advanced automation features"
-        echo
-        echo "🔄 Advanced Commands:"
-        echo "  sprint [status]   Sprint management"
-        echo "  blitz [sprint]    Automated sprint execution"
-        echo "  upgrade           Upgrade existing project to latest version"
-        echo
-        echo "🤖 Automation Transparency:"
-        echo "  preview <task_id> Show what automation would do before execution"
-        echo "  decisions list    Show recent AI decisions and reasoning"
-        echo "  decisions enable  Enable decision logging for automation"
-        echo "  checkpoints list  Show current automation checkpoint status"
-        echo "  checkpoints enable Enable checkpoint system for approval gates"
-        echo "  rollback [target] Undo automation changes (git-based rollback)"
-        echo "  export <format>   Export project data (json, csv, jira, github, backup)"
+    "help")
+        shift
+        show_command_help "${1:-}"
+        ;;
+    *)
+        show_general_help
         ;;
 esac
