@@ -49,6 +49,13 @@ Check: <$ARGUMENTS>
 
 ### 2. Analyze existing codebase and architectural constraints
 
+**MCP INTEGRATION:** Serena + Context7 for comprehensive codebase analysis
+
+**Serena MCP Usage:**
+- Use `/mcp__serena__get_symbols_overview` to understand current architecture
+- Use `/mcp__serena__find_symbol` to locate existing components
+- Use `/mcp__serena__find_referencing_symbols` to analyze dependencies
+
 **MCP INTEGRATION:** Context7 for understanding current system state
 
 **Codebase Analysis:**
@@ -59,13 +66,18 @@ Check: <$ARGUMENTS>
 
 ### 3. Research technical requirements and implementation approaches
 
-**MCP INTEGRATION:** Sequential Thinking + Context7 for comprehensive research
+**MCP INTEGRATION:** Sequential Thinking + Context7 + Fetch for comprehensive research
+
+**Fetch MCP Usage:**
+- Use `WebFetch` to gather external documentation and best practices
+- Research library documentation and API references
+- Gather industry standards and implementation examples
 
 **Technical Research:**
-- INVESTIGATE implementation options and trade-offs
-- RESEARCH required libraries, frameworks, or tools
+- INVESTIGATE implementation options and trade-offs using external resources
+- RESEARCH required libraries, frameworks, or tools via Fetch MCP
 - ANALYZE security, performance, and scalability requirements
-- EVALUATE best practices for proposed implementation
+- EVALUATE best practices for proposed implementation using fetched resources
 
 ### 4. Design high-level architecture and component structure
 
@@ -99,7 +111,7 @@ Check: <$ARGUMENTS>
 
 ### 7. Estimate effort and timeline for each milestone
 
-**MCP INTEGRATION:** Work History for historical estimation patterns
+**MCP INTEGRATION:** GitHub for historical estimation patterns
 
 **Effort Estimation:**
 - ESTIMATE development time for each milestone
@@ -148,5 +160,5 @@ Planning Results:
 **Suggested Follow-up Commands:**
 - `create_milestone` for immediate milestone creation
 - `create_general_task` for urgent preliminary tasks
-- `start_task` to begin implementation
+- `do_task` or `do_task_auto` to begin implementation
 - `status` to track planning progress

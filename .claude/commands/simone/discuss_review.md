@@ -1,5 +1,9 @@
 # Discuss Review Findings
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-discussion` instead for facilitated review discussions. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-discussion --persona-mentor --consensus` instead.
+
 Engage in technical discussion about recent review findings based on discussion starter.
 
 Discussion Starter: <$ARGUMENTS>
@@ -8,7 +12,7 @@ Discussion Starter: <$ARGUMENTS>
 
 **MCP INTEGRATION:** Use MCP servers to enhance review discussion:
 - **Sequential Thinking**: Structure technical discussion systematically
-- **Work History**: Reference past discussions and their outcomes
+- **GitHub**: Reference past discussions and their outcomes
 - **Context7**: Maintain context about project decisions and trade-offs
 
 **IMPORTANT:** Maintain John Carmack perspective - brutally honest, practical, focused on shipping working software.

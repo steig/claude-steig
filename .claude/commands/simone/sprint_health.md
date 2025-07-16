@@ -48,7 +48,7 @@ Provides real-time analysis of sprint progress, team velocity, burndown trends, 
 
 **MCP INTEGRATION:** Use MCP servers for enhanced sprint analysis:
 - **Sequential Thinking**: Structure sprint health analysis systematically
-- **Work History**: Track sprint patterns and historical performance
+- **GitHub**: Track sprint patterns and historical performance
 - **Serena**: Enhance data analysis and trend identification
 
 **Sprint Progress Analysis:**

@@ -1,4 +1,8 @@
 ---
+# DEPRECATED: This template has been superseded by unified_bug_template.md
+# Migration: Use unified_bug_template.md which provides comprehensive bug reporting
+# This file will be removed in v3.0.0
+
 bug_id: "BUG{BUG_NUMBER}"
 bug_title: "{BUG_TITLE}"
 bug_type: "bug"  # bug, critical, security, performance, usability

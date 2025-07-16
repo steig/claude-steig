@@ -37,7 +37,7 @@ Executes bug fix tasks with specialized bug tracking integration and comprehensi
 
 **MCP INTEGRATION:** Use MCP servers for enhanced bug analysis:
 - **Sequential Thinking**: Structure bug fix approach systematically
-- **Work History**: Reference similar bug fixes and their outcomes
+- **GitHub**: Reference similar bug fixes and their outcomes
 - **Context7**: Maintain context about bug investigation progress
 - **Serena**: Enhance code analysis for bug root cause identification
 
@@ -148,7 +148,7 @@ related_bug: "{BUG_ID}"
 **MCP INTEGRATION:** Leverage MCP servers during bug fixing:
 - **Sequential Thinking**: Structure fix implementation step-by-step
 - **Serena**: Get enhanced code analysis and fix suggestions
-- **Work History**: Log all bug fix activities and decisions
+- **GitHub**: Log all bug fix activities and decisions
 - **Context7**: Maintain context about fix implementation choices
 
 **Implementation Process:**

@@ -110,7 +110,7 @@ check_emergency_conditions() {
 ## Follow this exact process
 
 **MCP INTEGRATION:** YOLO mode requires comprehensive MCP server usage:
-- **Work History**: Critical for tracking all autonomous operations and decisions
+- **GitHub**: Critical for tracking all autonomous operations and decisions
 - **Sequential Thinking**: Structure autonomous decision-making processes
 - **Context7**: Maintain context across autonomous task execution
 - **Serena**:  Code analysis for autonomous development
@@ -235,7 +235,7 @@ Execute based on mode:
 ### WORK ON TASK (Enhanced Safety)
 
 **MCP INTEGRATION:** Use MCP servers for autonomous task execution:
-- **Work History**: Log all autonomous task decisions and outcomes
+- **GitHub**: Log all autonomous task decisions and outcomes
 - **Sequential Thinking**: Structure autonomous problem-solving approach
 - **Context7**: Maintain context about task execution and decisions
 

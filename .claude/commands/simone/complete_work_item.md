@@ -35,7 +35,7 @@ Marks work items as completed and applies the Simone completion naming conventio
 ## 1 · Parse arguments and identify work item type
 
 **MCP INTEGRATION:** Use MCP servers to enhance completion analysis:
-- **Work History**: Track completion patterns and document completion reasoning
+- **GitHub**: Track completion patterns and document completion reasoning
 - **Sequential Thinking**: Structure logical completion validation systematically
 - **Serena**: Enhance completion verification and cross-reference analysis
 

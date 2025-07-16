@@ -183,7 +183,7 @@ advanced_flags:
       - "long_session: >2 hours"
       - "high_context: >75% token usage"
     benefits:
-      - "70% token reduction"
+      - "token reduction for large projects"
       - "Significant cost optimization"
       - "Maintains information density"
       - "Improved response speed"

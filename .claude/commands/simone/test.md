@@ -37,7 +37,7 @@ Follow these instructions from top to bottom.
 
 **MCP INTEGRATION:** Use MCP servers to enhance testing:
 - **Playwright**: Enable browser automation and E2E testing capabilities
-- **Work History**: Track test results and common failure patterns
+- **GitHub**: Track test results and common failure patterns
 - **Sequential Thinking**: Structure test execution and debugging process
 
 ### First, detect the project's test runner:

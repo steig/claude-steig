@@ -1,10 +1,14 @@
 # Update Task Status - Metadata Management
 
+**Version**: 3.0.0 | **Enhanced**: Hierarchical Completion Tracking | **Release**: 2025-01-14
+
 Updates task status with comprehensive metadata tracking for Simone templates.
 
 **🚨 CRITICAL: This command MUST use the centralized metadata manager for reliable updates**
 
-## Create a TODO with EXACTLY these 7 Items
+**New in v3.0.0**: Automatic hierarchical completion checking and validation gates
+
+## Create a TODO with EXACTLY these 8 Items
 
 1. Initialize validation and start transaction  
 2. Parse arguments and locate task file
@@ -13,6 +17,7 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 5. Validate all updates succeeded
 6. Commit transaction or rollback on failure
 7. Log status change and report results
+8. Check hierarchical completion (sprint/milestone/project)
 
 ## DETAILS on every TODO item
 
@@ -22,11 +27,11 @@ Updates task status with comprehensive metadata tracking for Simone templates.
 
 ```bash
 # Source the utilities (run these commands)
-source .simone/01_UTILS/command-validator.sh
+# Note: command-validator.sh is deprecated - validation now built into framework
 source .simone/01_UTILS/metadata-manager.sh
 
-# Start command execution tracking
-EXECUTION_ID=$(start_command_execution "update_task_status" "$ARGUMENTS")
+# Start command execution tracking (simplified - no separate validation needed)
+echo "Starting task status update process..."
 echo "🔄 Started command execution: $EXECUTION_ID"
 
 # Initialize metadata manager
@@ -228,7 +233,7 @@ All manifest, sprint meta, and database updates are handled atomically.
 ### 7. Log status change and report results
 
 **Comprehensive Logging:**
-- Use **Work History** MCP if available to log status change
+- Use **GitHub** MCP if available to log status change
 - Update any monitoring or tracking systems
 - Log effort tracking and time estimates vs actual
 
@@ -252,8 +257,27 @@ echo "- Project manifest synchronized"
 echo "- Sprint progress recalculated (if applicable)"
 echo "- Database index updated"
 echo "- All changes validated successfully"
+echo "- Hierarchical completion checked"
 echo
 echo "⏭️ **Next Steps**: Continue with task work or move to next task"
+
+# NEW STEP 8: Check hierarchical completion if task was completed
+if [[ "$NEW_STATUS" == "completed" ]]; then
+    echo "🔗 Checking hierarchical completion status..."
+    
+    # Use metadata manager to check sprint/milestone/project completion
+    if command -v .simone/01_UTILS/metadata-manager.sh >/dev/null 2>&1; then
+        .simone/01_UTILS/metadata-manager.sh check_completion "$TASK_ID"
+        complete_step "$EXECUTION_ID" "8" "Checked hierarchical completion"
+    else
+        echo "⚠️ Metadata manager not found - hierarchical check skipped"
+    fi
+    
+    echo "📈 Hierarchical completion check completed"
+else
+    echo "ℹ️ Hierarchical completion check only runs for completed tasks"
+    complete_step "$EXECUTION_ID" "8" "Hierarchical check skipped (not completed)"
+fi
 ```
 
 **Error Handling:**

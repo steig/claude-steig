@@ -43,7 +43,7 @@ Provides comprehensive status overview of project health, task progress, deploym
 
 **MCP INTEGRATION:** Use MCP servers for enhanced status reporting:
 - **Sequential Thinking**: Structure status analysis systematically
-- **Work History**: Track progress patterns and trend analysis
+- **GitHub**: Track progress patterns and trend analysis
 - **Context7**: Maintain context about project evolution
 - **Serena**: Enhance project analysis and health assessment
 

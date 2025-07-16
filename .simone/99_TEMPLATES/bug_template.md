@@ -1,4 +1,8 @@
 ---
+# DEPRECATED: This template has been superseded by unified_bug_template.md
+# Migration: Use unified_bug_template.md which combines features from both bug templates
+# This file will be removed in v3.0.0
+
 bug_id: "{BUG_ID}"
 bug_title: "{BUG_TITLE}"
 bug_type: "bug" # Always "bug"

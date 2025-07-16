@@ -32,7 +32,7 @@ The argument format is: `<Bug Title or Description>`
 
 **MCP INTEGRATION:** Use MCP servers to enhance bug report creation:
 - **Sequential Thinking**: Structure bug analysis process systematically
-- **Work History**: Reference similar bugs and their resolutions
+- **GitHub**: Reference similar bugs and their resolutions
 - **Context7**: Maintain context about project state and known issues
 - **Serena**: Enhance codebase analysis for bug impact assessment
 

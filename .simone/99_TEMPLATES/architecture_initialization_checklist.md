@@ -1,5 +1,9 @@
 # Architecture Initialization Checklist
 
+> ⚠️ **DEPRECATED**: This checklist has been integrated into `architecture_template.md` for a unified architecture documentation approach. This file will be removed in v3.0.0.
+>
+> **Migration**: Use `architecture_template.md` which now includes the complete initialization checklist.
+
 Use this checklist during project initialization to ensure comprehensive architecture documentation.
 
 ## 1. Codebase Analysis (Auto-Detection)

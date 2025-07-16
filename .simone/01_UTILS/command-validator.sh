@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # Command Validator - Ensures Simone workflow commands properly execute all steps
 # Provides validation hooks for command execution
+#
+# ⚠️ DEPRECATED: This script has been deprecated as of 2025-01-14
+# Reason: Command validation functionality has been integrated directly into the Simone framework
+# Migration: Remove references to this script and use framework's built-in validation instead
+# Replacement: Built-in validation in do_task_auto, GitHub Actions, and automated commands
+#
+# This script is maintained for backward compatibility but will be removed in v3.0.0
 
 set -euo pipefail
 

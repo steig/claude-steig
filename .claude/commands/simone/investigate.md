@@ -61,7 +61,7 @@ Check: <$ARGUMENTS>
 
 ### 3. Analyze logs, error messages, and system state
 
-**MCP INTEGRATION:** Sequential Thinking + Work History for pattern recognition
+**MCP INTEGRATION:** Sequential Thinking + GitHub for pattern recognition
 
 **Log Analysis:**
 - EXAMINE application logs for relevant error patterns
@@ -81,7 +81,7 @@ Check: <$ARGUMENTS>
 
 ### 5. Examine recent changes and deployment history
 
-**MCP INTEGRATION:** Work History for change correlation analysis
+**MCP INTEGRATION:** GitHub for change correlation analysis
 
 **Change Analysis:**
 - REVIEW recent code commits and their impact
@@ -101,7 +101,7 @@ Check: <$ARGUMENTS>
 
 ### 7. Analyze similar historical issues and patterns
 
-**MCP INTEGRATION:** Work History for historical pattern analysis
+**MCP INTEGRATION:** GitHub for historical pattern analysis
 
 **Historical Analysis:**
 - SEARCH for similar issues in project history

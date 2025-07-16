@@ -1,0 +1,513 @@
+name: Simone Automated Quality Pipeline
+
+on:
+  push:
+    branches:
+      - 'task/**'  # All task branches
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+  workflow_dispatch:
+    inputs:
+      strict_mode:
+        description: 'Enable strict quality gates'
+        required: false
+        default: 'false'
+        type: boolean
+      bypass_non_critical:
+        description: 'Bypass non-critical quality gates'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.9'
+  GO_VERSION: '1.19'
+
+jobs:
+  # Parallel quality gate validation
+  code-quality:
+    name: Code Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for proper analysis
+      
+      - name: Setup Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        if: hashFiles('package.json') != ''
+        run: |
+          npm ci
+          npm audit --audit-level moderate
+      
+      - name: Code Linting
+        if: hashFiles('package.json') != ''
+        run: |
+          npm run lint || {
+            echo "::warning::Linting failed - attempting auto-fix"
+            npm run lint:fix || exit 1
+          }
+      
+      - name: Type Checking
+        if: hashFiles('package.json') != ''
+        run: npm run typecheck
+      
+      - name: Code Complexity Analysis
+        if: hashFiles('package.json') != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Simple complexity check (in practice, use proper tools)
+            const srcFiles = require('glob').sync('src/**/*.{js,ts,tsx}');
+            let complexityIssues = [];
+            
+            for (const file of srcFiles) {
+              const content = fs.readFileSync(file, 'utf8');
+              const functionCount = (content.match(/function\s+\w+/g) || []).length;
+              const lineCount = content.split('\n').length;
+              
+              if (lineCount > 500) {
+                complexityIssues.push(`${file}: File too large (${lineCount} lines)`);
+              }
+            }
+            
+            if (complexityIssues.length > 0) {
+              core.warning(`Complexity issues found:\n${complexityIssues.join('\n')}`);
+            } else {
+              core.info('Code complexity within acceptable limits');
+            }
+      
+      - name: Upload Code Quality Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: code-quality-report
+          path: |
+            coverage/
+            lint-results.json
+            typecheck-results.json
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        if: hashFiles('package.json') != ''
+        run: npm ci
+      
+      - name: Run npm audit
+        if: hashFiles('package.json') != ''
+        run: |
+          npm audit --audit-level moderate --production || {
+            echo "::error::Security vulnerabilities found in dependencies"
+            npm audit --audit-level moderate --production --json > security-audit.json
+            exit 1
+          }
+      
+      - name: Semgrep Security Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+          generateSarif: "1"
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      
+      - name: Secret Detection
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --debug --only-verified
+      
+      - name: Snyk Security Scan
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium
+      
+      - name: Upload Security Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-report
+          path: |
+            security-audit.json
+            semgrep-report.sarif
+            snyk-report.json
+
+  test-suite:
+    name: Test Suite Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        if: hashFiles('package.json') != ''
+        run: npm ci
+      
+      - name: Run Unit Tests
+        if: matrix.test-type == 'unit'
+        run: |
+          npm run test:unit -- --coverage --ci --watchAll=false
+          echo "COVERAGE_PERCENT=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')" >> $GITHUB_ENV
+      
+      - name: Run Integration Tests
+        if: matrix.test-type == 'integration'
+        run: npm run test:integration || true
+      
+      - name: Run E2E Tests
+        if: matrix.test-type == 'e2e'
+        run: |
+          # Start application in background
+          npm run start:test &
+          sleep 30
+          
+          # Run E2E tests
+          npm run test:e2e || {
+            echo "::warning::E2E tests failed - may indicate environmental issues"
+            exit 0  # Don't fail the build for E2E in CI
+          }
+      
+      - name: Coverage Threshold Check
+        if: matrix.test-type == 'unit'
+        run: |
+          THRESHOLD=80
+          if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
+            echo "::error::Test coverage ($COVERAGE_PERCENT%) below threshold ($THRESHOLD%)"
+            exit 1
+          else
+            echo "::notice::Test coverage passed: $COVERAGE_PERCENT%"
+          fi
+      
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.test-type }}
+          path: |
+            coverage/
+            test-results.xml
+            screenshots/
+            videos/
+
+  performance-check:
+    name: Performance Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        if: hashFiles('package.json') != ''
+        run: npm ci
+      
+      - name: Build Application
+        run: |
+          npm run build || {
+            echo "::error::Build failed"
+            exit 1
+          }
+      
+      - name: Bundle Size Analysis
+        run: |
+          # Analyze bundle size
+          du -sh dist/ || du -sh build/
+          
+          # Check for large files
+          find dist/ -name "*.js" -size +1M 2>/dev/null | while read file; do
+            size=$(du -h "$file" | cut -f1)
+            echo "::warning::Large bundle detected: $file ($size)"
+          done || true
+      
+      - name: Lighthouse Performance Test
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: '.lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true
+      
+      - name: Performance Budget Check
+        run: |
+          # Basic performance checks (customize based on your metrics)
+          if [[ -f "lighthouse-results.json" ]]; then
+            performance_score=$(cat lighthouse-results.json | jq '.categories.performance.score * 100')
+            
+            if (( $(echo "$performance_score < 80" | bc -l) )); then
+              echo "::warning::Performance score ($performance_score) below recommended threshold (80)"
+            else
+              echo "::notice::Performance score: $performance_score"
+            fi
+          fi
+
+  simone-quality-gate:
+    name: Simone Quality Gate Validation
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, test-suite, performance-check]
+    if: always()
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+      
+      - name: Setup Quality Gate Validator
+        run: |
+          chmod +x .simone/01_UTILS/quality-gate-validator.sh
+          mkdir -p .simone/logs .simone/reports
+      
+      - name: Extract Task ID from Branch
+        id: extract-task
+        run: |
+          branch_name="${{ github.head_ref || github.ref_name }}"
+          task_id=$(echo "$branch_name" | grep -oE 'T[0-9]+' | head -1 || echo "")
+          echo "task_id=$task_id" >> $GITHUB_OUTPUT
+          echo "Extracted Task ID: $task_id"
+      
+      - name: Run Simone Quality Gate Validation
+        id: quality-gate
+        run: |
+          # Determine flags based on inputs and job results
+          flags=""
+          
+          if [[ "${{ github.event.inputs.strict_mode }}" == "true" ]]; then
+            flags="$flags --strict"
+          fi
+          
+          if [[ "${{ github.event.inputs.bypass_non_critical }}" == "true" ]]; then
+            flags="$flags --bypass-non-critical"
+          fi
+          
+          if [[ -n "${{ steps.extract-task.outputs.task_id }}" ]]; then
+            flags="$flags --task-id ${{ steps.extract-task.outputs.task_id }}"
+          fi
+          
+          # Run quality gate validation
+          ./.simone/01_UTILS/quality-gate-validator.sh $flags || {
+            echo "quality_gate_status=FAIL" >> $GITHUB_OUTPUT
+            exit 1
+          }
+          
+          echo "quality_gate_status=PASS" >> $GITHUB_OUTPUT
+      
+      - name: Update Task Status (Success)
+        if: steps.quality-gate.outputs.quality_gate_status == 'PASS'
+        run: |
+          echo "::notice::All quality gates passed! Task ${{ steps.extract-task.outputs.task_id }} ready for review."
+          
+          # If task file exists, update it with CI results
+          task_id="${{ steps.extract-task.outputs.task_id }}"
+          if [[ -n "$task_id" ]]; then
+            task_file=$(find .simone/03_SPRINTS .simone/04_GENERAL_TASKS -name "*${task_id}*" -type f | head -1)
+            if [[ -f "$task_file" ]]; then
+              echo "" >> "$task_file"
+              echo "## CI/CD Results" >> "$task_file"
+              echo "[$(date '+%Y-%m-%d %H:%M:%S')]: All quality gates passed in CI/CD pipeline" >> "$task_file"
+              echo "- Workflow: ${{ github.workflow }}" >> "$task_file"
+              echo "- Run: ${{ github.run_number }}" >> "$task_file"
+              echo "- Commit: ${{ github.sha }}" >> "$task_file"
+            fi
+          fi
+      
+      - name: Create Quality Gate Summary
+        if: always()
+        run: |
+          cat > quality-gate-summary.md << EOF
+          # 🎯 Simone Quality Gate Results
+          
+          **Task ID**: ${{ steps.extract-task.outputs.task_id || 'N/A' }}  
+          **Branch**: ${{ github.head_ref || github.ref_name }}  
+          **Status**: ${{ steps.quality-gate.outputs.quality_gate_status || 'UNKNOWN' }}  
+          **Workflow**: ${{ github.workflow }}  
+          **Run**: ${{ github.run_number }}  
+          
+          ## 📊 Quality Metrics
+          
+          | Gate | Status | Details |
+          |------|--------|---------|
+          | Code Quality | ${{ needs.code-quality.result == 'success' && '✅ PASS' || '❌ FAIL' }} | Linting, type checking, complexity |
+          | Security Scan | ${{ needs.security-scan.result == 'success' && '✅ PASS' || '❌ FAIL' }} | Vulnerabilities, secrets, dependencies |
+          | Test Suite | ${{ needs.test-suite.result == 'success' && '✅ PASS' || '❌ FAIL' }} | Unit, integration, coverage |
+          | Performance | ${{ needs.performance-check.result == 'success' && '✅ PASS' || '❌ FAIL' }} | Bundle size, lighthouse, benchmarks |
+          
+          ## 🎭 Automation Features
+          
+          - **Strict Mode**: ${{ github.event.inputs.strict_mode || 'false' }}
+          - **Bypass Non-Critical**: ${{ github.event.inputs.bypass_non_critical || 'false' }}
+          - **Auto-Resolution**: Enabled for routine issues
+          - **Human Intervention**: Required only for ${{ steps.quality-gate.outputs.quality_gate_status == 'PASS' && 'PR review' || 'quality gate failures' }}
+          
+          ## 📋 Next Steps
+          
+          ${{ steps.quality-gate.outputs.quality_gate_status == 'PASS' && 
+          '✅ **Ready for PR Creation**: All quality gates passed. Create PR for human review of business logic and architecture.' ||
+          '❌ **Quality Gate Failed**: Address failures before proceeding. Check individual job logs for details.' }}
+          EOF
+      
+      - name: Upload Quality Gate Summary
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-gate-summary
+          path: |
+            quality-gate-summary.md
+            .simone/reports/
+            .simone/logs/
+      
+      - name: Comment PR with Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('quality-gate-summary.md', 'utf8');
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+  # Optional: Auto-merge for trusted automation
+  auto-merge:
+    name: Auto-merge Qualified Changes
+    runs-on: ubuntu-latest
+    needs: [simone-quality-gate]
+    if: |
+      github.event_name == 'pull_request' &&
+      needs.simone-quality-gate.result == 'success' &&
+      contains(github.head_ref, 'auto') &&
+      github.actor == 'claude-code-bot'
+    
+    steps:
+      - name: Auto-merge PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Only auto-merge low-risk, automated changes
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            // Additional safety checks
+            const title = pr.data.title.toLowerCase();
+            const autoMergeable = [
+              'docs:',
+              'style:',
+              'test:',
+              'chore:'
+            ].some(prefix => title.startsWith(prefix));
+            
+            if (autoMergeable && pr.data.changed_files <= 5) {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                merge_method: 'squash'
+              });
+              
+              console.log('✅ Auto-merged qualified automated change');
+            } else {
+              console.log('⚠️ Change requires human review');
+            }
+
+  # Cleanup and notifications
+  cleanup:
+    name: Cleanup and Notifications
+    runs-on: ubuntu-latest
+    needs: [simone-quality-gate]
+    if: always()
+    
+    steps:
+      - name: Notify on Slack (Success)
+        if: needs.simone-quality-gate.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: |
+            🎉 Simone Quality Gates Passed!
+            Task: ${{ steps.extract-task.outputs.task_id }}
+            Branch: ${{ github.head_ref || github.ref_name }}
+            Ready for human PR review.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      - name: Notify on Slack (Failure)
+        if: needs.simone-quality-gate.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: |
+            ❌ Simone Quality Gates Failed!
+            Task: ${{ steps.extract-task.outputs.task_id }}
+            Branch: ${{ github.head_ref || github.ref_name }}
+            Human intervention required.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

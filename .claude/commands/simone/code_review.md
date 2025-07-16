@@ -1,5 +1,9 @@
 # Code Review - Execute top to bottom
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-code` instead for comprehensive code review capabilities. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-code --persona-security --persona-analyzer` instead.
+
 **COGNITIVE PERSONAS INTEGRATION:** This command supports multi-domain code review through persona flags.
 
 **AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
@@ -43,7 +47,7 @@ Follow step by step and adhere closely to the following instructions for each st
 **MCP INTEGRATION:** Use MCP servers to enhance code review process:
 - **Serena**: Get enhanced code analysis and quality insights
 - **Sequential Thinking**: Structure the review process systematically
-- **Work History**: Reference previous code reviews and their outcomes
+- **GitHub**: Reference previous code reviews and their outcomes
 
 check: <$ARGUMENTS>
 

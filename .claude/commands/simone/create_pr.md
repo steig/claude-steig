@@ -1,5 +1,9 @@
 # Create Pull Request - Automated PR Creation and Management
 
+> ⚠️ **DEPRECATED**: This command has been superseded by `create_pr_auto` which provides comprehensive automation, AI-generated content, intelligent reviewer assignment, and quality validation. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:create_pr_auto <task_id> --auto-assign --comprehensive` instead.
+
 **COGNITIVE PERSONAS INTEGRATION:** This command supports domain expertise for intelligent PR creation and review preparation.
 
 **AVAILABLE PERSONAS** (reference: `.claude/commands/shared/persona-flags.yml`):
@@ -79,7 +83,7 @@ Creates pull requests with auto-generated descriptions, checklists, and proper l
 
 **MCP INTEGRATION:** Use MCP servers for enhanced PR creation:
 - **Sequential Thinking**: Structure PR information gathering systematically
-- **Work History**: Reference similar PRs and their outcomes
+- **GitHub**: Reference similar PRs and their outcomes
 - **Context7**: Maintain context about task/bug relationships
 - **Serena**: Enhance code analysis for PR description
 

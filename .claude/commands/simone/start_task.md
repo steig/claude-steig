@@ -1,5 +1,9 @@
 # Start Task - Create Branch and Set Up Task Environment
 
+> ⚠️ **DEPRECATED**: This command functionality has been merged into `do_task` and `do_task_auto`. Branch creation and environment setup are now handled automatically during task execution. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:do_task <task_id>` or `/project:simone:do_task_auto <task_id>` instead.
+
 Creates a Git branch for a task and sets up the development environment without executing the task implementation.
 
 ## Create a TODO with EXACTLY these 6 Items
@@ -33,7 +37,7 @@ Creates a Git branch for a task and sets up the development environment without 
 **MCP INTEGRATION:** Use MCP servers for enhanced task analysis:
 - **Sequential Thinking**: Structure task analysis systematically
 - **Context7**: Maintain context about project state and requirements
-- **Work History**: Reference similar task setups and outcomes
+- **GitHub**: Reference similar task setups and outcomes
 
 **Task Location Process:**
 - Search `.simone/03_SPRINTS/*/T*.md` for sprint tasks
@@ -190,7 +194,7 @@ Examples:
 - Provide guidance on managing multiple streams of work
 
 ### MCP Server Integration
-- **Work History**: Log task start patterns and branch naming decisions
+- **GitHub**: Log task start patterns and branch naming decisions
 - **Sequential Thinking**: Structure task setup process systematically
 - **Context7**: Maintain context about task relationships and project state
 - **Serena**: Enhance task analysis and development environment setup

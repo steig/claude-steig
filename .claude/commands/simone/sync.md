@@ -40,7 +40,7 @@ Manages branch synchronization, conflict resolution, and repository maintenance 
 
 **MCP INTEGRATION:** Use MCP servers for enhanced synchronization:
 - **Sequential Thinking**: Structure conflict resolution systematically
-- **Work History**: Track sync patterns and resolution strategies
+- **GitHub**: Track sync patterns and resolution strategies
 - **Context7**: Maintain context about code changes and conflicts
 - **Serena**: Enhance conflict analysis and resolution suggestions
 

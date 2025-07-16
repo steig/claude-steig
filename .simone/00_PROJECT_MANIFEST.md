@@ -1,21 +1,40 @@
 ---
-project_name: Your Project Name
+project_name: Claude Simone Framework
+version: 3.1.0
 current_milestone_id: M01
 highest_sprint_in_milestone: S02
 current_sprint_id: S01
 status: active
-last_updated: 2025-01-01 00:00:00
+last_updated: 2025-07-15 12:00:00
+framework_version: 3.1.0
+release_date: 2025-07-15
+major_features:
+  - quality_enforcement_system
+  - garbage_in_garbage_out_prevention
+  - hierarchical_completion_tracking
+  - metadata_synchronization
+  - completion_validation_gates
+  - unified_review_system
+  - automated_task_execution
 ---
 
-# Project Manifest: Your Project Name
+# Project Manifest: Claude Simone Framework
 
-This manifest serves as the central reference point for the project. It tracks the current focus and links to key documentation.
+**Version**: 3.0.0 | **Release Date**: 2025-01-14 | **Status**: Active
+
+This manifest serves as the central reference point for the Simone Framework project. It tracks the current focus and links to key documentation.
 
 ## 1. Project Vision & Overview
 
-[Describe your project's core vision, purpose, and goals here. What problem does it solve? Who is it for? What makes it unique?]
+The Claude Simone Framework is a project management and development workflow system designed for Claude Code. It provides structured task management, hierarchical completion tracking, and quality assurance workflows that help teams deliver software with reduced manual overhead.
 
-This project follows a milestone-based development approach.
+**Core Purpose**: Provide structured, trackable, and automated workflows with built-in quality gates and progress visibility.
+
+**Target Audience**: Development teams, project managers, and technical leaders using Claude Code for software development.
+
+**Key Feature**: Hierarchical completion tracking that automatically propagates status from tasks → sprints → milestones → project completion with validation.
+
+This project follows a milestone-based development approach with integrated quality assurance and automated metadata management.
 
 ## 2. Current Focus
 

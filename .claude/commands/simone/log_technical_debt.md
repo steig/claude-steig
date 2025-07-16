@@ -42,7 +42,7 @@ Create structured technical debt documentation with comprehensive impact analysi
 **MCP INTEGRATION:** Use MCP servers to enhance debt analysis:
 - **Sequential Thinking**: Structure debt analysis systematically
 - **Serena**: Enhance debt pattern recognition and categorization
-- **Work History**: Track similar debt patterns and resolution outcomes
+- **GitHub**: Track similar debt patterns and resolution outcomes
 
 **Argument Analysis:**
 - Check `<$ARGUMENTS>` for debt description, category hints, or context

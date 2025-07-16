@@ -1,10 +1,10 @@
-# Simone Performance Utilities
+# Simone Framework Utilities
 
-This directory contains performance optimization modules that make Simone commands 60-80% faster.
+This directory contains utility modules that support Simone framework operations.
 
 ## 🚀 Quick Start
 
-The performance system is automatically initialized when you source any Simone command. To manually initialize:
+The utility system is automatically initialized when you source any Simone command. To manually initialize:
 
 ```bash
 source .simone/01_UTILS/performance-main.sh
@@ -13,32 +13,31 @@ source .simone/01_UTILS/performance-main.sh
 ## 📁 Module Structure
 
 - **performance-main.sh** - Main entry point and command dispatcher
-- **performance-optimizer.sh** - Core optimization functions (caching, batching)
-- **cache-manager.sh** - Advanced cache management and monitoring
-- **database-manager.sh** - SQLite database for instant task queries
 - **fast-commands.sh** - Optimized implementations of common commands
 - **git-automation.sh** - Git operation batching and smart commits
 - **hooks-integration.sh** - Claude Code hooks for automated workflows
+- **metadata-manager.sh** - Project metadata management utilities
+- **command-validator.sh** - Command validation and error checking
 
-## ⚡ Performance Features
+## ⚡ Utility Features
 
-### 1. SQLite Task Database
-- Instant task queries (95% faster than file scanning)
-- Full-text search capabilities
-- Task history tracking
-- Automatic indexing
+### 1. Task Management System
+- File-based task queries with grep/find
+- Basic search capabilities
+- Task status tracking through files
+- Simple file organization
 
-### 2. Smart Caching
-- Template caching (90% faster template operations)
-- Query result caching
+### 2. Basic Caching
+- Template caching system
+- Simple result caching
 - Configurable TTL (time-to-live)
 - Automatic cache cleanup
 
-### 3. Optimized Commands
-- `fast_status` - Project status in milliseconds
-- `fast_search` - Instant task search
-- `fast_create_task` - Cached template creation
-- `fast_sprint_status` - Sprint analytics
+### 3. Utility Commands
+- `simple_status` - Project status display
+- `simple_search` - Task search functionality
+- `simple_sprint_status` - Sprint analytics
+- `simple_dashboard` - Project dashboard generation
 
 ### 4. Batch Operations
 - Git command batching
@@ -176,33 +175,32 @@ rm .simone/.cache/tasks.db
 export SIMONE_CACHE_MAX_SIZE=50M
 ```
 
-## 📈 Performance Metrics
+## 📈 Available Functions
 
-Typical improvements with optimization enabled:
-- **Status command**: 95% faster (2s → 0.1s)
-- **Task search**: 95% faster (1s → 0.05s)
-- **Template operations**: 90% faster (0.5s → 0.05s)
-- **Sprint analytics**: 80% faster (3s → 0.6s)
-- **Overall**: 60-80% faster execution
+Basic utility functions available:
+- **Status command**: Project status display
+- **Task search**: File-based task search
+- **Template operations**: Template management
+- **Sprint analytics**: Basic sprint information
 
 ## 🔍 Implementation Details
 
-### Database Schema
-- Tasks table with full metadata
-- Sprint and milestone tracking
-- Task dependency management
-- Full-text search index
-- History tracking for changes
+### File Organization
+- Task files with metadata
+- Sprint and milestone structure
+- File-based dependency tracking
+- Simple search capabilities
+- Basic history through git
 
 ### Cache Strategy
-- LRU (Least Recently Used) eviction
-- TTL-based expiration
-- Separate caches for different data types
-- Hit/miss tracking for optimization
+- Simple cache implementation
+- Basic TTL support
+- File-based caching
+- Basic cache monitoring
 
-### Optimization Techniques
-- Lazy loading of heavy operations
-- Batch I/O operations
-- Memory-based template cache
-- Index-based queries instead of file scanning
-- Parallel processing where applicable
+### Utility Techniques
+- Lazy loading of modules
+- Basic file operations
+- Simple template management
+- File-based operations
+- Sequential processing

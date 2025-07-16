@@ -39,7 +39,7 @@ Performs comprehensive automated code review with quality checks, security analy
 - **Sequential Thinking**: Structure review process systematically
 - **Serena**: Enhance code analysis and pattern recognition
 - **Context7**: Maintain context about codebase patterns
-- **Work History**: Reference similar code reviews and outcomes
+- **GitHub**: Reference similar code reviews and outcomes
 
 **Change Analysis:**
 - **File Categories**: Source code, tests, documentation, configuration

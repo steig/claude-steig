@@ -1,0 +1,190 @@
+version: '3.8'
+
+# Multi-Project MCP Configuration
+# This file creates isolated containers for each project using environment variables
+# PROJECT_NUM, PROJECT_ID, and PROJECT_PATH are set by mcp-multi.sh
+
+services:
+  # Serena MCP Server - Enhanced IDE assistance and project management
+  serena:
+    build:
+      context: ./docker/mcp-servers/serena
+      dockerfile: Dockerfile
+    container_name: mcp-serena-${PROJECT_ID}
+    environment:
+      - MCP_SERVER_NAME=serena
+      - PROJECT_PATH=${PROJECT_PATH}
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - CONTEXT=ide-assistant
+    volumes:
+      - ${PROJECT_PATH}:/workspace:ro
+      - mcp-serena-data-${PROJECT_ID}:/app/data
+    networks:
+      - mcp-network-${PROJECT_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "${SERENA_PORT}:8080"
+
+  # Context7 MCP Server - Advanced context management and retrieval
+  context7:
+    build:
+      context: ./docker/mcp-servers/context7
+      dockerfile: Dockerfile
+    container_name: mcp-context7-${PROJECT_ID}
+    environment:
+      - MCP_SERVER_NAME=context7
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL:-}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN:-}
+    volumes:
+      - mcp-context7-data-${PROJECT_ID}:/app/data
+      - ${PROJECT_PATH}/.simone:/workspace/.simone:ro
+    networks:
+      - mcp-network-${PROJECT_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "${CONTEXT7_PORT}:8081"
+
+  # Playwright MCP Server - Browser automation and testing
+  playwright:
+    build:
+      context: ./docker/mcp-servers/playwright
+      dockerfile: Dockerfile
+    container_name: mcp-playwright-${PROJECT_ID}
+    environment:
+      - MCP_SERVER_NAME=playwright
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - DISPLAY=${DISPLAY:-:99}
+    volumes:
+      - mcp-playwright-data-${PROJECT_ID}:/app/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${PROJECT_PATH}:/workspace:ro
+    networks:
+      - mcp-network-${PROJECT_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "${PLAYWRIGHT_PORT}:8082"
+    # Enable headless browser automation
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+
+  # Work History MCP Server - Command tracking and output logging
+  work-history:
+    build:
+      context: ./docker/mcp-servers/work-history
+      dockerfile: Dockerfile
+    container_name: mcp-work-history-${PROJECT_ID}
+    environment:
+      - MCP_SERVER_NAME=work-history
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - HISTORY_RETENTION_DAYS=${HISTORY_RETENTION_DAYS:-30}
+    volumes:
+      - mcp-work-history-data-${PROJECT_ID}:/app/data
+      - ${PROJECT_PATH}/.simone/logs:/workspace/logs
+    networks:
+      - mcp-network-${PROJECT_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "${WORK_HISTORY_PORT}:8083"
+
+  # Sequential Thinking MCP Server - Enhanced reasoning and problem-solving
+  sequential-thinking:
+    build:
+      context: ./docker/mcp-servers/sequential-thinking
+      dockerfile: Dockerfile
+    container_name: mcp-sequential-thinking-${PROJECT_ID}
+    environment:
+      - MCP_SERVER_NAME=sequential-thinking
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - THINKING_MODE=${THINKING_MODE:-structured}
+    volumes:
+      - mcp-sequential-thinking-data-${PROJECT_ID}:/app/data
+    networks:
+      - mcp-network-${PROJECT_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "${SEQUENTIAL_THINKING_PORT}:8084"
+
+  # MCP Gateway - Central proxy and load balancer for this project
+  mcp-gateway:
+    build:
+      context: ./docker/mcp-gateway
+      dockerfile: Dockerfile
+    container_name: mcp-gateway-${PROJECT_ID}
+    environment:
+      - GATEWAY_PORT=9000
+      - PROJECT_ID=${PROJECT_ID}
+      - PROJECT_NUM=${PROJECT_NUM}
+      - PROJECT_PATH=${PROJECT_PATH}
+      - SERENA_URL=http://serena:8080
+      - CONTEXT7_URL=http://context7:8081
+      - PLAYWRIGHT_URL=http://playwright:8082
+      - WORK_HISTORY_URL=http://work-history:8083
+      - SEQUENTIAL_THINKING_URL=http://sequential-thinking:8084
+    ports:
+      - "${GATEWAY_PORT}:9000"
+    networks:
+      - mcp-network-${PROJECT_ID}
+    depends_on:
+      - serena
+      - context7
+      - playwright
+      - work-history
+      - sequential-thinking
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  mcp-network-${PROJECT_ID}:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${NETWORK_SUBNET}
+
+volumes:
+  mcp-serena-data-${PROJECT_ID}:
+    driver: local
+  mcp-context7-data-${PROJECT_ID}:
+    driver: local
+  mcp-playwright-data-${PROJECT_ID}:
+    driver: local
+  mcp-work-history-data-${PROJECT_ID}:
+    driver: local
+  mcp-sequential-thinking-data-${PROJECT_ID}:
+    driver: local

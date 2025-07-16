@@ -12,12 +12,12 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Configuration
-SIMONE_REPO="https://github.com/steig/claude-steig"
+# Configuration - Repository for remote installation
+SIMONE_REPO="https://github.com/steig/claude-steig"  # Main Simone repository
 SIMONE_DIR=".simone"
 BACKUP_DIR=".simone.backup.$(date +%Y%m%d_%H%M%S)"
 VERSION_FILE="$SIMONE_DIR/.version"
-CURRENT_VERSION="2.1.0"
+CURRENT_VERSION="3.1.0"
 TARGET_DIR=""
 REMOTE_INSTALL=false
 TEMP_DIR=""
@@ -281,6 +281,41 @@ install_commands() {
     fi
 }
 
+# Clean up deprecated commands and files
+cleanup_deprecated_files() {
+    log "Cleaning up deprecated commands and files..."
+    
+    # Deprecated command files to remove
+    local deprecated_commands=(
+        ".claude/commands/simone/start_task.md"
+        ".claude/commands/simone/quality_gate_validator.md"
+        ".claude/commands/simone/command-validator.sh"
+    )
+    
+    # Remove deprecated command files
+    for cmd_file in "${deprecated_commands[@]}"; do
+        if [[ -f "$cmd_file" ]]; then
+            log "Removing deprecated command: $cmd_file"
+            rm -f "$cmd_file"
+        fi
+    done
+    
+    # Remove old utility scripts that have been replaced
+    if [[ -f "$SIMONE_DIR/01_UTILS/command-validator.sh" ]]; then
+        log "Removing deprecated utility: command-validator.sh"
+        rm -f "$SIMONE_DIR/01_UTILS/command-validator.sh"
+    fi
+    
+    # Clean up old cache files
+    if [[ -d "$SIMONE_DIR/.cache" ]]; then
+        log "Cleaning old cache files..."
+        find "$SIMONE_DIR/.cache" -name "*.old" -delete 2>/dev/null || true
+        find "$SIMONE_DIR/.cache" -name "*.bak" -delete 2>/dev/null || true
+    fi
+    
+    success "Deprecated files cleaned up"
+}
+
 # Upgrade existing installation
 upgrade_installation() {
     log "Upgrading existing Simone installation..."
@@ -325,6 +360,9 @@ upgrade_installation() {
         [[ -d "$SIMONE_DIR/04_GENERAL_TASKS" ]] && backup_tasks="$SIMONE_DIR/04_GENERAL_TASKS"
         [[ -d "$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS" ]] && backup_architectural_decisions="$SIMONE_DIR/05_ARCHITECTURAL_DECISIONS"
         [[ -d "$SIMONE_DIR/10_STATE_OF_PROJECT" ]] && backup_reviews="$SIMONE_DIR/10_STATE_OF_PROJECT"
+        
+        # Clean up deprecated files first
+        cleanup_deprecated_files
         
         # Install new version
         install_core_structure "$source_dir"
@@ -449,10 +487,32 @@ create_initial_manifest() {
 install_mcp_servers() {
     log "Installing MCP servers for enhanced Simone capabilities..."
     
-    # Check if claude mcp command is available
+    # Offer Docker option first
+    if command -v docker >/dev/null 2>&1 && (command -v docker-compose >/dev/null 2>&1 || docker compose version >/dev/null 2>&1); then
+        log "Docker detected. Choose MCP deployment method:"
+        echo "  1) Docker containers (recommended - isolated, scalable)"
+        echo "  2) Local installation (traditional - requires uvx)"
+        echo ""
+        # Auto-detect CI/CD environment or if non-interactive
+        if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" || ! -t 0 ]]; then
+            choice=2  # Use local installation in CI/CD
+            log "CI/CD environment detected - using local MCP installation"
+        else
+            read -p "Enter choice [1-2] (default: 1): " choice
+            choice=${choice:-1}
+        fi
+        
+        if [[ "$choice" == "1" ]]; then
+            install_mcp_docker
+            return 0
+        fi
+    fi
+    
+    # Check if claude mcp command is available for local installation
     if ! command -v claude >/dev/null 2>&1; then
         warn "Claude CLI not found - skipping MCP server installation"
         warn "Install Claude CLI first, then run: claude mcp status to verify"
+        warn "Or use Docker option: ./scripts/mcp-docker.sh setup"
         return 0
     fi
     
@@ -471,8 +531,9 @@ install_mcp_servers() {
         "serena:uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)"
         "context7:uvx --from git+https://github.com/upstash/context7 context7-mcp-server"
         "playwright:uvx --from git+https://github.com/microsoft/playwright-mcp playwright-mcp-server"
-        "work-history:uvx mcp-work-history"
+        "github:docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN:-} ghcr.io/github/github-mcp-server"
         "sequential-thinking:uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/sequentialthinking mcp-server-sequentialthinking"
+        "fetch:uvx --from git+https://github.com/modelcontextprotocol/servers.git --subdirectory src/fetch mcp-server-fetch"
     )
     
     for server_spec in "${mcp_servers[@]}"; do
@@ -500,9 +561,9 @@ install_mcp_servers() {
     
     # Summary
     if [[ $mcp_servers_installed -gt 0 ]]; then
-        success "MCP servers installed: $mcp_servers_installed/5"
+        success "MCP servers installed: $mcp_servers_installed/6"
         if [[ $mcp_servers_failed -gt 0 ]]; then
-            warn "MCP servers failed: $mcp_servers_failed/5"
+            warn "MCP servers failed: $mcp_servers_failed/6"
             warn "Use /project:simone:prime to check status and troubleshoot"
         fi
     else
@@ -511,6 +572,45 @@ install_mcp_servers() {
     fi
     
     log "MCP installation complete"
+}
+
+# Install MCP servers using Docker
+install_mcp_docker() {
+    log "Setting up MCP servers with Docker..."
+    
+    # Check if scripts directory exists
+    if [ ! -f "scripts/mcp-docker.sh" ]; then
+        warn "MCP Docker script not found. Skipping Docker MCP setup."
+        warn "This is expected in CI/CD environments or limited installations."
+        warn "For Docker MCP setup, run: ./scripts/mcp-docker.sh setup"
+        return 0
+    fi
+    
+    # Make script executable
+    chmod +x scripts/mcp-docker.sh
+    
+    # Run Docker setup
+    log "Running Docker MCP setup..."
+    if ./scripts/mcp-docker.sh setup; then
+        success "Docker MCP setup completed successfully"
+        log "Services starting in background..."
+        
+        # Start services
+        if ./scripts/mcp-docker.sh start; then
+            success "All MCP services started"
+            log "Gateway available at: http://localhost:9000"
+            log "Service status: ./scripts/mcp-docker.sh status"
+            log "Health check: ./scripts/mcp-docker.sh health"
+        else
+            warn "MCP services failed to start - check logs with: ./scripts/mcp-docker.sh logs"
+        fi
+    else
+        error "Docker MCP setup failed"
+        warn "Fallback: Try local installation or check Docker configuration"
+        return 1
+    fi
+    
+    log "Docker MCP installation complete"
 }
 
 # Set version

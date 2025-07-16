@@ -1,5 +1,9 @@
 # Testing Review - Execute top to bottom
 
+> ⚠️ **DEPRECATED**: This command has been merged into the unified review system. Use `/project:simone:review --type-testing` instead for comprehensive testing review. This command will be removed in v3.0.0.
+>
+> **Migration**: Use `/project:simone:review --type-testing --persona-qa --persona-analyzer` instead.
+
 Analyzes test implementation against the project's testing strategy to ensure tests remain balanced, purposeful, and aligned with development goals.
 
 ## Prerequisites Check
@@ -28,7 +32,7 @@ Follow step by step and adhere closely to the following instructions for each st
 **MCP INTEGRATION:** Use MCP servers to enhance testing review:
 - **Playwright**: Analyze browser automation and E2E testing coverage
 - **Sequential Thinking**: Structure comprehensive test analysis systematically
-- **Work History**: Track testing improvements and review outcomes
+- **GitHub**: Track testing improvements and review outcomes
 - **Serena**: Enhance test code analysis and quality assessment
 
 **Option A - Strategy document exists:**

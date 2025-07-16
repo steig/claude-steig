@@ -59,7 +59,7 @@ Check: <$ARGUMENTS>
 
 **CRITICAL:** System health is foundation for all diagnostics
 
-**MCP INTEGRATION:** Sequential Thinking + Work History for baseline establishment
+**MCP INTEGRATION:** Sequential Thinking + GitHub for baseline establishment
 
 **Health Check Sequence:**
 - USE patterns from `safety_check.md` for system validation
@@ -109,7 +109,7 @@ Check: <$ARGUMENTS>
 
 ### 5. Review technical debt accumulation and code quality issues
 
-**MCP INTEGRATION:** Work History for tracking debt patterns over time
+**MCP INTEGRATION:** GitHub for tracking debt patterns over time
 
 **Technical Debt Analysis:**
 - SCAN for code smells and anti-patterns
@@ -141,7 +141,7 @@ Check: <$ARGUMENTS>
 
 ### 7. Identify workflow bottlenecks and process inefficiencies
 
-**MCP INTEGRATION:** Work History for pattern analysis + Sequential Thinking
+**MCP INTEGRATION:** GitHub for pattern analysis + Sequential Thinking
 
 **Workflow Analysis:**
 - EXAMINE development team velocity and throughput metrics
@@ -208,7 +208,7 @@ Check: <$ARGUMENTS>
 
 **CRITICAL:** Use established milestone and task templates
 
-**MCP INTEGRATION:** Sequential Thinking for structured planning + Work History for timeline estimation
+**MCP INTEGRATION:** Sequential Thinking for structured planning + GitHub for timeline estimation
 
 **Remediation Planning:**
 - GROUP related issues into logical milestone chunks
